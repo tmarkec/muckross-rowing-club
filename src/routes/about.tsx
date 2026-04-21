@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Anchor, Trophy, Globe2 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import boathouse from "@/assets/boathouse.jpg";
 import community from "@/assets/club-community.jpg";
@@ -8,9 +8,9 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — Muckross Rowing Club, Killarney" },
-      { name: "description", content: "Learn about Muckross Rowing Club: our heritage, our home on Lough Leane, and our place in the Irish rowing community." },
+      { name: "description", content: "Over 150 years of rowing heritage on the Lakes of Killarney — from the Killarney Six to the Olympic Games. Discover the story of Muckross Rowing Club." },
       { property: "og:title", content: "About Muckross Rowing Club" },
-      { property: "og:description", content: "Heritage, community and rowing on Lough Leane in Killarney." },
+      { property: "og:description", content: "150 years of heritage, from the Elizabeth Rose to the Olympic Games." },
     ],
   }),
   component: AboutPage,
