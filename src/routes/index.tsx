@@ -1,26 +1,174 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, Award, Users, Waves } from "lucide-react";
+import { SiteLayout } from "@/components/SiteLayout";
+import heroLake from "@/assets/hero-lake.jpg";
+import rowingAction from "@/assets/rowing-action.jpg";
+import community from "@/assets/club-community.jpg";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Muckross Rowing Club — Rowing on Lough Leane, Killarney" },
+      { name: "description", content: "Welcome to Muckross Rowing Club. Join our community rowing on the stunning waters of Lough Leane in Killarney, Co. Kerry." },
+      { property: "og:title", content: "Muckross Rowing Club — Killarney" },
+      { property: "og:description", content: "Rowing on the historic waters of Lough Leane beneath the MacGillycuddy's Reeks." },
+    ],
+  }),
+  component: HomePage,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function HomePage() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
+    <SiteLayout>
+      {/* Hero */}
+      <section className="relative h-[88vh] min-h-[560px] w-full overflow-hidden">
+        <img
+          src={heroLake}
+          alt="Rowing eight gliding across Lough Leane at sunrise with the MacGillycuddy's Reeks in the background"
+          width={1920}
+          height={1280}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-hero" />
+        <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
+          <div className="max-w-2xl">
+            <span className="inline-block rounded-full border border-secondary/40 bg-primary/30 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-secondary backdrop-blur-sm">
+              Killarney · Co. Kerry
+            </span>
+            <h1 className="mt-6 font-serif text-4xl font-bold leading-[1.05] text-primary-foreground sm:text-5xl lg:text-6xl">
+              Rowing on the<br />
+              <span className="text-secondary">historic waters</span><br />
+              of Lough Leane
+            </h1>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
+              A welcoming club for rowers of all ages and abilities, beneath the
+              MacGillycuddy's Reeks in the heart of Killarney National Park.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                to="/join"
+                className="inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-6 py-3 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
+              >
+                Join the Club <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 bg-primary-foreground/5 px-6 py-3 text-sm font-semibold text-primary-foreground backdrop-blur-sm transition-colors hover:bg-primary-foreground/15"
+              >
+                Our Story
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
-function Index() {
-  return <PlaceholderIndex />;
+      {/* Highlights */}
+      <section className="bg-background py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">A club for everyone</span>
+            <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+              More than a sport, a community
+            </h2>
+            <p className="mt-4 text-base text-muted-foreground">
+              From learn-to-row beginners to seasoned competitors, Muckross brings together
+              people who share a love of the water and the lakes of Killarney.
+            </p>
+          </div>
+
+          <div className="mt-14 grid gap-8 md:grid-cols-3">
+            {[
+              { icon: Waves, title: "Iconic Waters", body: "Train and race on Lough Leane — one of Ireland's most beautiful lakes, shaped by mountains and ancient woodland." },
+              { icon: Users, title: "All Abilities", body: "Junior, senior, masters and recreational rowing. Whether you've never rowed before or have raced competitively, you're welcome." },
+              { icon: Award, title: "Proud Heritage", body: "A long-standing fixture of Irish rowing, with a presence at regattas across the country including the famous Killarney Regatta." },
+            ].map(({ icon: Icon, title, body }) => (
+              <div key={title} className="group rounded-2xl border border-border/60 bg-card p-8 shadow-soft transition-all hover:-translate-y-1 hover:shadow-elegant">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
+                  <Icon className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="mt-5 font-serif text-xl font-semibold text-foreground">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Split image feature */}
+      <section className="bg-muted/40 py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div className="relative overflow-hidden rounded-2xl shadow-elegant">
+              <img
+                src={rowingAction}
+                alt="Muckross rowing crew in yellow kit pulling together on the lake"
+                width={1600}
+                height={1024}
+                loading="lazy"
+                className="aspect-[4/3] w-full object-cover"
+              />
+            </div>
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">Train · Race · Belong</span>
+              <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+                Pulling together, since the beginning
+              </h2>
+              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+                Our rowers train year-round, taking to the water at dawn and competing at
+                regattas across Ireland. The yellow of Muckross is a familiar sight on the
+                start line — and on the podium.
+              </p>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                We welcome new members every season. No experience is needed — just
+                enthusiasm and a willingness to be part of a crew.
+              </p>
+              <Link
+                to="/join"
+                className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                How to join <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Community CTA */}
+      <section className="relative overflow-hidden bg-gradient-navy py-20 text-primary-foreground sm:py-28">
+        <img
+          src={community}
+          alt=""
+          aria-hidden="true"
+          width={1600}
+          height={1024}
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover opacity-15"
+        />
+        <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
+          <h2 className="font-serif text-3xl font-bold sm:text-4xl">
+            Become part of the Muckross story
+          </h2>
+          <p className="mt-4 text-base text-primary-foreground/80 sm:text-lg">
+            Memberships, pay-per-row and club fees are all handled through ClubForce.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <a
+              href="https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-6 py-3 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
+            >
+              Visit ClubForce <ArrowRight className="h-4 w-4" />
+            </a>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-foreground/10"
+            >
+              Get in touch
+            </Link>
+          </div>
+        </div>
+      </section>
+    </SiteLayout>
+  );
 }
