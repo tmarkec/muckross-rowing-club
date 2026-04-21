@@ -19,8 +19,8 @@ export const Route = createFileRoute("/join")({
 const tiers = [
   {
     name: "Junior",
-    body: "For young rowers learning the sport. Coached sessions, club kit and a pathway into competitive crews.",
-    bullets: ["Beginner friendly", "Qualified coaches", "Club regatta entries"],
+    body: "For young rowers aged 11+ learning the sport. Coached sessions, club kit and a pathway into competitive crews.",
+    bullets: ["Ages 11+", "Water & gym sessions", "Qualified coaches"],
   },
   {
     name: "Senior",
@@ -42,7 +42,8 @@ function JoinPage() {
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Membership</span>
           <h1 className="mt-4 font-serif text-4xl font-bold sm:text-5xl">Join Muckross</h1>
           <p className="mt-5 text-lg text-primary-foreground/85">
-            New rowers welcome. Find your crew, your fitness and your community on Lough Leane.
+            New rowers welcome from age 11 right through to masters. Dare to try a sport like
+            no other — find your crew, your fitness and your community on Lough Leane.
           </p>
         </div>
       </section>
