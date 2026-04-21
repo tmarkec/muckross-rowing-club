@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, Wrench, Anchor, Users, ArrowRight, Mail } from "lucide-react";
+import { Heart, Copy, Check, Wrench, Anchor, Fuel, ArrowRight, Mail, ExternalLink } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 
 export const Route = createFileRoute("/support")({
