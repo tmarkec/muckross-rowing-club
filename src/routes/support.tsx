@@ -133,18 +133,13 @@ function SupportPage() {
             </p>
           </div>
 
-          <ul className="mt-12 grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
             {sponsors.map((s) => (
               <li
                 key={s.name}
-                className="group flex aspect-square flex-col items-center justify-center rounded-2xl border border-border/70 bg-card p-4 text-center shadow-soft transition-all hover:-translate-y-1 hover:border-secondary hover:shadow-yellow"
+                className="group flex aspect-[5/3] flex-col items-center justify-center rounded-xl border border-border/70 bg-card px-3 py-3 text-center transition-all hover:-translate-y-0.5 hover:border-secondary hover:shadow-soft"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-yellow">
-                  <span className="font-serif text-sm font-bold text-primary">
-                    {s.name.charAt(0)}
-                  </span>
-                </div>
-                <span className="mt-3 font-serif text-base font-bold leading-tight text-primary">
+                <span className="font-serif text-sm font-semibold leading-tight text-primary">
                   {s.name}
                 </span>
                 <span className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
