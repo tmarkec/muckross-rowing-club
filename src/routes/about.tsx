@@ -138,13 +138,18 @@ function AboutPage() {
       <section className="bg-muted/40 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">What we stand for</h2>
+            <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">A club of two traditions</h2>
+            <p className="mt-4 text-muted-foreground">
+              On any evening at the Old Boathouse at Dundag, you might see a wood-built
+              Killarney Six training alongside a carbon-fibre Olympic scull — past and
+              future, side by side.
+            </p>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {[
-              { title: "Community", body: "A welcoming environment where rowers of every background and ability train, race and socialise together." },
-              { title: "Tradition", body: "Honouring the heritage of Irish rowing and our place within the Killarney sporting community." },
-              { title: "Excellence", body: "Supporting our crews to compete with pride at regattas across Ireland and beyond." },
+              { title: "Heritage", body: "Honouring the Killarney Six and the world's oldest traditional regatta — a 150-year-old spirit carried by every new generation." },
+              { title: "Community", body: "A welcoming home for rowers of every background and ability, rooted in the families and traditions of the Muckross Estate." },
+              { title: "Excellence", body: "From the Bourn Vincent Trophy to the Olympic Games — supporting our crews to compete with pride at the highest level." },
             ].map((v) => (
               <div key={v.title} className="rounded-2xl border border-border/60 bg-card p-8 shadow-soft">
                 <h3 className="font-serif text-xl font-semibold text-foreground">{v.title}</h3>
