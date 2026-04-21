@@ -22,9 +22,9 @@ function AboutPage() {
       <section className="relative overflow-hidden bg-gradient-navy py-20 text-primary-foreground sm:py-28">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Our Story</span>
-          <h1 className="mt-4 font-serif text-4xl font-bold sm:text-5xl">About the Club</h1>
+          <h1 className="mt-4 font-serif text-4xl font-bold sm:text-5xl">150 Years on the Lakes of Killarney</h1>
           <p className="mt-5 text-lg text-primary-foreground/85">
-            A community of rowers shaped by the lakes, mountains and traditions of Killarney.
+            From the Killarney Six to the Olympic Games — the heritage and ambition of Muckross Rowing Club.
           </p>
         </div>
       </section>
@@ -44,10 +44,92 @@ function AboutPage() {
                 among the most scenic in Europe.
               </p>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                Generations of rowers have trained here, and the club has long been a part
-                of life in Killarney. Our distinctive yellow kit is well-known on the
-                national regatta circuit.
+                Widely considered the oldest rowing club in Killarney, Muckross has been
+                the heartbeat of the Muckross community for over 150 years — deeply
+                intertwined with the families who lived and worked on the Muckross Estate.
+                Our distinctive yellow kit is known across the national regatta circuit.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-primary py-20 text-primary-foreground sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Heritage</span>
+            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl">A century and a half of rowing</h2>
+            <p className="mt-4 text-primary-foreground/80">
+              Few clubs in the world can trace a story like ours. Here are the moments that shaped Muckross.
+            </p>
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                year: "Mid-1800s",
+                title: "Foundations",
+                body: "Muckross is founded as Killarney's oldest rowing club, synonymous with the Traditional Killarney Six — a unique fixed-seat racing style on the Lakes of Killarney.",
+              },
+              {
+                year: "1924",
+                title: "The Elizabeth Rose",
+                body: "The club launches its most iconic boat, named after the daughter of the Vincent family of Muckross House. She celebrated her centenary in 2024 and remains the oldest traditional racing boat still in active use on the lakes.",
+              },
+              {
+                year: "1993",
+                title: "Bourn Vincent victory",
+                body: "A legendary win at the Killarney Regatta ends a 20-year wait for the Senior Men's Bourn Vincent Trophy and sparks decades of dominance in traditional racing.",
+              },
+            ].map((item) => (
+              <div key={item.title} className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-7">
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">{item.year}</span>
+                <h3 className="mt-2 font-serif text-xl font-semibold">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-primary-foreground/80">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-background py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">1990s — Present</span>
+              <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">From Lough Leane to the world stage</h2>
+              <p className="mt-5 leading-relaxed text-muted-foreground">
+                In the 1990s Muckross expanded beyond traditional lake rowing into
+                Olympic-style sliding-seat rowing, opening the door to national and
+                international competition. Our athletes have since worn the Green Jersey
+                of Ireland at every level of the sport.
+              </p>
+              <ul className="mt-6 space-y-4">
+                <li className="flex gap-4">
+                  <Trophy className="mt-0.5 h-5 w-5 flex-none text-secondary" />
+                  <div>
+                    <p className="font-semibold text-foreground">Olympic Games</p>
+                    <p className="text-sm text-muted-foreground">Multiple club Olympians at Athens 2004, Beijing 2008, Tokyo 2020 and Paris 2024.</p>
+                  </div>
+                </li>
+                <li className="flex gap-4">
+                  <Globe2 className="mt-0.5 h-5 w-5 flex-none text-secondary" />
+                  <div>
+                    <p className="font-semibold text-foreground">World Championships</p>
+                    <p className="text-sm text-muted-foreground">World Championship Gold and multiple podium finishes for Muckross athletes.</p>
+                  </div>
+                </li>
+                <li className="flex gap-4">
+                  <Anchor className="mt-0.5 h-5 w-5 flex-none text-secondary" />
+                  <div>
+                    <p className="font-semibold text-foreground">Coupe de la Jeunesse & Home Internationals</p>
+                    <p className="text-sm text-muted-foreground">A staple of the Irish junior and senior teams, with regular medals at Europe's leading junior regatta.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div className="overflow-hidden rounded-2xl shadow-elegant">
+              <img src={community} alt="Muckross rowing crew on the dock" width={1600} height={1024} loading="lazy" className="aspect-[4/3] w-full object-cover" />
             </div>
           </div>
         </div>
