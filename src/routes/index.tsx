@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Award, Users, Waves } from "lucide-react";
+import { ArrowRight, Award, Heart, Users, Waves } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import heroLake from "@/assets/hero-lake.jpg";
 import rowingAction from "@/assets/rowing-action.jpg";
@@ -165,6 +165,12 @@ function HomePage() {
               className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-foreground/10"
             >
               Get in touch
+            </Link>
+            <Link
+              to="/support"
+              className="inline-flex items-center gap-2 rounded-md border border-secondary/40 bg-secondary/10 px-6 py-3 text-sm font-semibold text-secondary transition-colors hover:bg-secondary/20"
+            >
+              <Heart className="h-4 w-4" /> Support the club
             </Link>
           </div>
         </div>
