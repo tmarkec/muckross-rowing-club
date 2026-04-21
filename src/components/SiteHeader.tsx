@@ -7,6 +7,7 @@ const navItems = [
   { to: "/about", label: "About" },
   { to: "/news", label: "News" },
   { to: "/join", label: "Join Us" },
+  { to: "/support", label: "Support" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
