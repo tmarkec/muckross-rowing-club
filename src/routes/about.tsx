@@ -109,7 +109,7 @@ function AboutPage() {
                   <Trophy className="mt-0.5 h-5 w-5 flex-none text-secondary" />
                   <div>
                     <p className="font-semibold text-foreground">Olympic Games</p>
-                    <p className="text-sm text-muted-foreground">Multiple club Olympians at Athens 2004, Beijing 2008, Tokyo 2020 and Paris 2024.</p>
+                    <p className="text-sm text-muted-foreground">Multiple club Olympians at Athens 2004 and Beijing 2008.</p>
                   </div>
                 </li>
                 <li className="flex gap-4">
