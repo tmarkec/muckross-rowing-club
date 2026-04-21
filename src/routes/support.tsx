@@ -57,30 +57,67 @@ function SupportPage() {
               Why your support matters
             </span>
             <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
-              Running a rowing club isn't cheap
+              The real cost of keeping crews on the water
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              Boats, blades, safety equipment and the upkeep of our historic boathouse on
-              Lough Leane all carry significant ongoing costs. Membership fees cover only
-              part of what's needed to keep Muckross competing at the highest level — and
-              to keep introducing new generations of rowers to the sport.
+              From petrol for the safety launches to electricity bills, boathouse
+              maintenance and the constant repair and replacement of boats, oars and
+              ergometers — the running costs are relentless. Membership fees cover only
+              part of what's needed to keep Muckross competing at the highest level.
             </p>
           </div>
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {[
-              { icon: Anchor, title: "Boats & Equipment", body: "A new racing eight can cost €30,000+. Blades, riggers and ergometers all need regular replacement." },
-              { icon: Wrench, title: "Boathouse Upkeep", body: "Maintaining our historic boathouse on Lough Leane — from pontoons to roofing — is a year-round commitment." },
-              { icon: Users, title: "Junior Programme", body: "Coaching, safety launches and travel to regattas keep our junior section thriving and inclusive." },
-            ].map(({ icon: Icon, title, body }) => (
-              <div key={title} className="rounded-2xl border border-border/60 bg-card p-6 shadow-soft">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
-                  <Icon className="h-5 w-5 text-primary" />
-                </div>
-                <h3 className="mt-4 font-serif text-lg font-semibold text-foreground">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
+            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-soft">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
+                <Fuel className="h-5 w-5 text-primary" />
               </div>
-            ))}
+              <h3 className="mt-4 font-serif text-lg font-semibold text-foreground">Fuel & Running Costs</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Petrol for the safety launches, electricity, water and insurance — the
+                day-to-day bills that keep the club open and our crews safe on the water.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-soft">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
+                <Wrench className="h-5 w-5 text-primary" />
+              </div>
+              <h3 className="mt-4 font-serif text-lg font-semibold text-foreground">Boathouse Maintenance</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Pontoons, doors, roofing and the small repairs that never stop — keeping
+                the boathouse on Lough Leane in good working order year-round.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-soft">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
+                <Anchor className="h-5 w-5 text-primary" />
+              </div>
+              <h3 className="mt-4 font-serif text-lg font-semibold text-foreground">Boats, Oars & Ergs</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Repairs, replacement oars, new ergometers and — when the time comes — new
+                racing shells. See current prices from{" "}
+                <a
+                  href="https://www.filippiboats.it/en/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-0.5 font-semibold text-primary underline-offset-4 hover:underline"
+                >
+                  Filippi <ExternalLink className="h-3 w-3" />
+                </a>{" "}
+                and{" "}
+                <a
+                  href="https://www.concept2.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-0.5 font-semibold text-primary underline-offset-4 hover:underline"
+                >
+                  Concept2 <ExternalLink className="h-3 w-3" />
+                </a>
+                .
+              </p>
+            </div>
           </div>
         </div>
       </section>
