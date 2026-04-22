@@ -1,7 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Mail, MapPin, Send } from "lucide-react";
+import { Mail, MapPin, Send, Navigation } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+
+const LAT = 52.02188586501607;
+const LNG = -9.508196213456204;
+const BBOX_DELTA = 0.01;
+const OSM_EMBED_URL = `https://www.openstreetmap.org/export/embed.html?bbox=${LNG - BBOX_DELTA}%2C${LAT - BBOX_DELTA}%2C${LNG + BBOX_DELTA}%2C${LAT + BBOX_DELTA}&layer=mapnik&marker=${LAT}%2C${LNG}`;
+const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${LAT},${LNG}`;
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -120,6 +126,38 @@ function ContactPage() {
                 )}
               </form>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-muted/40 pb-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
+                Find the boathouse
+              </span>
+              <h2 className="mt-2 font-serif text-2xl font-bold text-foreground sm:text-3xl">
+                On the shores of Lough Leane
+              </h2>
+            </div>
+            <a
+              href={DIRECTIONS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              <Navigation className="h-4 w-4" /> Get directions
+            </a>
+          </div>
+
+          <div className="overflow-hidden rounded-2xl border border-border/60 shadow-soft">
+            <iframe
+              title="Muckross Rowing Club boathouse location on Lough Leane"
+              src={OSM_EMBED_URL}
+              loading="lazy"
+              className="h-[420px] w-full border-0"
+            />
           </div>
         </div>
       </section>
