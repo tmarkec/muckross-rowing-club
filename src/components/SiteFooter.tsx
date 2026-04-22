@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
+import logo from "@/assets/muckross-logo.png";
 
 const CLUBFORCE_URL = "https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/";
 
@@ -10,9 +11,11 @@ export function SiteFooter() {
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-1">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-yellow">
-                <span className="font-serif text-lg font-bold text-primary">M</span>
-              </div>
+              <img
+                src={logo}
+                alt="Muckross Rowing Club crest"
+                className="h-12 w-auto"
+              />
               <div>
                 <div className="font-serif text-lg font-bold">Muckross RC</div>
                 <div className="text-[10px] uppercase tracking-[0.15em] text-primary-foreground/70">
