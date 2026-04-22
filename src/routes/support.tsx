@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, Wrench, Anchor, Fuel, ArrowRight, Mail, ExternalLink } from "lucide-react";
+import { Heart, Copy, Check, Wrench, Anchor, Fuel, ArrowRight, Mail, ExternalLink, Ticket, Calendar } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { LottoCountdown } from "@/components/LottoCountdown";
+
+const LOTTO_URL = "https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/";
 
 export const Route = createFileRoute("/support")({
   head: () => ({
