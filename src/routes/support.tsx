@@ -157,6 +157,50 @@ function SupportPage() {
         </div>
       </section>
 
+      {/* Muckross Lotto */}
+      <section className="bg-background py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-3xl border border-border/60 bg-gradient-yellow p-8 shadow-yellow sm:p-12">
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-elegant">
+                <Ticket className="h-6 w-6 text-secondary" />
+              </div>
+              <span className="mt-5 text-xs font-semibold uppercase tracking-[0.2em] text-primary/70">
+                Community fundraiser
+              </span>
+              <h2 className="mt-2 font-serif text-3xl font-bold text-primary sm:text-4xl">
+                Muckross Lotto
+              </h2>
+              <p className="mt-3 max-w-xl text-base text-primary/80">
+                Play the Muckross Lotto to support the club and be in with a chance to win.
+                Draw every Saturday at 8:00 PM.
+              </p>
+
+              <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold text-primary">
+                <Calendar className="h-3.5 w-3.5" />
+                Next draw — Saturday, 8:00 PM
+              </div>
+
+              <div className="w-full max-w-md">
+                <LottoCountdown />
+              </div>
+
+              <a
+                href={LOTTO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-105"
+              >
+                <Ticket className="h-4 w-4" /> Play the Lotto <ArrowRight className="h-4 w-4" />
+              </a>
+              <p className="mt-3 text-[11px] text-primary/60">
+                Play responsibly. Must be 18+ to enter.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Sponsors */}
       <section className="bg-background py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
