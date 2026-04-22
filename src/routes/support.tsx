@@ -180,7 +180,7 @@ function SupportPage() {
             </h3>
             <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
               We'd love to hear from local businesses interested in supporting the club.
-              Get in touch and we can chat about ways to work together.
+              Get in touch with us and we can chat about ways to work together.
             </p>
             <Link
               to="/contact"
