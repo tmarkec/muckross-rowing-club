@@ -46,12 +46,7 @@ export function SiteFooter() {
             <ul className="mt-4 space-y-2 text-sm">
               <li>
                 <a href={CLUBFORCE_URL} target="_blank" rel="noopener noreferrer" className="text-primary-foreground/80 transition-colors hover:text-secondary">
-                  Pay Membership (ClubForce)
-                </a>
-              </li>
-              <li>
-                <a href={CLUBFORCE_URL} target="_blank" rel="noopener noreferrer" className="text-primary-foreground/80 transition-colors hover:text-secondary">
-                  Pay Per Row
+                  ClubForce
                 </a>
               </li>
               <li>
