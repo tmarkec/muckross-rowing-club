@@ -1,9 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, Calendar } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 
 const CLUBFORCE_URL = "https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/";
-const PAY_PER_EVENT_URL = "https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/";
 
 export const Route = createFileRoute("/join")({
   head: () => ({
@@ -73,8 +72,9 @@ function JoinPage() {
               Membership & payments via ClubForce
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base text-primary/80">
-              Sign up or renew your annual membership, or pay-per-event for one-off
-              sessions and trial rows. For everything else, get in touch.
+              Sign up, renew your annual membership or pay-per-event for one-off
+              sessions and trial rows — all handled in one place on ClubForce.
+              For anything else, get in touch.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
@@ -83,15 +83,7 @@ function JoinPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-105"
               >
-                Club Membership <ArrowRight className="h-4 w-4" />
-              </a>
-              <a
-                href={PAY_PER_EVENT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-primary/30 bg-background/80 px-6 py-3 text-sm font-semibold text-primary backdrop-blur-sm transition-colors hover:bg-background"
-              >
-                <Calendar className="h-4 w-4" /> Pay Per Event
+                Open ClubForce <ArrowRight className="h-4 w-4" />
               </a>
               <Link
                 to="/contact"
