@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, ArrowRight, Mail, ExternalLink, Ticket, Calendar } from "lucide-react";
+import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Calendar } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 
@@ -17,14 +17,6 @@ export const Route = createFileRoute("/support")({
   }),
   component: SupportPage,
 });
-
-const sponsors = [
-  { name: "Reeks Brewing Co.", tag: "Local Brewery" },
-  { name: "Lough Leane Hotel", tag: "Hospitality" },
-  { name: "Killarney Outdoors", tag: "Outdoor Gear" },
-  { name: "Kerry Marine Supplies", tag: "Marine Equipment" },
-  { name: "MacGillycuddy Insurance", tag: "Insurance" },
-];
 
 const bank = {
   accountName: "Muckross Rowing Club",
@@ -179,52 +171,23 @@ function SupportPage() {
         </div>
       </section>
 
-      {/* Sponsors */}
+      {/* Become a sponsor */}
       <section className="bg-background py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
-              Thank you
-            </span>
-            <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
-              Our sponsors
-            </h2>
-            <p className="mt-4 text-base text-muted-foreground">
-              Muckross Rowing Club is proudly supported by these local businesses.
-              Their generosity keeps our crews on the water.
-            </p>
-          </div>
-
-          <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-            {sponsors.map((s) => (
-              <li
-                key={s.name}
-                className="group flex aspect-[5/3] flex-col items-center justify-center rounded-xl border border-border/70 bg-card px-3 py-3 text-center transition-all hover:-translate-y-0.5 hover:border-secondary hover:shadow-soft"
-              >
-                <span className="font-serif text-sm font-semibold leading-tight text-primary">
-                  {s.name}
-                </span>
-                <span className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-                  {s.tag}
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-14 rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center">
-            <h3 className="font-serif text-xl font-semibold text-foreground">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center">
+            <h3 className="font-serif text-2xl font-semibold text-foreground">
               Interested in becoming a sponsor?
             </h3>
             <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
               Sponsorship packages are available for businesses who'd like to support the
               club and have their brand seen on our boats, kit and at regattas across Ireland.
             </p>
-            <a
-              href="mailto:info@muckrossrowingclub.ie?subject=Sponsorship%20enquiry"
+            <Link
+              to="/contact"
               className="mt-5 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              <Mail className="h-4 w-4" /> Enquire about sponsorship <ArrowRight className="h-4 w-4" />
-            </a>
+              Enquire about sponsorship <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>
