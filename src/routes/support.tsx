@@ -18,14 +18,6 @@ export const Route = createFileRoute("/support")({
   component: SupportPage,
 });
 
-const sponsors = [
-  { name: "Reeks Brewing Co.", tag: "Local Brewery" },
-  { name: "Lough Leane Hotel", tag: "Hospitality" },
-  { name: "Killarney Outdoors", tag: "Outdoor Gear" },
-  { name: "Kerry Marine Supplies", tag: "Marine Equipment" },
-  { name: "MacGillycuddy Insurance", tag: "Insurance" },
-];
-
 const bank = {
   accountName: "Muckross Rowing Club",
   iban: "IE00 BOFI 0000 0000 0000 00",
