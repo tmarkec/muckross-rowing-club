@@ -179,8 +179,8 @@ function SupportPage() {
               Interested in becoming a sponsor?
             </h3>
             <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-              Sponsorship packages are available for businesses who'd like to support the
-              club and have their brand seen on our boats, kit and at regattas across Ireland.
+              We'd love to hear from local businesses interested in supporting the club.
+              Get in touch and we can chat about ways to work together.
             </p>
             <Link
               to="/contact"
