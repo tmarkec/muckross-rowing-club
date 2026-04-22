@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import logo from "@/assets/muckross-logo.png";
 
 const navItems = [
   { to: "/", label: "Home" },
@@ -18,9 +19,11 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border/40 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-yellow shadow-yellow">
-            <span className="font-serif text-lg font-bold text-primary">M</span>
-          </div>
+          <img
+            src={logo}
+            alt="Muckross Rowing Club crest"
+            className="h-11 w-auto"
+          />
           <div className="leading-tight">
             <div className="font-serif text-base font-bold text-primary sm:text-lg">Muckross</div>
             <div className="text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground">
