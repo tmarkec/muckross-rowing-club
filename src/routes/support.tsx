@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, Wrench, Anchor, Fuel, ArrowRight, Mail, ExternalLink, Ticket, Calendar } from "lucide-react";
+import { Heart, Copy, Check, ArrowRight, Mail, ExternalLink, Ticket, Calendar } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 
@@ -54,53 +54,27 @@ function SupportPage() {
 
       {/* Why we need support */}
       <section className="bg-background py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
               Why your support matters
             </span>
             <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
               The real cost of keeping crews on the water
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              From petrol for the safety launches to electricity bills, boathouse
-              maintenance and the constant repair and replacement of boats, oars and
-              ergometers — the running costs are relentless. Membership fees cover only
-              part of what's needed to keep Muckross competing at the highest level.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-soft">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
-                <Fuel className="h-5 w-5 text-primary" />
-              </div>
-              <h3 className="mt-4 font-serif text-lg font-semibold text-foreground">Fuel & Running Costs</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Petrol for the safety launches, electricity, water and insurance — the
-                day-to-day bills that keep the club open and our crews safe on the water.
+            <div className="mt-6 space-y-4 text-left text-base leading-relaxed text-muted-foreground sm:text-[1.0625rem]">
+              <p>
+                Running a rowing club is relentless work behind the scenes. Our biggest
+                ongoing cost is petrol for the safety launches that follow every crew on
+                the water, closely followed by the regular bills — electricity, water,
+                insurance — that keep the boathouse open year-round.
               </p>
-            </div>
-
-            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-soft">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
-                <Wrench className="h-5 w-5 text-primary" />
-              </div>
-              <h3 className="mt-4 font-serif text-lg font-semibold text-foreground">Boathouse Maintenance</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Pontoons, doors, roofing and the small repairs that never stop — keeping
-                the boathouse on Lough Leane in good working order year-round.
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-soft">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
-                <Anchor className="h-5 w-5 text-primary" />
-              </div>
-              <h3 className="mt-4 font-serif text-lg font-semibold text-foreground">Boats, Oars & Ergs</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Repairs, replacement oars, new ergometers and — when the time comes — new
-                racing shells. See current prices from{" "}
+              <p>
+                Then there's the constant small maintenance: pontoons, doors, roofing
+                and the dozens of repairs that never stop on a building sat on the
+                shore of Lough Leane. And of course the equipment itself — boat
+                repairs, replacement oars, new ergometers and, when the time comes,
+                new racing shells from{" "}
                 <a
                   href="https://www.filippiboats.it/en/"
                   target="_blank"
@@ -109,7 +83,7 @@ function SupportPage() {
                 >
                   Filippi <ExternalLink className="h-3 w-3" />
                 </a>{" "}
-                and{" "}
+                or training gear from{" "}
                 <a
                   href="https://www.concept2.com/"
                   target="_blank"
@@ -119,6 +93,10 @@ function SupportPage() {
                   Concept2 <ExternalLink className="h-3 w-3" />
                 </a>
                 .
+              </p>
+              <p>
+                Membership fees cover only part of it. Every donation and sponsorship
+                helps keep Muckross competing at the highest level.
               </p>
             </div>
           </div>
