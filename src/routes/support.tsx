@@ -115,7 +115,23 @@ function SupportPage() {
               </p>
             </div>
 
-            <BankDetails />
+            {/* Primary CTA — card / online donation */}
+            <div className="mt-8 flex flex-col items-center">
+              <a
+                href={DONATE_URL}
+                className="group inline-flex w-full max-w-sm items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-elegant transition-all hover:scale-[1.02] hover:bg-primary/90 sm:text-lg"
+              >
+                <CreditCard className="h-5 w-5" />
+                Donate by Card
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Secure online payment · Apple Pay · Google Pay
+              </p>
+            </div>
+
+            {/* Secondary — bank transfer */}
+            <BankTransferDetails />
 
             <div className="mt-8 rounded-xl bg-muted/60 p-4 text-center text-xs text-muted-foreground">
               Please use your name as the payment reference so we can thank you personally.
