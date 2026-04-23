@@ -5,13 +5,54 @@ import heroLake from "@/assets/hero-lake.jpg";
 import rowingAction from "@/assets/rowing-action.jpg";
 import community from "@/assets/club-community.jpg";
 
+const SITE_URL = "https://muckrossrowingclub.ie";
+
+const homeJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SportsClub",
+  name: "Muckross Rowing Club",
+  alternateName: ["Muckross RC", "Muckross Rowing"],
+  sport: "Rowing",
+  url: SITE_URL,
+  logo: `${SITE_URL}/muckross-logo.png`,
+  image: `${SITE_URL}/hero-lake.jpg`,
+  description:
+    "Muckross Rowing Club — rowing on the historic lakes of Killarney, Co. Kerry. Welcoming members of all ages and abilities.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Killarney",
+    addressRegion: "Co. Kerry",
+    addressCountry: "IE",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 52.02188586501607,
+    longitude: -9.508196213456204,
+  },
+  areaServed: "Killarney, Co. Kerry, Ireland",
+};
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Muckross Rowing Club — Rowing on Lough Leane, Killarney" },
-      { name: "description", content: "Welcome to Muckross Rowing Club. Join our community rowing on the stunning waters of Lough Leane in Killarney, Co. Kerry." },
-      { property: "og:title", content: "Muckross Rowing Club — Killarney" },
-      { property: "og:description", content: "Rowing on the historic waters of Lough Leane beneath the MacGillycuddy's Reeks." },
+      { title: "Muckross Rowing Club | Killarney, Co. Kerry — Rowing on the Lakes of Killarney" },
+      { name: "description", content: "Muckross Rowing Club — a welcoming rowing club on the historic lakes of Killarney, Co. Kerry. Junior, senior, masters & learn-to-row programmes for all ages and abilities." },
+      { name: "keywords", content: "Muckross Rowing Club, Muckross RC, rowing Killarney, Killarney rowing club, Lough Leane rowing, rowing Kerry, learn to row Killarney" },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
+      { name: "theme-color", content: "#0a2540" },
+      { property: "og:title", content: "Muckross Rowing Club — Killarney, Co. Kerry" },
+      { property: "og:description", content: "Rowing on the historic lakes of Killarney, beneath the MacGillycuddy's Reeks." },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:image", content: `${SITE_URL}/hero-lake.jpg` },
+      { property: "og:locale", content: "en_IE" },
+      { name: "twitter:image", content: `${SITE_URL}/hero-lake.jpg` },
+    ],
+    links: [{ rel: "canonical", href: SITE_URL + "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(homeJsonLd),
+      },
     ],
   }),
   component: HomePage,
@@ -37,8 +78,8 @@ function HomePage() {
             </span>
             <h1 className="mt-6 font-serif text-4xl font-bold leading-[1.05] text-primary-foreground sm:text-5xl lg:text-6xl">
               Rowing on the<br />
-              <span className="text-secondary">historic waters</span><br />
-              of Lough Leane
+              <span className="text-secondary">historic lakes</span><br />
+              of Killarney
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
               A welcoming club for rowers of all ages and abilities, beneath the

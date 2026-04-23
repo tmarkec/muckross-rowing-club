@@ -24,7 +24,7 @@ export function SiteFooter() {
               </div>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-primary-foreground/75">
-              Rowing on the historic waters of Lough Leane, beneath the MacGillycuddy's Reeks.
+              Rowing on the historic lakes of Killarney, beneath the MacGillycuddy's Reeks.
             </p>
           </div>
 
