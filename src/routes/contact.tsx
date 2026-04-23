@@ -143,12 +143,8 @@ function ContactPage() {
             </div>
             <a
               href={DIRECTIONS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(event) => {
-                event.preventDefault();
-                window.open(DIRECTIONS_URL, "_blank", "noopener,noreferrer");
-              }}
+              target="_top"
+              rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
               <Navigation className="h-4 w-4" /> Get directions
