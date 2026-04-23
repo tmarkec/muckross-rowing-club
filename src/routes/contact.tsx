@@ -7,7 +7,7 @@ const LAT = 52.02188586501607;
 const LNG = -9.508196213456204;
 const BBOX_DELTA = 0.01;
 const OSM_EMBED_URL = `https://www.openstreetmap.org/export/embed.html?bbox=${LNG - BBOX_DELTA}%2C${LAT - BBOX_DELTA}%2C${LNG + BBOX_DELTA}%2C${LAT + BBOX_DELTA}&layer=mapnik&marker=${LAT}%2C${LNG}`;
-const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${LAT},${LNG}`;
+const DIRECTIONS_URL = `https://www.openstreetmap.org/directions?from=&to=${LAT}%2C${LNG}`;
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
