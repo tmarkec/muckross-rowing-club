@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Calendar } from "lucide-react";
+import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Calendar, CreditCard } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 
 const LOTTO_URL = "https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/";
+// TODO: Replace with real Stripe / iDonate.ie / GoFundMe link when payments are set up.
+const DONATE_URL = "#donate-bank";
 
 export const Route = createFileRoute("/support")({
   head: () => ({
@@ -113,7 +115,23 @@ function SupportPage() {
               </p>
             </div>
 
-            <BankDetails />
+            {/* Primary CTA — card / online donation */}
+            <div className="mt-8 flex flex-col items-center">
+              <a
+                href={DONATE_URL}
+                className="group inline-flex w-full max-w-sm items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-elegant transition-all hover:scale-[1.02] hover:bg-primary/90 sm:text-lg"
+              >
+                <CreditCard className="h-5 w-5" />
+                Donate by Card
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Secure online payment · Apple Pay · Google Pay
+              </p>
+            </div>
+
+            {/* Secondary — bank transfer */}
+            <BankTransferDetails />
 
             <div className="mt-8 rounded-xl bg-muted/60 p-4 text-center text-xs text-muted-foreground">
               Please use your name as the payment reference so we can thank you personally.
@@ -195,8 +213,9 @@ function SupportPage() {
   );
 }
 
-function BankDetails() {
+function BankTransferDetails() {
   const [copied, setCopied] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   const copy = async (label: string, value: string) => {
     try {
@@ -216,12 +235,21 @@ function BankDetails() {
   ];
 
   return (
-    <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-background">
-      <div className="border-b border-border bg-muted/40 px-5 py-3">
+    <div id="donate-bank" className="mt-6 overflow-hidden rounded-2xl border border-border bg-background scroll-mt-24">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-4 border-b border-border bg-muted/40 px-5 py-3 text-left transition-colors hover:bg-muted/60"
+        aria-expanded={open}
+      >
         <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Bank Transfer Details
+          Prefer bank transfer? Show details
         </span>
-      </div>
+        <ArrowRight
+          className={`h-4 w-4 text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`}
+        />
+      </button>
+      {open && (
       <dl className="divide-y divide-border">
         {rows.map((row) => (
           <div key={row.label} className="flex items-center justify-between gap-4 px-5 py-4">
@@ -254,6 +282,7 @@ function BankDetails() {
           </div>
         ))}
       </dl>
+      )}
     </div>
   );
 }
