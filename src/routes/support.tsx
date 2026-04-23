@@ -213,8 +213,9 @@ function SupportPage() {
   );
 }
 
-function BankDetails() {
+function BankTransferDetails() {
   const [copied, setCopied] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   const copy = async (label: string, value: string) => {
     try {
@@ -234,12 +235,21 @@ function BankDetails() {
   ];
 
   return (
-    <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-background">
-      <div className="border-b border-border bg-muted/40 px-5 py-3">
+    <div id="donate-bank" className="mt-6 overflow-hidden rounded-2xl border border-border bg-background scroll-mt-24">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-4 border-b border-border bg-muted/40 px-5 py-3 text-left transition-colors hover:bg-muted/60"
+        aria-expanded={open}
+      >
         <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          Bank Transfer Details
+          Prefer bank transfer? Show details
         </span>
-      </div>
+        <ArrowRight
+          className={`h-4 w-4 text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`}
+        />
+      </button>
+      {open && (
       <dl className="divide-y divide-border">
         {rows.map((row) => (
           <div key={row.label} className="flex items-center justify-between gap-4 px-5 py-4">
@@ -272,6 +282,7 @@ function BankDetails() {
           </div>
         ))}
       </dl>
+      )}
     </div>
   );
 }
