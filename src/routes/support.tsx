@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Calendar } from "lucide-react";
+import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Calendar, CreditCard, Landmark, ChevronDown } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 
 const LOTTO_URL = "https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/";
+// TODO: Replace with real Stripe / iDonate.ie / GoFundMe link when payments are set up.
+const DONATE_URL = "#donate-bank";
 
 export const Route = createFileRoute("/support")({
   head: () => ({
