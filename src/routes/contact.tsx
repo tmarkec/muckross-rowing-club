@@ -65,7 +65,7 @@ function ContactPage() {
                   </div>
                   <div>
                     <div className="font-semibold text-foreground">Boathouse</div>
-                    <p className="mt-1 text-muted-foreground">Lough Leane, Killarney<br />Co. Kerry, Ireland</p>
+                    <p className="mt-1 text-muted-foreground">Muckross Rd, Muckross<br />Killarney, Co. Kerry, Ireland</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
