@@ -20,8 +20,10 @@ const homeJsonLd = {
     "Muckross Rowing Club — rowing on the historic lakes of Killarney, Co. Kerry. Welcoming members of all ages and abilities.",
   address: {
     "@type": "PostalAddress",
+    streetAddress: "Muckross Rd, Muckross",
     addressLocality: "Killarney",
     addressRegion: "Co. Kerry",
+    postalCode: "V93",
     addressCountry: "IE",
   },
   geo: {
@@ -30,6 +32,10 @@ const homeJsonLd = {
     longitude: -9.508196213456204,
   },
   areaServed: "Killarney, Co. Kerry, Ireland",
+  sameAs: [
+    "https://www.facebook.com/muckrossrc/",
+    "https://www.instagram.com/muckrossrc/",
+  ],
 };
 
 export const Route = createFileRoute("/")({
