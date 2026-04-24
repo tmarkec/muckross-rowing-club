@@ -67,7 +67,7 @@ export function SiteFooter() {
             <ul className="mt-4 space-y-3 text-sm text-primary-foreground/80">
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-                <span>Lough Leane, Killarney<br />Co. Kerry, Ireland</span>
+                <span>Muckross Rd, Muckross<br />Killarney, Co. Kerry, Ireland</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 shrink-0 text-secondary" />
@@ -77,10 +77,10 @@ export function SiteFooter() {
               </li>
             </ul>
             <div className="mt-4 flex gap-3">
-              <a href="#" aria-label="Facebook" className="rounded-full bg-primary-foreground/10 p-2 transition-colors hover:bg-secondary hover:text-primary">
+              <a href="https://www.facebook.com/muckrossrc/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="rounded-full bg-primary-foreground/10 p-2 transition-colors hover:bg-secondary hover:text-primary">
                 <Facebook className="h-4 w-4" />
               </a>
-              <a href="#" aria-label="Instagram" className="rounded-full bg-primary-foreground/10 p-2 transition-colors hover:bg-secondary hover:text-primary">
+              <a href="https://www.instagram.com/muckrossrc/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="rounded-full bg-primary-foreground/10 p-2 transition-colors hover:bg-secondary hover:text-primary">
                 <Instagram className="h-4 w-4" />
               </a>
             </div>
@@ -89,7 +89,7 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-primary-foreground/15 pt-6 text-xs text-primary-foreground/60 sm:flex-row">
           <p>© {new Date().getFullYear()} Muckross Rowing Club. All rights reserved.</p>
-          <p>Lough Leane · Killarney · Co. Kerry</p>
+          <p>Muckross Rd · Killarney · Co. Kerry</p>
         </div>
       </div>
     </footer>
