@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Calendar, CreditCard, Users, HandHeart, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake, Building2 } from "lucide-react";
+import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, CreditCard, Users, HandHeart, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake, Building2 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 
