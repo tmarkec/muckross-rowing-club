@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Calendar, CreditCard } from "lucide-react";
+import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Calendar, CreditCard, Users, HandHeart, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 
@@ -205,6 +205,63 @@ function SupportPage() {
               className="mt-5 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
               Enquire about sponsorship <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Volunteering */}
+      <section id="volunteering" className="bg-muted/40 py-20 scroll-mt-24">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-elegant">
+              <HandHeart className="h-6 w-6 text-secondary" />
+            </div>
+            <span className="mt-5 block text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
+              Get involved
+            </span>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+              Volunteering
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
+              Volunteering is at the heart of Muckross Rowing Club. It's what underpins the club's
+              success and what enables every rower and cox to realise their ambition on the water.
+            </p>
+            <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
+              Whether you're a new member, a parent or guardian of a junior, a life-long member,
+              a lover of sport, or a friend of Muckross — your help from time to time is greatly
+              appreciated. There's so much to choose from…
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { icon: Trophy, title: "Rowing events", body: "Help run regattas, time trials and club race days." },
+              { icon: Megaphone, title: "Fundraising & celebrations", body: "Lend a hand at fundraisers, dinners and club socials." },
+              { icon: ClipboardList, title: "Administration & management", body: "Committee work, communications and day-to-day running." },
+              { icon: GraduationCap, title: "Coaching & training support", body: "Assist coaches on the bank, in the gym or in the launch." },
+              { icon: Users, title: "Regatta logistics", body: "Boat trailers, equipment, food and travel for race days." },
+              { icon: Wrench, title: "Facilities & equipment", body: "Boathouse upkeep, boat repairs and pontoon maintenance." },
+              { icon: HeartHandshake, title: "Rower wellbeing", body: "Welfare, mentoring and supporting our junior rowers." },
+            ].map(({ icon: Icon, title, body }) => (
+              <div key={title} className="flex gap-4 rounded-2xl border border-border/60 bg-card p-5 shadow-soft">
+                <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
+                  <Icon className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-serif text-base font-semibold text-foreground">{title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Volunteer with Muckross <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
