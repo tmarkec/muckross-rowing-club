@@ -19,7 +19,7 @@ export function SiteFooter() {
               <div>
                 <div className="font-serif text-lg font-bold">Muckross RC</div>
                 <div className="text-[10px] uppercase tracking-[0.15em] text-primary-foreground/70">
-                  Killarney · Est. heritage
+                  Killarney · Co. Kerry
                 </div>
               </div>
             </div>
@@ -89,7 +89,7 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-primary-foreground/15 pt-6 text-xs text-primary-foreground/60 sm:flex-row">
           <p>© {new Date().getFullYear()} Muckross Rowing Club. All rights reserved.</p>
-          <p>Muckross Rd · Killarney · Co. Kerry</p>
+          <p>Rowing on the lakes of Killarney</p>
         </div>
       </div>
     </footer>
