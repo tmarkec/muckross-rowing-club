@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Anchor, Trophy, Globe2 } from "lucide-react";
+import { ArrowRight, Anchor, Trophy, Globe2, FileText, Download } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import boathouse from "@/assets/boathouse.jpg";
 import community from "@/assets/club-community.jpg";
@@ -178,6 +178,63 @@ function AboutPage() {
               <img src={community} alt="Muckross rowing members on the dock" width={1600} height={1024} loading="lazy" className="aspect-[4/3] w-full object-cover" />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Club documents & policies */}
+      <section id="documents" className="bg-muted/40 py-20 scroll-mt-24">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-elegant">
+              <FileText className="h-6 w-6 text-secondary" />
+            </div>
+            <span className="mt-5 block text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
+              Governance
+            </span>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+              Club documents & policies
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
+              Muckross Rowing Club is committed to providing a safe, welcoming and well-governed
+              environment for all members. Our key policy documents are available to download below.
+            </p>
+          </div>
+
+          <ul className="mt-10 grid gap-3 sm:grid-cols-2">
+            {[
+              { title: "Code of Behaviour", body: "Standards of conduct expected of members, coaches and supporters." },
+              { title: "Child Safeguarding Statement", body: "How we protect and support our junior rowers." },
+              { title: "Anti-Bullying Policy", body: "Our commitment to a respectful, inclusive club." },
+              { title: "Health & Safety Policy", body: "On-water and boathouse safety procedures." },
+              { title: "Club Constitution", body: "The governing rules of Muckross Rowing Club." },
+              { title: "Complaints & Disciplinary Procedure", body: "How concerns are raised and addressed fairly." },
+            ].map((doc) => (
+              <li key={doc.title}>
+                <a
+                  href="#"
+                  className="flex items-start gap-4 rounded-2xl border border-border/60 bg-card p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:border-secondary hover:shadow-elegant"
+                >
+                  <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
+                    <Download className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-serif text-base font-semibold text-foreground">{doc.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{doc.body}</p>
+                    <span className="mt-2 inline-block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      PDF · Coming soon
+                    </span>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-8 text-center text-sm text-muted-foreground">
+            For any questions on club governance or to request a document,{" "}
+            <Link to="/contact" className="font-semibold text-primary underline-offset-4 hover:underline">
+              get in touch
+            </Link>.
+          </p>
         </div>
       </section>
     </SiteLayout>
