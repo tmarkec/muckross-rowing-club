@@ -37,7 +37,7 @@ export function SiteFooter() {
               <li><Link to="/about" className="text-primary-foreground/80 transition-colors hover:text-secondary">About</Link></li>
               <li><Link to="/news" className="text-primary-foreground/80 transition-colors hover:text-secondary">News</Link></li>
               <li><Link to="/join" className="text-primary-foreground/80 transition-colors hover:text-secondary">Join Us</Link></li>
-              <li><Link to="/support" className="text-primary-foreground/80 transition-colors hover:text-secondary">Support the Club</Link></li>
+              <li><Link to="/support" className="text-primary-foreground/80 transition-colors hover:text-secondary">Support</Link></li>
               <li><Link to="/contact" className="text-primary-foreground/80 transition-colors hover:text-secondary">Contact</Link></li>
             </ul>
           </div>
