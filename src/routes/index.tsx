@@ -83,9 +83,7 @@ function HomePage() {
               Killarney · Co. Kerry
             </span>
             <h1 className="mt-6 font-serif text-4xl font-bold leading-[1.05] text-primary-foreground sm:text-5xl lg:text-6xl">
-              Rowing on the<br />
-              <span className="text-secondary">historic lakes</span><br />
-              of Killarney
+              Rowing on the <span className="text-secondary">historic lakes</span> of Killarney
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
               A welcoming club for rowers of all ages and abilities, beneath the
@@ -207,12 +205,6 @@ function HomePage() {
             >
               Visit ClubForce <ArrowRight className="h-4 w-4" />
             </a>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-foreground/10"
-            >
-              Get in touch
-            </Link>
             <Link
               to="/support"
               className="inline-flex items-center gap-2 rounded-md border border-secondary/40 bg-secondary/10 px-6 py-3 text-sm font-semibold text-secondary transition-colors hover:bg-secondary/20"
