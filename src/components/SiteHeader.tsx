@@ -50,7 +50,7 @@ export function SiteHeader() {
             rel="noopener noreferrer"
             className="ml-2 inline-flex items-center justify-center rounded-md bg-gradient-yellow px-4 py-2 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
           >
-            Membership
+            Join Us
           </a>
         </nav>
 
@@ -84,7 +84,7 @@ export function SiteHeader() {
               rel="noopener noreferrer"
               className="mt-2 inline-flex items-center justify-center rounded-md bg-gradient-yellow px-4 py-3 text-sm font-semibold text-primary shadow-yellow"
             >
-              Membership / Pay-Per-Row
+              Join Us
             </a>
           </nav>
         </div>
