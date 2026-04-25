@@ -35,6 +35,12 @@ export const Route = createRootRoute({
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Muckross Rowing Club" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Muckross Rowing Club — Killarney, Co. Kerry" },
+      { name: "twitter:title", content: "Muckross Rowing Club — Killarney, Co. Kerry" },
+      { property: "og:description", content: "Muckross Rowing Club rows on the historic waters of Lough Leane, Killarney. Welcoming members of all ages and abilities." },
+      { name: "twitter:description", content: "Muckross Rowing Club rows on the historic waters of Lough Leane, Killarney. Welcoming members of all ages and abilities." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bd8c8a1a-519e-48f3-bade-d57a3c927f19/id-preview-b63c20d5--728edba8-45b0-46a2-9077-84c4b3a9ae95.lovable.app-1777110705477.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bd8c8a1a-519e-48f3-bade-d57a3c927f19/id-preview-b63c20d5--728edba8-45b0-46a2-9077-84c4b3a9ae95.lovable.app-1777110705477.png" },
     ],
     links: [
       {
