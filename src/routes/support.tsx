@@ -148,8 +148,8 @@ function SupportPage() {
                     Become a sponsor
                   </h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    Sponsorship packages are available for businesses who'd like to support
-                    the club. Get in touch to chat about ways to work together.
+                    Interested in supporting Muckross as a club sponsor? Get in touch for
+                    more details and we'll talk through the options together.
                   </p>
                   <Link
                     to="/contact"
