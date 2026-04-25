@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Calendar, CreditCard, Users, HandHeart, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake } from "lucide-react";
+import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Calendar, CreditCard, Users, HandHeart, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake, Building2 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 
@@ -133,13 +133,32 @@ function SupportPage() {
             {/* Secondary — bank transfer */}
             <BankTransferDetails />
 
-            <div className="mt-8 rounded-xl bg-muted/60 p-4 text-center text-xs text-muted-foreground">
+            <p className="mt-6 text-center text-xs text-muted-foreground">
               Please use your name as the payment reference so we can thank you personally.
-              For corporate sponsorship enquiries,{" "}
-              <Link to="/contact" className="font-semibold text-primary underline-offset-4 hover:underline">
-                get in touch
-              </Link>
-              .
+            </p>
+
+            {/* Become a sponsor — businesses */}
+            <div className="mt-8 rounded-2xl border border-dashed border-border bg-muted/40 p-6 sm:p-7">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                <div className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-primary shadow-elegant">
+                  <Building2 className="h-5 w-5 text-secondary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-serif text-xl font-semibold text-foreground">
+                    Become a sponsor
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    Sponsorship packages are available for businesses who'd like to support
+                    the club. Get in touch to chat about ways to work together.
+                  </p>
+                  <Link
+                    to="/contact"
+                    className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                  >
+                    Enquire about sponsorship <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -185,27 +204,6 @@ function SupportPage() {
                 Play responsibly. Must be 18+ to enter.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Become a sponsor */}
-      <section className="bg-background py-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center">
-            <h3 className="font-serif text-2xl font-semibold text-foreground">
-              Interested in becoming a sponsor?
-            </h3>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-              Sponsorship packages are available for businesses who'd like to support the
-              club. Get in touch with us to chat about ways to work together.
-            </p>
-            <Link
-              to="/contact"
-              className="mt-5 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Enquire about sponsorship <ArrowRight className="h-4 w-4" />
-            </Link>
           </div>
         </div>
       </section>
