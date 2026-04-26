@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Award, Heart, Users, Waves } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { OarButton } from "@/components/OarButton";
+import { OarDivider } from "@/components/OarDivider";
 import heroLake from "@/assets/hero-lake.jpg";
 import rowingAction from "@/assets/rowing-action.jpg";
 import community from "@/assets/club-community.jpg";
@@ -90,12 +92,11 @@ function HomePage() {
               MacGillycuddy's Reeks in the heart of Killarney National Park.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/join"
-                className="inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-6 py-3 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
-              >
-                Join the Club <ArrowRight className="h-4 w-4" />
-              </Link>
+              <OarButton asChild>
+                <Link to="/join">
+                  Join the Club <ArrowRight className="h-4 w-4" />
+                </Link>
+              </OarButton>
               <Link
                 to="/about"
                 className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 bg-primary-foreground/5 px-6 py-3 text-sm font-semibold text-primary-foreground backdrop-blur-sm transition-colors hover:bg-primary-foreground/15"
@@ -110,6 +111,7 @@ function HomePage() {
       {/* Highlights */}
       <section className="bg-background py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <OarDivider className="mb-12" />
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">A club for everyone</span>
             <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">

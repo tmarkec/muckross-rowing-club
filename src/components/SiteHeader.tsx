@@ -48,7 +48,13 @@ export function SiteHeader() {
             href="https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/"
             target="_blank"
             rel="noopener noreferrer"
-            className="ml-2 inline-flex items-center justify-center rounded-md bg-gradient-yellow px-4 py-2 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
+            className="ml-2 inline-flex items-center justify-center bg-gradient-yellow px-6 py-2 text-xs font-semibold uppercase tracking-wider text-primary shadow-yellow transition-transform hover:scale-105"
+            style={{
+              clipPath:
+                "polygon(8% 0%, 92% 18%, 100% 50%, 92% 82%, 8% 100%, 0% 85%, 0% 15%)",
+              WebkitClipPath:
+                "polygon(8% 0%, 92% 18%, 100% 50%, 92% 82%, 8% 100%, 0% 85%, 0% 15%)",
+            }}
           >
             ClubForce
           </a>

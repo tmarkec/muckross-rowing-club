@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { OarDivider } from "./OarDivider";
 
 const sponsors = [
   { name: "Reeks Brewing Co.", tag: "Local Brewery" },
@@ -12,6 +13,7 @@ export function SponsorStrip() {
   return (
     <section className="border-y border-border/60 bg-muted/40 py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <OarDivider className="mb-8" />
         <div className="flex flex-col items-center gap-2 text-center">
           <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
             Proudly supported by
