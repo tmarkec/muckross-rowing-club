@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import crossedOars from "@/assets/crossed-oars-yellow.png";
+import crossedOars from "@/assets/crossed-oars-black.png";
 
 /**
  * Subtle decorative divider — two crossed oar blades over a thin rule.

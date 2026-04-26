@@ -8,10 +8,12 @@ import { cn } from "@/lib/utils";
  * signature CTA; standard buttons should still use rectangular pills.
  */
 
-// Blade silhouette: tall rounded-rect blade on the left tapering into a
-// shorter shaft handle on the right. Defined in % so it scales with the box.
+// Hatchet-blade silhouette (Macon-style asymmetric oar tip):
+// flat top edge, vertical trailing (right) edge, flat bottom, and a
+// diagonal leading (left) edge that slices from the top-left corner area
+// down toward the lower-left — the signature hatchet shape.
 const BLADE_CLIP =
-  "polygon(8% 0%, 92% 18%, 100% 50%, 92% 82%, 8% 100%, 0% 85%, 0% 15%)";
+  "polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%)";
 
 export interface OarButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
