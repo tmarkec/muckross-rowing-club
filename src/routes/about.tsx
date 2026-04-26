@@ -45,7 +45,7 @@ function AboutPage() {
               </p>
               <p className="mt-4 leading-relaxed text-muted-foreground">
                 Widely considered the oldest rowing club in Killarney, Muckross has been
-                the heartbeat of the Muckross community for over 150 years — deeply
+                the heartbeat of the local community for over 150 years — deeply
                 intertwined with the families who lived and worked on the Muckross Estate.
                 Our distinctive yellow kit is known across the national regatta circuit.
               </p>
