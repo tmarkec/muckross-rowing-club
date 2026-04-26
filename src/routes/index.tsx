@@ -91,10 +91,8 @@ function HomePage() {
               MacGillycuddy's Reeks in the heart of Killarney National Park.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <OarButton asChild>
-                <Link to="/join">
-                  Join the Club <ArrowRight className="h-4 w-4" />
-                </Link>
+              <OarButton href="/join">
+                Join the Club <ArrowRight className="h-4 w-4" />
               </OarButton>
               <Link
                 to="/about"
