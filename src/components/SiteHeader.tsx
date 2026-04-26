@@ -2,8 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/muckross-logo.png";
-import { OarButton } from "./OarButton";
-
 const navItems = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
@@ -45,15 +43,14 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <OarButton
-            size="sm"
-            className="ml-2"
+          <a
             href="https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/"
             target="_blank"
             rel="noopener noreferrer"
+            className="ml-2 inline-flex items-center justify-center rounded-md bg-gradient-yellow px-5 py-2 text-xs font-semibold uppercase tracking-wider text-primary shadow-yellow transition-transform hover:scale-105"
           >
             ClubForce
-          </OarButton>
+          </a>
         </nav>
 
         <button
