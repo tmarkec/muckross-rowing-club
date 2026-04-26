@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Award, Heart, Users, Waves } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
-import { OarButton } from "@/components/OarButton";
 import heroLake from "@/assets/hero-lake.jpg";
 import rowingAction from "@/assets/rowing-action.jpg";
 import community from "@/assets/club-community.jpg";
@@ -91,9 +90,12 @@ function HomePage() {
               MacGillycuddy's Reeks in the heart of Killarney National Park.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <OarButton href="/join">
+              <Link
+                to="/join"
+                className="inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-6 py-3 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
+              >
                 Join the Club <ArrowRight className="h-4 w-4" />
-              </OarButton>
+              </Link>
               <Link
                 to="/about"
                 className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 bg-primary-foreground/5 px-6 py-3 text-sm font-semibold text-primary-foreground backdrop-blur-sm transition-colors hover:bg-primary-foreground/15"
