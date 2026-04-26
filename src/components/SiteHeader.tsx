@@ -45,14 +45,14 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <OarButton asChild size="sm" className="ml-2">
-            <a
-              href="https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ClubForce
-            </a>
+          <OarButton
+            size="sm"
+            className="ml-2"
+            href="https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            ClubForce
           </OarButton>
         </nav>
 
