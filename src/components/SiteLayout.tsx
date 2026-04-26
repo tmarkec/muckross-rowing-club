@@ -1,6 +1,7 @@
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { SponsorStrip } from "./SponsorStrip";
+import { MobileBackButton } from "./MobileBackButton";
 
 export function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
       <main className="flex-1">{children}</main>
       <SponsorStrip />
       <SiteFooter />
+      <MobileBackButton />
     </div>
   );
 }
