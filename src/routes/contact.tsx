@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, type MouseEvent } from "react";
 import { Mail, MapPin, Send, Navigation } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { CLUBFORCE_URL } from "@/lib/site";
 
 const LAT = 52.02188586501607;
 const LNG = -9.508196213456204;
