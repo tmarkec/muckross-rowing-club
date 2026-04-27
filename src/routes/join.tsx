@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
-
-const CLUBFORCE_URL = "https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/";
+import { CLUBFORCE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/join")({
   head: () => ({

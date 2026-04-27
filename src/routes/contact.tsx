@@ -87,7 +87,7 @@ function ContactPage() {
                   All membership and pay-per-row is handled through ClubForce.
                 </p>
                 <a
-                  href="https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/"
+                  href={CLUBFORCE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"

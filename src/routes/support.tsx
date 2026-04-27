@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, CreditCard, Users, HandHeart, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake, Building2 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
+import { CLUBFORCE_URL as LOTTO_URL } from "@/lib/site";
 
-const LOTTO_URL = "https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/";
 // TODO: Replace with real Stripe / iDonate.ie / GoFundMe link when payments are set up.
 const DONATE_URL = "#donate-bank";
 

@@ -2,15 +2,12 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/muckross-logo.png";
-const navItems = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/news", label: "News" },
-  { to: "/join", label: "Join Us" },
-  { to: "/support", label: "Support" },
-  { to: "/contact", label: "Contact" },
-] as const;
+import { CLUBFORCE_URL, NAV_ITEMS } from "@/lib/site";
 
+/**
+ * Sticky top navigation bar. Renders the club crest, primary nav and the
+ * external ClubForce CTA. Collapses to a hamburger menu under `md`.
+ */
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
@@ -32,7 +29,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
-          {navItems.map((item) => (
+          {NAV_ITEMS.map((item) => (
             <Link
               key={item.to}
               to={item.to}
@@ -44,7 +41,7 @@ export function SiteHeader() {
             </Link>
           ))}
           <a
-            href="https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/"
+            href={CLUBFORCE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="ml-2 inline-flex items-center justify-center rounded-md bg-gradient-yellow px-5 py-2 text-xs font-semibold uppercase tracking-wider text-primary shadow-yellow transition-transform hover:scale-105"
@@ -65,7 +62,7 @@ export function SiteHeader() {
       {open && (
         <div className="border-t border-border/40 bg-background md:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
-            {navItems.map((item) => (
+            {NAV_ITEMS.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
@@ -78,7 +75,7 @@ export function SiteHeader() {
               </Link>
             ))}
             <a
-              href="https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/"
+              href={CLUBFORCE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-2 inline-flex items-center justify-center rounded-md bg-gradient-yellow px-4 py-3 text-sm font-semibold text-primary shadow-yellow"
