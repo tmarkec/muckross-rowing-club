@@ -1,12 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { OarDivider } from "./OarDivider";
 
-const sponsors = [
-  { name: "Reeks Brewing Co.", tag: "Local Brewery" },
-  { name: "Lough Leane Hotel", tag: "Hospitality" },
-  { name: "Killarney Outdoors", tag: "Outdoor Gear" },
-  { name: "Kerry Marine Supplies", tag: "Marine" },
-  { name: "MacGillycuddy Insurance", tag: "Insurance" },
+/**
+ * Current club sponsors. `url` is optional — when present the card
+ * renders as an external link to the sponsor's website.
+ */
+const sponsors: { name: string; tag: string; url?: string }[] = [
+  { name: "Cahernane House Hotel", tag: "Hospitality" },
+  {
+    name: "Muckross Park Hotel",
+    tag: "Hospitality",
+    url: "https://www.muckrosspark.com/",
+  },
 ];
 
 export function SponsorStrip() {
@@ -23,20 +28,37 @@ export function SponsorStrip() {
           </h2>
         </div>
 
-        <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-          {sponsors.map((s) => (
-            <li
-              key={s.name}
-              className="group flex aspect-[5/3] flex-col items-center justify-center rounded-xl border border-border/70 bg-background px-3 py-4 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:border-secondary hover:shadow-yellow"
-            >
-              <span className="font-serif text-sm font-bold leading-tight text-primary sm:text-base">
-                {s.name}
-              </span>
-              <span className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-                {s.tag}
-              </span>
-            </li>
-          ))}
+        <ul className="mx-auto mt-6 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2">
+          {sponsors.map((s) => {
+            const cardClass =
+              "group flex aspect-[5/3] flex-col items-center justify-center rounded-xl border border-border/70 bg-background px-3 py-4 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:border-secondary hover:shadow-yellow";
+            const inner = (
+              <>
+                <span className="font-serif text-sm font-bold leading-tight text-primary sm:text-base">
+                  {s.name}
+                </span>
+                <span className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+                  {s.tag}
+                </span>
+              </>
+            );
+            return (
+              <li key={s.name}>
+                {s.url ? (
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cardClass}
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <div className={cardClass}>{inner}</div>
+                )}
+              </li>
+            );
+          })}
         </ul>
 
         <div className="mt-6 text-center">
