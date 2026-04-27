@@ -6,7 +6,11 @@ import { OarDivider } from "./OarDivider";
  * renders as an external link to the sponsor's website.
  */
 const sponsors: { name: string; tag: string; url?: string }[] = [
-  { name: "Cahernane House Hotel", tag: "Hospitality" },
+  {
+    name: "Cahernane House Hotel",
+    tag: "Hospitality",
+    url: "https://www.cahernane.com/",
+  },
   {
     name: "Muckross Park Hotel",
     tag: "Hospitality",
