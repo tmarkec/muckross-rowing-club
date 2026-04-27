@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { ExternalLink, Hotel } from "lucide-react";
 import { OarDivider } from "./OarDivider";
 
 /**
@@ -24,14 +25,22 @@ export function SponsorStrip() {
           </h2>
         </div>
 
-        <ul className="mx-auto mt-6 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2">
+        <ul className="mx-auto mt-6 flex max-w-3xl flex-wrap items-stretch justify-center gap-3">
           {sponsors.map((s) => {
             const cardClass =
-              "group flex aspect-[5/3] flex-col items-center justify-center rounded-xl border border-border/70 bg-background px-3 py-4 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:border-secondary hover:shadow-yellow";
+              "group inline-flex items-center gap-3 rounded-full border border-border/70 bg-background py-2.5 pl-3 pr-5 shadow-soft transition-all hover:-translate-y-0.5 hover:border-secondary hover:shadow-yellow";
             const inner = (
-              <span className="font-serif text-sm font-bold leading-tight text-primary sm:text-base">
-                {s.name}
-              </span>
+              <>
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-yellow text-primary shadow-yellow">
+                  <Hotel className="h-4 w-4" />
+                </span>
+                <span className="font-serif text-sm font-bold leading-tight text-primary sm:text-base">
+                  {s.name}
+                </span>
+                {s.url ? (
+                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-secondary" />
+                ) : null}
+              </>
             );
             return (
               <li key={s.name}>
