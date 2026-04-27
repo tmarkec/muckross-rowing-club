@@ -5,17 +5,9 @@ import { OarDivider } from "./OarDivider";
  * Current club sponsors. `url` is optional — when present the card
  * renders as an external link to the sponsor's website.
  */
-const sponsors: { name: string; tag: string; url?: string }[] = [
-  {
-    name: "Cahernane House Hotel",
-    tag: "Hospitality",
-    url: "https://www.cahernane.com/",
-  },
-  {
-    name: "Muckross Park Hotel",
-    tag: "Hospitality",
-    url: "https://www.muckrosspark.com/",
-  },
+const sponsors: { name: string; url?: string }[] = [
+  { name: "Cahernane House Hotel", url: "https://www.cahernane.com/" },
+  { name: "Muckross Park Hotel", url: "https://www.muckrosspark.com/" },
 ];
 
 export function SponsorStrip() {
@@ -37,14 +29,9 @@ export function SponsorStrip() {
             const cardClass =
               "group flex aspect-[5/3] flex-col items-center justify-center rounded-xl border border-border/70 bg-background px-3 py-4 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:border-secondary hover:shadow-yellow";
             const inner = (
-              <>
-                <span className="font-serif text-sm font-bold leading-tight text-primary sm:text-base">
-                  {s.name}
-                </span>
-                <span className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-                  {s.tag}
-                </span>
-              </>
+              <span className="font-serif text-sm font-bold leading-tight text-primary sm:text-base">
+                {s.name}
+              </span>
             );
             return (
               <li key={s.name}>
