@@ -1,9 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
 import logo from "@/assets/muckross-logo.png";
+import { CLUB_EMAIL, CLUBFORCE_URL, NAV_ITEMS, SOCIAL } from "@/lib/site";
 
-const CLUBFORCE_URL = "https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/";
-
+/**
+ * Site-wide footer: brand blurb, primary nav mirror, members links,
+ * contact details and social icons. Driven by shared constants in
+ * `src/lib/site.ts` so navigation stays in sync with the header.
+ */
 export function SiteFooter() {
   return (
     <footer className="bg-gradient-navy text-primary-foreground">
@@ -33,12 +37,16 @@ export function SiteFooter() {
               Explore
             </h4>
             <ul className="mt-4 space-y-2 text-sm">
-              <li><Link to="/" className="text-primary-foreground/80 transition-colors hover:text-secondary">Home</Link></li>
-              <li><Link to="/about" className="text-primary-foreground/80 transition-colors hover:text-secondary">About</Link></li>
-              <li><Link to="/news" className="text-primary-foreground/80 transition-colors hover:text-secondary">News</Link></li>
-              <li><Link to="/join" className="text-primary-foreground/80 transition-colors hover:text-secondary">Join Us</Link></li>
-              <li><Link to="/support" className="text-primary-foreground/80 transition-colors hover:text-secondary">Support</Link></li>
-              <li><Link to="/contact" className="text-primary-foreground/80 transition-colors hover:text-secondary">Contact</Link></li>
+              {NAV_ITEMS.map((item) => (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className="text-primary-foreground/80 transition-colors hover:text-secondary"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -71,16 +79,16 @@ export function SiteFooter() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 shrink-0 text-secondary" />
-                <a href="mailto:info@muckrossrowingclub.ie" className="transition-colors hover:text-secondary">
-                  info@muckrossrowingclub.ie
+                <a href={`mailto:${CLUB_EMAIL}`} className="transition-colors hover:text-secondary">
+                  {CLUB_EMAIL}
                 </a>
               </li>
             </ul>
             <div className="mt-4 flex gap-3">
-              <a href="https://www.facebook.com/muckrossrc/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="rounded-full bg-primary-foreground/10 p-2 transition-colors hover:bg-secondary hover:text-primary">
+              <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="rounded-full bg-primary-foreground/10 p-2 transition-colors hover:bg-secondary hover:text-primary">
                 <Facebook className="h-4 w-4" />
               </a>
-              <a href="https://www.instagram.com/muckrossrc/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="rounded-full bg-primary-foreground/10 p-2 transition-colors hover:bg-secondary hover:text-primary">
+              <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="rounded-full bg-primary-foreground/10 p-2 transition-colors hover:bg-secondary hover:text-primary">
                 <Instagram className="h-4 w-4" />
               </a>
             </div>

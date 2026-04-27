@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Award, Heart, Users, Waves } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { CLUBFORCE_URL, SITE_URL, SOCIAL } from "@/lib/site";
 import heroLake from "@/assets/hero-lake.jpg";
 import rowingAction from "@/assets/rowing-action.jpg";
 import community from "@/assets/club-community.jpg";
 
-const SITE_URL = "https://muckrossrowingclub.ie";
-
+/** Structured data for the homepage — describes the club to search engines. */
 const homeJsonLd = {
   "@context": "https://schema.org",
   "@type": "SportsClub",
@@ -32,10 +32,7 @@ const homeJsonLd = {
     longitude: -9.508196213456204,
   },
   areaServed: "Killarney, Co. Kerry, Ireland",
-  sameAs: [
-    "https://www.facebook.com/muckrossrc/",
-    "https://www.instagram.com/muckrossrc/",
-  ],
+  sameAs: [SOCIAL.facebook, SOCIAL.instagram],
 };
 
 export const Route = createFileRoute("/")({
@@ -198,7 +195,7 @@ function HomePage() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a
-              href="https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/"
+              href={CLUBFORCE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-6 py-3 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"

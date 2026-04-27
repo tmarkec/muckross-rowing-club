@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, type MouseEvent } from "react";
 import { Mail, MapPin, Send, Navigation } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { CLUBFORCE_URL } from "@/lib/site";
 
 const LAT = 52.02188586501607;
 const LNG = -9.508196213456204;
@@ -87,7 +88,7 @@ function ContactPage() {
                   All membership and pay-per-row is handled through ClubForce.
                 </p>
                 <a
-                  href="https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/"
+                  href={CLUBFORCE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
