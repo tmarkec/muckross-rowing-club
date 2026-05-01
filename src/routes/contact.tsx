@@ -11,6 +11,9 @@ const OSM_EMBED_URL = `https://www.openstreetmap.org/export/embed.html?bbox=${LN
 const DIRECTIONS_URL = `https://www.google.com/maps/search/?api=1&query=${LAT},${LNG}`;
 
 export const Route = createFileRoute("/contact")({
+  validateSearch: (search: Record<string, unknown>): { subject?: string } => ({
+    subject: typeof search.subject === "string" ? search.subject : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Contact — Muckross Rowing Club, Killarney" },
@@ -25,6 +28,8 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [directionsCopied, setDirectionsCopied] = useState(false);
+  const { subject: initialSubject } = Route.useSearch();
+  const [subject, setSubject] = useState(initialSubject ?? "");
 
   const handleDirectionsClick = async (event: MouseEvent<HTMLAnchorElement>) => {
     if (window.self === window.top) {
@@ -123,7 +128,12 @@ function ContactPage() {
                 </div>
                 <div className="mt-4">
                   <label className="text-sm font-medium text-foreground" htmlFor="subject">Subject</label>
-                  <input id="subject" className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2" />
+                  <input
+                    id="subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2"
+                  />
                 </div>
                 <div className="mt-4">
                   <label className="text-sm font-medium text-foreground" htmlFor="message">Message</label>
