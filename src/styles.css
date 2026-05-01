@@ -64,43 +64,49 @@
 :root {
   --radius: 0.625rem;
   /* Muckross Rowing Club — yellow + deep navy heritage palette */
-  --background: oklch(0.995 0.005 95);
-  --foreground: oklch(0.18 0.04 250);
+  --background: oklch(0.99 0.008 90);
+  --foreground: oklch(0.17 0.045 252);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.04 250);
+  --card-foreground: oklch(0.17 0.045 252);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.04 250);
+  --popover-foreground: oklch(0.17 0.045 252);
   /* Primary: deep navy (heritage anchor) */
-  --primary: oklch(0.22 0.05 250);
+  --primary: oklch(0.21 0.055 252);
   --primary-foreground: oklch(0.99 0.01 95);
   /* Secondary: club yellow */
-  --secondary: oklch(0.88 0.16 95);
-  --secondary-foreground: oklch(0.18 0.04 250);
-  --muted: oklch(0.96 0.01 95);
-  --muted-foreground: oklch(0.45 0.03 250);
+  --secondary: oklch(0.88 0.16 92);
+  --secondary-foreground: oklch(0.17 0.045 252);
+  --muted: oklch(0.965 0.012 92);
+  --muted-foreground: oklch(0.46 0.03 252);
   /* Accent: vivid club yellow */
-  --accent: oklch(0.86 0.18 92);
-  --accent-foreground: oklch(0.18 0.04 250);
+  --accent: oklch(0.86 0.185 90);
+  --accent-foreground: oklch(0.17 0.045 252);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.9 0.015 95);
-  --input: oklch(0.92 0.015 95);
-  --ring: oklch(0.86 0.18 92);
+  --border: oklch(0.9 0.015 92);
+  --input: oklch(0.92 0.015 92);
+  --ring: oklch(0.86 0.185 90);
 
   /* Brand tokens */
-  --brand-yellow: oklch(0.86 0.18 92);
-  --brand-yellow-deep: oklch(0.78 0.19 85);
-  --brand-navy: oklch(0.22 0.05 250);
-  --brand-navy-deep: oklch(0.15 0.04 250);
-  --brand-cream: oklch(0.98 0.015 95);
+  --brand-yellow: oklch(0.86 0.185 90);
+  --brand-yellow-deep: oklch(0.76 0.19 82);
+  --brand-navy: oklch(0.21 0.055 252);
+  --brand-navy-deep: oklch(0.13 0.04 252);
+  --brand-cream: oklch(0.985 0.015 92);
 
-  --gradient-hero: linear-gradient(180deg, oklch(0.15 0.04 250 / 0.1) 0%, oklch(0.15 0.04 250 / 0.75) 100%);
+  /* Hero overlay: deeper at the bottom for legibility on any image */
+  --gradient-hero: linear-gradient(
+    180deg,
+    oklch(0.13 0.04 252 / 0.15) 0%,
+    oklch(0.13 0.04 252 / 0.55) 55%,
+    oklch(0.13 0.04 252 / 0.85) 100%
+  );
   --gradient-yellow: linear-gradient(135deg, var(--brand-yellow) 0%, var(--brand-yellow-deep) 100%);
   --gradient-navy: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-navy-deep) 100%);
 
-  --shadow-soft: 0 4px 20px -8px oklch(0.18 0.04 250 / 0.15);
-  --shadow-elegant: 0 20px 60px -20px oklch(0.18 0.04 250 / 0.35);
-  --shadow-yellow: 0 10px 30px -10px oklch(0.86 0.18 92 / 0.5);
+  --shadow-soft: 0 4px 20px -8px oklch(0.17 0.045 252 / 0.18);
+  --shadow-elegant: 0 24px 60px -24px oklch(0.13 0.04 252 / 0.4);
+  --shadow-yellow: 0 10px 30px -10px oklch(0.86 0.185 90 / 0.55);
 
   --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;

@@ -11,7 +11,8 @@ import { FooterLottoCountdown } from "./FooterLottoCountdown";
  */
 export function SiteFooter() {
   return (
-    <footer className="bg-gradient-navy text-primary-foreground">
+    <footer className="relative bg-gradient-navy text-primary-foreground">
+      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-yellow opacity-70" />
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-1">
