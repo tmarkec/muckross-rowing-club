@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
 import logo from "@/assets/muckross-logo.png";
-import { CLUB_EMAIL, CLUBFORCE_URL, NAV_ITEMS, SOCIAL } from "@/lib/site";
+import { CLUB_EMAIL, NAV_ITEMS, SOCIAL } from "@/lib/site";
+import { FooterLottoCountdown } from "./FooterLottoCountdown";
 
 /**
  * Site-wide footer: brand blurb, primary nav mirror, members links,
@@ -50,23 +51,7 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          <div>
-            <h4 className="font-serif text-sm font-semibold uppercase tracking-wider text-secondary">
-              Members
-            </h4>
-            <ul className="mt-4 space-y-2 text-sm">
-              <li>
-                <a href={CLUBFORCE_URL} target="_blank" rel="noopener noreferrer" className="text-primary-foreground/80 transition-colors hover:text-secondary">
-                  ClubForce
-                </a>
-              </li>
-              <li>
-                <a href={CLUBFORCE_URL} target="_blank" rel="noopener noreferrer" className="text-primary-foreground/80 transition-colors hover:text-secondary">
-                  Muckross Lotto
-                </a>
-              </li>
-            </ul>
-          </div>
+          <FooterLottoCountdown />
 
           <div>
             <h4 className="font-serif text-sm font-semibold uppercase tracking-wider text-secondary">
