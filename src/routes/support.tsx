@@ -153,6 +153,7 @@ function SupportPage() {
                   </p>
                   <Link
                     to="/contact"
+                    search={{ subject: "Sponsorship enquiry" }}
                     className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
                   >
                     Enquire about sponsorship <ArrowRight className="h-4 w-4" />
@@ -252,6 +253,7 @@ function SupportPage() {
           <div className="mt-10 text-center">
             <Link
               to="/contact"
+              search={{ subject: "Volunteering" }}
               className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
               Volunteer with Muckross <ArrowRight className="h-4 w-4" />

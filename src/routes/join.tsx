@@ -86,6 +86,7 @@ function JoinPage() {
               </a>
               <Link
                 to="/contact"
+                search={{ subject: "Join Us" }}
                 className="inline-flex items-center gap-2 rounded-md border border-primary/30 bg-background/60 px-6 py-3 text-sm font-semibold text-primary backdrop-blur-sm transition-colors hover:bg-background"
               >
                 Contact the club
