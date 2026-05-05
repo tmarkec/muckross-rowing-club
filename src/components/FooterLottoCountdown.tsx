@@ -74,13 +74,13 @@ export function FooterLottoCountdown() {
       <p className="mt-4 text-xs text-primary-foreground/70">
         Next draw — Saturday 20:00
       </p>
-      <div className="mt-3 grid grid-cols-4 gap-1.5">
+      <div className="mt-3 flex max-w-[220px] gap-1 sm:max-w-none sm:grid sm:grid-cols-4 sm:gap-1.5">
         {cells.map((c) => (
           <div
             key={c.label}
-            className="rounded-md bg-primary-foreground/10 px-1.5 py-2 text-center"
+            className="flex-1 rounded-md bg-primary-foreground/10 px-1 py-1.5 text-center sm:px-1.5 sm:py-2"
           >
-            <div className="font-mono text-base font-bold tabular-nums text-secondary">
+            <div className="font-mono text-sm font-bold tabular-nums text-secondary sm:text-base">
               {mounted ? String(c.value).padStart(2, "0") : "--"}
             </div>
             <div className="text-[9px] font-semibold uppercase tracking-wider text-primary-foreground/60">
