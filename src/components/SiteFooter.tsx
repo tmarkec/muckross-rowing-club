@@ -34,6 +34,7 @@ export function SiteFooter() {
             </p>
           </div>
 
+          <div className="grid grid-cols-2 gap-6 md:contents">
           <div>
             <h4 className="font-serif text-sm font-semibold uppercase tracking-wider text-secondary">
               Explore
@@ -53,6 +54,7 @@ export function SiteFooter() {
           </div>
 
           <FooterLottoCountdown />
+          </div>
 
           <div>
             <h4 className="font-serif text-sm font-semibold uppercase tracking-wider text-secondary">
