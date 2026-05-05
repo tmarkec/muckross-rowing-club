@@ -40,8 +40,8 @@ function SupportPage() {
             Support Muckross
           </h1>
           <p className="mt-5 text-lg text-primary-foreground/85">
-            Every stroke on Lough Leane is made possible by the businesses, families and
-            supporters who stand behind the club.
+            Every stroke on Lough Leane is made possible by the volunteers, coaches,
+            families and business supporters who stand behind the club.
           </p>
         </div>
       </section>
