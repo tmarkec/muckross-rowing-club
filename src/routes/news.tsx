@@ -53,35 +53,20 @@ const fixtures = [
     name: "Killarney Regatta",
     location: "Lough Leane, Killarney",
     tag: "Home regatta",
-    highlight: true,
   },
-  {
-    date: new Date(2026, 6, 17),
-    dateLabel: "17–19 Jul 2026",
-    name: "Irish Rowing Championships",
-    location: "NRC, Farran Wood, Cork",
-    tag: "Championship",
-  },
-  {
-    date: new Date(2026, 7, 22),
-    dateLabel: "Sat 22 Aug 2026",
-    name: "Castleconnell Regatta",
-    location: "River Shannon, Limerick",
-    tag: "Away",
-  },
-  {
-    date: new Date(2026, 9, 1),
-    dateLabel: "Oct 2026 · TBC",
-    name: "Head of the River",
-    location: "Venue to be confirmed",
-    tag: "Head race",
-  },
+  { date: new Date(2026, 4, 9),  dateLabel: "Sat 9 May 2026",  name: "Lough Rinn Regatta",        location: "Lough Rinn",                tag: "Regatta" },
+  { date: new Date(2026, 4, 16), dateLabel: "Sat 16 May 2026", name: "Lee Regatta",                location: "Marina, Cork",              tag: "Regatta" },
+  { date: new Date(2026, 4, 23), dateLabel: "Sat 23 May 2026", name: "Castleconnell Sprint Regatta", location: "Castleconnell, Limerick", tag: "Regatta" },
+  { date: new Date(2026, 4, 23), dateLabel: "Sat 23 May 2026", name: "Dublin Metropolitan Regatta", location: "Blessington Lake",         tag: "Regatta" },
+  { date: new Date(2026, 5, 6),  dateLabel: "Sat 6 Jun 2026",  name: "Munster Branch Regatta",     location: "NRC, Farran Wood, Cork",    tag: "Regatta" },
+  { date: new Date(2026, 5, 20), dateLabel: "Sat 20 Jun 2026", name: "Cork Regatta",               location: "NRC, Farran Wood, Cork",    tag: "Regatta" },
+  { date: new Date(2026, 6, 10), dateLabel: "10–12 Jul 2026",  name: "Irish Rowing Championships", location: "NRC, Farran Wood, Cork",    tag: "Championship" },
+  { date: new Date(2026, 11, 5), dateLabel: "Sat 5 Dec 2026",  name: "Muckross Head",              location: "NRC, Farran Wood, Cork",    tag: "Head race" },
 ];
 
 function NewsPage() {
   const [open, setOpen] = useState(false);
-  const homeDays = useMemo(() => fixtures.filter((f) => f.highlight).map((f) => f.date), []);
-  const awayDays = useMemo(() => fixtures.filter((f) => !f.highlight).map((f) => f.date), []);
+  const eventDays = useMemo(() => fixtures.map((f) => f.date), []);
   const firstFixtureMonth = fixtures[0]?.date ?? new Date();
 
   return (
@@ -99,43 +84,39 @@ function NewsPage() {
       <section className="bg-muted/40 py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-[auto_1fr] md:items-center">
-            <div className="rounded-2xl border border-border/60 bg-card p-4 shadow-soft">
+            <div className="rounded-2xl border border-border/60 bg-card p-3 shadow-soft [--cell-size:1.75rem]">
               <Calendar
                 mode="single"
                 defaultMonth={firstFixtureMonth}
-                modifiers={{ home: homeDays, away: awayDays }}
+                modifiers={{ event: eventDays }}
                 modifiersClassNames={{
-                  home: "bg-gradient-navy text-primary-foreground rounded-md font-bold",
-                  away: "bg-secondary text-secondary-foreground rounded-md font-bold",
+                  event: "bg-gradient-navy text-primary-foreground rounded-md font-bold",
                 }}
                 className="pointer-events-auto"
               />
               <div className="mt-3 flex flex-wrap items-center justify-center gap-3 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy" /> Home regatta
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-secondary" /> Away
+                  <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy" /> Muckross RC competing
                 </span>
               </div>
             </div>
 
             <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Fixtures</span>
-              <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">Race calendar</h2>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Events</span>
+              <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">Regatta calendar</h2>
               <p className="mt-3 max-w-md text-sm text-muted-foreground">
-                Marked days show where Muckross is racing. Open the full fixtures list for dates,
-                venues and entry details.
+                Highlighted days show events Muckross RC is competing at. Open the full list for
+                dates, venues and details.
               </p>
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                   <Button className="mt-5 gap-2">
-                    <CalendarIcon className="h-4 w-4" /> View all fixtures
+                    <CalendarIcon className="h-4 w-4" /> View all events
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
                   <DialogHeader>
-                    <DialogTitle className="font-serif text-2xl">Upcoming regattas</DialogTitle>
+                    <DialogTitle className="font-serif text-2xl">Upcoming events</DialogTitle>
                     <DialogDescription>
                       Where the club is racing next. Past events drop off automatically.
                     </DialogDescription>
@@ -147,11 +128,7 @@ function NewsPage() {
                         className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-5"
                       >
                         <div
-                          className={`flex shrink-0 flex-col items-center justify-center rounded-lg px-3 py-2 text-center sm:w-32 ${
-                            f.highlight
-                              ? "bg-gradient-navy text-primary-foreground"
-                              : "bg-secondary text-secondary-foreground"
-                          }`}
+                          className="flex shrink-0 flex-col items-center justify-center rounded-lg bg-gradient-navy px-3 py-2 text-center text-primary-foreground sm:w-32"
                         >
                           <CalendarIcon className="h-3.5 w-3.5 opacity-80" />
                           <span className="mt-1 text-[11px] font-semibold uppercase tracking-wider">
