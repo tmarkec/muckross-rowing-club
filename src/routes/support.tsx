@@ -31,15 +31,12 @@ function SupportPage() {
   return (
     <SiteLayout>
       {/* Hero */}
-      <section className="bg-gradient-navy py-20 text-primary-foreground sm:py-24">
+      <section className="bg-gradient-navy py-12 text-primary-foreground sm:py-16">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
-            Sponsors & Donations
-          </span>
-          <h1 className="mt-4 font-serif text-4xl font-bold sm:text-5xl">
+          <h1 className="font-serif text-3xl font-bold sm:text-4xl">
             Support Muckross
           </h1>
-          <p className="mt-5 text-lg text-primary-foreground/85">
+          <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
             Every stroke on Lough Leane is made possible by the volunteers, coaches,
             families and business supporters who stand behind the club.
           </p>

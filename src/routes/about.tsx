@@ -19,11 +19,10 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   return (
     <SiteLayout>
-      <section className="relative overflow-hidden bg-gradient-navy py-20 text-primary-foreground sm:py-28">
+      <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Our Story</span>
-          <h1 className="mt-4 font-serif text-4xl font-bold sm:text-5xl">150 Years on the Lakes of Killarney</h1>
-          <p className="mt-5 text-lg text-primary-foreground/85">
+          <h1 className="font-serif text-3xl font-bold sm:text-4xl">150 Years on the Lakes of Killarney</h1>
+          <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
             From the Killarney Six to the Olympic Games — the heritage and ambition of Muckross Rowing Club.
           </p>
         </div>
