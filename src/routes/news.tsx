@@ -82,24 +82,7 @@ function NewsPage() {
 
       <section className="bg-muted/40 py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 md:grid-cols-[auto_1fr] md:items-center">
-            <div className="rounded-2xl border border-border/60 bg-card p-3 shadow-soft [--cell-size:1.75rem]">
-              <Calendar
-                mode="single"
-                defaultMonth={firstFixtureMonth}
-                modifiers={{ event: eventDays }}
-                modifiersClassNames={{
-                  event: "bg-gradient-navy text-primary-foreground rounded-md font-bold",
-                }}
-                className="pointer-events-auto"
-              />
-              <div className="mt-3 flex flex-wrap items-center justify-center gap-3 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy" /> Muckross RC competing
-                </span>
-              </div>
-            </div>
-
+          <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-start">
             <div>
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Events</span>
               <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">Regatta calendar</h2>
@@ -150,6 +133,23 @@ function NewsPage() {
                   </ul>
                 </DialogContent>
               </Dialog>
+            </div>
+
+            <div className="mx-auto w-fit rounded-2xl border border-border/60 bg-card p-3 shadow-soft [--cell-size:1.75rem]">
+              <Calendar
+                mode="single"
+                defaultMonth={firstFixtureMonth}
+                modifiers={{ event: eventDays }}
+                modifiersClassNames={{
+                  event: "bg-gradient-navy text-primary-foreground rounded-md font-bold",
+                }}
+                className="pointer-events-auto"
+              />
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-3 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy" /> Muckross RC competing
+                </span>
+              </div>
             </div>
           </div>
         </div>
