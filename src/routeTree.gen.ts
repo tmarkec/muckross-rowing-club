@@ -15,6 +15,7 @@ import { Route as JoinRouteImport } from './routes/join'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
 
 const SupportRoute = SupportRouteImport.update({
   id: '/support',
@@ -46,6 +47,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesLoginRoute = CoachesLoginRouteImport.update({
+  id: '/coaches/login',
+  path: '/coaches/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/join': typeof JoinRoute
   '/news': typeof NewsRoute
   '/support': typeof SupportRoute
+  '/coaches/login': typeof CoachesLoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/join': typeof JoinRoute
   '/news': typeof NewsRoute
   '/support': typeof SupportRoute
+  '/coaches/login': typeof CoachesLoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,13 +79,36 @@ export interface FileRoutesById {
   '/join': typeof JoinRoute
   '/news': typeof NewsRoute
   '/support': typeof SupportRoute
+  '/coaches/login': typeof CoachesLoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/join' | '/news' | '/support'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/join'
+    | '/news'
+    | '/support'
+    | '/coaches/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/join' | '/news' | '/support'
-  id: '__root__' | '/' | '/about' | '/contact' | '/join' | '/news' | '/support'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/join'
+    | '/news'
+    | '/support'
+    | '/coaches/login'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/join'
+    | '/news'
+    | '/support'
+    | '/coaches/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -87,6 +118,7 @@ export interface RootRouteChildren {
   JoinRoute: typeof JoinRoute
   NewsRoute: typeof NewsRoute
   SupportRoute: typeof SupportRoute
+  CoachesLoginRoute: typeof CoachesLoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -133,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/login': {
+      id: '/coaches/login'
+      path: '/coaches/login'
+      fullPath: '/coaches/login'
+      preLoaderRoute: typeof CoachesLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -143,7 +182,17 @@ const rootRouteChildren: RootRouteChildren = {
   JoinRoute: JoinRoute,
   NewsRoute: NewsRoute,
   SupportRoute: SupportRoute,
+  CoachesLoginRoute: CoachesLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
