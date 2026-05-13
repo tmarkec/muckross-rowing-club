@@ -85,7 +85,11 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-primary-foreground/15 pt-6 text-xs text-primary-foreground/60 sm:flex-row">
           <p>© {new Date().getFullYear()} Muckross Rowing Club. All rights reserved.</p>
-          <p>Rowing on the lakes of Killarney</p>
+          <div className="flex items-center gap-3">
+            <Link to="/coaches/login" className="hover:text-secondary transition-colors">Coaches</Link>
+            <span aria-hidden="true">·</span>
+            <span>Rowing on the lakes of Killarney</span>
+          </div>
         </div>
       </div>
     </footer>
