@@ -15,6 +15,7 @@ import { Route as JoinRouteImport } from './routes/join'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CoachesIndexRouteImport } from './routes/coaches.index'
 import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
 
 const SupportRoute = SupportRouteImport.update({
@@ -47,6 +48,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesIndexRoute = CoachesIndexRouteImport.update({
+  id: '/coaches/',
+  path: '/coaches/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoachesLoginRoute = CoachesLoginRouteImport.update({
   id: '/coaches/login',
   path: '/coaches/login',
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/news': typeof NewsRoute
   '/support': typeof SupportRoute
   '/coaches/login': typeof CoachesLoginRoute
+  '/coaches/': typeof CoachesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/news': typeof NewsRoute
   '/support': typeof SupportRoute
   '/coaches/login': typeof CoachesLoginRoute
+  '/coaches': typeof CoachesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/news': typeof NewsRoute
   '/support': typeof SupportRoute
   '/coaches/login': typeof CoachesLoginRoute
+  '/coaches/': typeof CoachesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/support'
     | '/coaches/login'
+    | '/coaches/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/support'
     | '/coaches/login'
+    | '/coaches'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/support'
     | '/coaches/login'
+    | '/coaches/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   NewsRoute: typeof NewsRoute
   SupportRoute: typeof SupportRoute
   CoachesLoginRoute: typeof CoachesLoginRoute
+  CoachesIndexRoute: typeof CoachesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/': {
+      id: '/coaches/'
+      path: '/coaches'
+      fullPath: '/coaches/'
+      preLoaderRoute: typeof CoachesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/coaches/login': {
       id: '/coaches/login'
       path: '/coaches/login'
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   NewsRoute: NewsRoute,
   SupportRoute: SupportRoute,
   CoachesLoginRoute: CoachesLoginRoute,
+  CoachesIndexRoute: CoachesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
