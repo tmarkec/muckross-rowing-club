@@ -17,6 +17,8 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CoachesIndexRouteImport } from './routes/coaches.index'
 import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
+import { Route as CoachesAdminRouteImport } from './routes/coaches.admin'
+import { Route as CoachesGroupsGroupIdRouteImport } from './routes/coaches.groups.$groupId'
 
 const SupportRoute = SupportRouteImport.update({
   id: '/support',
@@ -58,6 +60,16 @@ const CoachesLoginRoute = CoachesLoginRouteImport.update({
   path: '/coaches/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesAdminRoute = CoachesAdminRouteImport.update({
+  id: '/coaches/admin',
+  path: '/coaches/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoachesGroupsGroupIdRoute = CoachesGroupsGroupIdRouteImport.update({
+  id: '/coaches/groups/$groupId',
+  path: '/coaches/groups/$groupId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,8 +78,10 @@ export interface FileRoutesByFullPath {
   '/join': typeof JoinRoute
   '/news': typeof NewsRoute
   '/support': typeof SupportRoute
+  '/coaches/admin': typeof CoachesAdminRoute
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/': typeof CoachesIndexRoute
+  '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,8 +90,10 @@ export interface FileRoutesByTo {
   '/join': typeof JoinRoute
   '/news': typeof NewsRoute
   '/support': typeof SupportRoute
+  '/coaches/admin': typeof CoachesAdminRoute
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches': typeof CoachesIndexRoute
+  '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,8 +103,10 @@ export interface FileRoutesById {
   '/join': typeof JoinRoute
   '/news': typeof NewsRoute
   '/support': typeof SupportRoute
+  '/coaches/admin': typeof CoachesAdminRoute
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/': typeof CoachesIndexRoute
+  '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,8 +117,10 @@ export interface FileRouteTypes {
     | '/join'
     | '/news'
     | '/support'
+    | '/coaches/admin'
     | '/coaches/login'
     | '/coaches/'
+    | '/coaches/groups/$groupId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,8 +129,10 @@ export interface FileRouteTypes {
     | '/join'
     | '/news'
     | '/support'
+    | '/coaches/admin'
     | '/coaches/login'
     | '/coaches'
+    | '/coaches/groups/$groupId'
   id:
     | '__root__'
     | '/'
@@ -119,8 +141,10 @@ export interface FileRouteTypes {
     | '/join'
     | '/news'
     | '/support'
+    | '/coaches/admin'
     | '/coaches/login'
     | '/coaches/'
+    | '/coaches/groups/$groupId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -130,8 +154,10 @@ export interface RootRouteChildren {
   JoinRoute: typeof JoinRoute
   NewsRoute: typeof NewsRoute
   SupportRoute: typeof SupportRoute
+  CoachesAdminRoute: typeof CoachesAdminRoute
   CoachesLoginRoute: typeof CoachesLoginRoute
   CoachesIndexRoute: typeof CoachesIndexRoute
+  CoachesGroupsGroupIdRoute: typeof CoachesGroupsGroupIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +218,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/admin': {
+      id: '/coaches/admin'
+      path: '/coaches/admin'
+      fullPath: '/coaches/admin'
+      preLoaderRoute: typeof CoachesAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coaches/groups/$groupId': {
+      id: '/coaches/groups/$groupId'
+      path: '/coaches/groups/$groupId'
+      fullPath: '/coaches/groups/$groupId'
+      preLoaderRoute: typeof CoachesGroupsGroupIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -202,8 +242,10 @@ const rootRouteChildren: RootRouteChildren = {
   JoinRoute: JoinRoute,
   NewsRoute: NewsRoute,
   SupportRoute: SupportRoute,
+  CoachesAdminRoute: CoachesAdminRoute,
   CoachesLoginRoute: CoachesLoginRoute,
   CoachesIndexRoute: CoachesIndexRoute,
+  CoachesGroupsGroupIdRoute: CoachesGroupsGroupIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
