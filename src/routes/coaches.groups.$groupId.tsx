@@ -202,7 +202,9 @@ function AthletesTab({ groupId }: { groupId: string }) {
 
 function TodayTab({ groupId }: { groupId: string }) {
   const [date, setDate] = useState(todayISO());
+  const [isDouble, setIsDouble] = useState(false);
   const [athletes, setAthletes] = useState<Athlete[]>([]);
+  // keyed by `${athleteId}|${part}`
   const [records, setRecords] = useState<Record<string, Attendance>>({});
 
   const load = useCallback(async () => {
@@ -212,58 +214,133 @@ function TodayTab({ groupId }: { groupId: string }) {
     if (ids.length === 0) { setRecords({}); return; }
     const { data: att } = await supabase.from("attendance").select("*").in("athlete_id", ids).eq("session_date", date);
     const map: Record<string, Attendance> = {};
-    (att ?? []).forEach((r) => { map[r.athlete_id] = r as Attendance; });
+    (att ?? []).forEach((r) => { const rec = r as Attendance; map[`${rec.athlete_id}|${rec.session_part}`] = rec; });
     setRecords(map);
+    // auto-detect double if any am/pm rows exist
+    if ((att ?? []).some((r: any) => r.session_part === "am" || r.session_part === "pm")) setIsDouble(true);
   }, [groupId, date]);
 
   useEffect(() => { void load(); }, [load]);
 
-  const set = async (athleteId: string, status: Attendance["status"]) => {
-    const existing = records[athleteId];
-    if (existing) {
-      const { error } = await supabase.from("attendance").update({ status }).eq("id", existing.id);
-      if (error) return toast.error(error.message);
-    } else {
-      const { data, error } = await supabase.from("attendance").insert({ athlete_id: athleteId, session_date: date, status }).select().single();
-      if (error) return toast.error(error.message);
-      setRecords({ ...records, [athleteId]: data as Attendance });
-      return;
-    }
-    setRecords({ ...records, [athleteId]: { ...existing, status } });
+  const setStatus = async (athleteId: string, part: SessionPart, status: Status) => {
+    const key = `${athleteId}|${part}`;
+    const existing = records[key];
+    // optimistic
+    setRecords((prev) => ({
+      ...prev,
+      [key]: { ...(existing ?? { id: "tmp", athlete_id: athleteId, session_date: date, session_part: part, notes: null }), status } as Attendance,
+    }));
+    const { data, error } = await supabase
+      .from("attendance")
+      .upsert(
+        { athlete_id: athleteId, session_date: date, session_part: part, status },
+        { onConflict: "athlete_id,session_date,session_part" }
+      )
+      .select()
+      .single();
+    if (error) { toast.error(error.message); void load(); return; }
+    setRecords((prev) => ({ ...prev, [key]: data as Attendance }));
   };
 
-  const markAllPresent = async () => {
-    await Promise.all(athletes.map((a) => set(a.id, "present")));
+  const markAllPresent = async (part: SessionPart) => {
+    await Promise.all(athletes.map((a) => setStatus(a.id, part, "present")));
     toast.success("All marked present");
   };
 
+  const parts: SessionPart[] = isDouble ? ["am", "pm"] : ["single"];
+  const partLabel = (p: SessionPart) => (p === "am" ? "AM" : p === "pm" ? "PM" : "Session");
+
   return (
-    <div className="mt-6 rounded-lg border bg-background p-6">
+    <div className="mt-6 rounded-lg border bg-background p-4 sm:p-6">
       <div className="flex items-end justify-between gap-3 mb-4 flex-wrap">
         <div>
-          <Label>Session date</Label>
+          <Label className="text-xs">Session date</Label>
           <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-auto" />
         </div>
-        <Button size="sm" variant="outline" onClick={markAllPresent} disabled={athletes.length === 0}>Mark all present</Button>
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            size="sm"
+            variant={isDouble ? "outline" : "default"}
+            onClick={() => setIsDouble(false)}
+          >Single</Button>
+          <Button
+            type="button"
+            size="sm"
+            variant={isDouble ? "default" : "outline"}
+            onClick={() => setIsDouble(true)}
+          >Double (AM/PM)</Button>
+        </div>
       </div>
 
-      {athletes.length === 0 ? <p className="text-sm text-muted-foreground">No athletes in this group yet.</p> : (
-        <div className="divide-y">
-          {athletes.map((a) => {
-            const status = records[a.id]?.status;
-            return (
-              <div key={a.id} className="py-2 flex items-center justify-between gap-3">
-                <div className="font-medium">{a.last_name}, {a.first_name}</div>
-                <Select value={status ?? ""} onValueChange={(v) => set(a.id, v as Attendance["status"])}>
-                  <SelectTrigger className="w-36"><SelectValue placeholder="—" /></SelectTrigger>
-                  <SelectContent>
-                    {STATUSES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-            );
-          })}
-        </div>
+      {athletes.length === 0 ? (
+        <p className="text-sm text-muted-foreground">No athletes in this group yet.</p>
+      ) : (
+        <>
+          {/* summary header */}
+          <div className="mb-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
+            {parts.map((p) => {
+              const present = athletes.filter((a) => records[`${a.id}|${p}`]?.status === "present").length;
+              const absent = athletes.filter((a) => records[`${a.id}|${p}`]?.status === "absent").length;
+              return (
+                <div key={p} className="rounded-md border px-3 py-1.5 flex items-center gap-3">
+                  <span className="font-semibold text-foreground">{partLabel(p)}</span>
+                  <span><span className="text-green-600 font-medium">{present}</span> present</span>
+                  <span><span className="text-red-600 font-medium">{absent}</span> absent</span>
+                  <span>{athletes.length - present - absent} unmarked</span>
+                  <button
+                    type="button"
+                    onClick={() => markAllPresent(p)}
+                    className="ml-1 text-primary hover:underline"
+                  >mark all</button>
+                </div>
+              );
+            })}
+          </div>
+
+          <ul className="divide-y">
+            {athletes.map((a) => (
+              <li key={a.id} className="py-3 flex items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <div className="font-medium truncate">{a.last_name}, {a.first_name}</div>
+                  <div className="text-xs text-muted-foreground">2k {fmt2k(a.erg_2k_seconds)}</div>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  {parts.map((p) => {
+                    const status = records[`${a.id}|${p}`]?.status;
+                    return (
+                      <div key={p} className="flex items-center gap-1.5">
+                        {isDouble && <span className="w-7 text-[10px] font-semibold text-muted-foreground text-right">{partLabel(p)}</span>}
+                        <button
+                          type="button"
+                          onClick={() => setStatus(a.id, p, "present")}
+                          className={cn(
+                            "h-10 min-w-[64px] px-3 rounded-md text-sm font-medium border transition-colors active:scale-95",
+                            status === "present"
+                              ? "bg-green-600 text-white border-green-600"
+                              : "bg-background hover:bg-green-50 border-input"
+                          )}
+                          aria-pressed={status === "present"}
+                        >Present</button>
+                        <button
+                          type="button"
+                          onClick={() => setStatus(a.id, p, "absent")}
+                          className={cn(
+                            "h-10 min-w-[64px] px-3 rounded-md text-sm font-medium border transition-colors active:scale-95",
+                            status === "absent"
+                              ? "bg-red-600 text-white border-red-600"
+                              : "bg-background hover:bg-red-50 border-input"
+                          )}
+                          aria-pressed={status === "absent"}
+                        >Absent</button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
