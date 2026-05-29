@@ -10,7 +10,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger,
 } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/coaches/groups/$groupId")({
   head: () => ({ meta: [{ title: "Group — Coaches Corner" }, { name: "robots", content: "noindex" }] }),
@@ -19,9 +19,9 @@ export const Route = createFileRoute("/coaches/groups/$groupId")({
 
 type Group = { id: string; name: string; description: string | null };
 type Athlete = { id: string; group_id: string; first_name: string; last_name: string; dob: string | null; erg_2k_seconds: number | null; notes: string | null };
-type Attendance = { id: string; athlete_id: string; session_date: string; status: "present" | "absent" | "late" | "excused"; notes: string | null };
-
-const STATUSES: Attendance["status"][] = ["present", "absent", "late", "excused"];
+type SessionPart = "single" | "am" | "pm";
+type Status = "present" | "absent";
+type Attendance = { id: string; athlete_id: string; session_date: string; session_part: SessionPart; status: Status; notes: string | null };
 
 function fmt2k(seconds: number | null): string {
   if (seconds == null) return "—";
