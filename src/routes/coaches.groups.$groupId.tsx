@@ -372,17 +372,30 @@ function MonthlyTab({ groupId }: { groupId: string }) {
 
   useEffect(() => { void load(); }, [load]);
 
-  const cell = (athleteId: string, day: number) => {
-    const d = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    return records.find((r) => r.athlete_id === athleteId && r.session_date === d);
+  const dayKey = (day: number) => `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+  // For a given athlete and day, return present-count / total-sessions that day
+  const cellInfo = (athleteId: string, day: number) => {
+    const d = dayKey(day);
+    const rs = records.filter((r) => r.athlete_id === athleteId && r.session_date === d);
+    if (rs.length === 0) return null;
+    const present = rs.filter((r) => r.status === "present").length;
+    return { present, total: rs.length };
   };
 
   const summary = (athleteId: string) => {
     const rs = records.filter((r) => r.athlete_id === athleteId);
     if (rs.length === 0) return { pct: null as number | null, p: 0, total: 0 };
-    const present = rs.filter((r) => r.status === "present" || r.status === "late").length;
+    const present = rs.filter((r) => r.status === "present").length;
     return { pct: Math.round((present / rs.length) * 100), p: present, total: rs.length };
   };
+
+  // group-wide attendance for this month
+  const groupPct = (() => {
+    if (records.length === 0) return null;
+    const present = records.filter((r) => r.status === "present").length;
+    return Math.round((present / records.length) * 100);
+  })();
 
   const monthName = new Date(year, month, 1).toLocaleString("default", { month: "long" });
 
@@ -393,20 +406,24 @@ function MonthlyTab({ groupId }: { groupId: string }) {
     if (month === 11) { setYear(year + 1); setMonth(0); } else setMonth(month + 1);
   };
 
-  const colour = (s?: string) => {
-    switch (s) {
-      case "present": return "bg-green-500/80 text-white";
-      case "late": return "bg-yellow-500/80 text-white";
-      case "absent": return "bg-red-500/80 text-white";
-      case "excused": return "bg-blue-500/80 text-white";
-      default: return "";
-    }
+  const cellColour = (info: { present: number; total: number } | null) => {
+    if (!info) return "";
+    if (info.present === 0) return "bg-red-500/80 text-white";
+    if (info.present < info.total) return "bg-yellow-500/80 text-white"; // partial (e.g. AM only)
+    return "bg-green-500/80 text-white"; // all sessions present
   };
 
   return (
-    <div className="mt-6 rounded-lg border bg-background p-6">
+    <div className="mt-6 rounded-lg border bg-background p-4 sm:p-6">
       <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
-        <h2 className="font-serif text-xl">{monthName} {year}</h2>
+        <div>
+          <h2 className="font-serif text-xl">{monthName} {year}</h2>
+          {groupPct != null && (
+            <p className="text-xs text-muted-foreground mt-1">
+              Group attendance: <span className="font-semibold text-foreground">{groupPct}%</span> ({records.filter(r => r.status === "present").length}/{records.length} sessions)
+            </p>
+          )}
+        </div>
         <div className="flex gap-2">
           <Button size="sm" variant="outline" onClick={setPrev}>← Prev</Button>
           <Button size="sm" variant="outline" onClick={setNext}>Next →</Button>
@@ -428,12 +445,22 @@ function MonthlyTab({ groupId }: { groupId: string }) {
                 const sum = summary(a.id);
                 return (
                   <tr key={a.id} className="border-b">
-                    <td className="sticky left-0 bg-background p-2 whitespace-nowrap">{a.last_name}, {a.first_name}</td>
+                    <td className="sticky left-0 bg-background p-2 whitespace-nowrap font-medium">{a.last_name}, {a.first_name}</td>
                     {days.map((d) => {
-                      const r = cell(a.id, d);
-                      return <td key={d} className="p-0 text-center border-l"><div className={`w-7 h-7 mx-auto flex items-center justify-center text-[10px] uppercase ${colour(r?.status)}`}>{r ? r.status[0] : ""}</div></td>;
+                      const info = cellInfo(a.id, d);
+                      const label = info ? (info.total > 1 ? `${info.present}/${info.total}` : info.present === info.total ? "✓" : "✗") : "";
+                      return (
+                        <td key={d} className="p-0 text-center border-l">
+                          <div className={`w-7 h-7 mx-auto flex items-center justify-center text-[10px] font-semibold ${cellColour(info)}`}>{label}</div>
+                        </td>
+                      );
                     })}
-                    <td className="p-2 text-center font-medium tabular-nums">{sum.pct == null ? "—" : `${sum.pct}%`}<div className="text-[10px] text-muted-foreground">{sum.p}/{sum.total}</div></td>
+                    <td className="p-2 text-center font-semibold tabular-nums">
+                      <span className={sum.pct == null ? "" : sum.pct >= 80 ? "text-green-600" : sum.pct >= 50 ? "text-yellow-600" : "text-red-600"}>
+                        {sum.pct == null ? "—" : `${sum.pct}%`}
+                      </span>
+                      <div className="text-[10px] text-muted-foreground font-normal">{sum.p}/{sum.total}</div>
+                    </td>
                   </tr>
                 );
               })}
@@ -441,10 +468,9 @@ function MonthlyTab({ groupId }: { groupId: string }) {
           </table>
 
           <div className="mt-4 flex gap-4 text-xs text-muted-foreground flex-wrap">
-            <div className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-green-500/80 rounded-sm" /> Present</div>
-            <div className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-yellow-500/80 rounded-sm" /> Late</div>
+            <div className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-green-500/80 rounded-sm" /> All sessions present</div>
+            <div className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-yellow-500/80 rounded-sm" /> Partial (e.g. AM only)</div>
             <div className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-red-500/80 rounded-sm" /> Absent</div>
-            <div className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-blue-500/80 rounded-sm" /> Excused</div>
           </div>
         </div>
       )}
