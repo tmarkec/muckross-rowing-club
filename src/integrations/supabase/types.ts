@@ -66,6 +66,7 @@ export type Database = {
           notes: string | null
           recorded_by: string | null
           session_date: string
+          session_part: Database["public"]["Enums"]["session_part"]
           status: Database["public"]["Enums"]["attendance_status"]
           updated_at: string
         }
@@ -76,6 +77,7 @@ export type Database = {
           notes?: string | null
           recorded_by?: string | null
           session_date: string
+          session_part?: Database["public"]["Enums"]["session_part"]
           status: Database["public"]["Enums"]["attendance_status"]
           updated_at?: string
         }
@@ -86,6 +88,7 @@ export type Database = {
           notes?: string | null
           recorded_by?: string | null
           session_date?: string
+          session_part?: Database["public"]["Enums"]["session_part"]
           status?: Database["public"]["Enums"]["attendance_status"]
           updated_at?: string
         }
@@ -214,6 +217,7 @@ export type Database = {
     Enums: {
       app_role: "admin" | "coach" | "athlete"
       attendance_status: "present" | "absent" | "late" | "excused"
+      session_part: "single" | "am" | "pm"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -343,6 +347,7 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "coach", "athlete"],
       attendance_status: ["present", "absent", "late", "excused"],
+      session_part: ["single", "am", "pm"],
     },
   },
 } as const
