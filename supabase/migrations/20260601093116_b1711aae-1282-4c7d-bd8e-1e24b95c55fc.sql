@@ -1,0 +1,3 @@
+ALTER TABLE public.attendance DROP CONSTRAINT IF EXISTS attendance_athlete_id_session_date_key;
+ALTER TABLE public.attendance DROP CONSTRAINT IF EXISTS attendance_athlete_id_session_date_session_part_key;
+ALTER TABLE public.attendance ADD CONSTRAINT attendance_athlete_id_session_date_session_part_key UNIQUE (athlete_id, session_date, session_part);
