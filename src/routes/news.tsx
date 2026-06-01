@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Calendar as CalendarIcon, MapPin, ArrowRight } from "lucide-react";
+import { Calendar as CalendarIcon, MapPin, ExternalLink } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -46,6 +46,8 @@ const posts = [
   },
 ];
 
+const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
+
 const fixtures = [
   {
     date: new Date(2026, 6, 11),
@@ -66,8 +68,15 @@ const fixtures = [
 
 function NewsPage() {
   const [open, setOpen] = useState(false);
-  const eventDays = useMemo(() => fixtures.map((f) => f.date), []);
-  const firstFixtureMonth = fixtures[0]?.date ?? new Date();
+  const upcomingFixtures = useMemo(() => {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    return fixtures
+      .filter((f) => f.date.getTime() >= startOfToday.getTime())
+      .sort((a, b) => a.date.getTime() - b.date.getTime());
+  }, []);
+  const eventDays = useMemo(() => upcomingFixtures.map((f) => f.date), [upcomingFixtures]);
+  const firstFixtureMonth = upcomingFixtures[0]?.date ?? new Date();
 
   return (
     <SiteLayout>
@@ -103,8 +112,13 @@ function NewsPage() {
                       Where the club is racing next. Past events drop off automatically.
                     </DialogDescription>
                   </DialogHeader>
+                  {upcomingFixtures.length === 0 ? (
+                    <p className="mt-6 text-center text-sm text-muted-foreground">
+                      No upcoming events scheduled. Check back soon.
+                    </p>
+                  ) : (
                   <ul className="mt-4 divide-y divide-border/60 overflow-hidden rounded-xl border border-border/60">
-                    {fixtures.map((f) => (
+                    {upcomingFixtures.map((f) => (
                       <li
                         key={f.name}
                         className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-5"
@@ -127,10 +141,29 @@ function NewsPage() {
                           <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                             <MapPin className="h-3.5 w-3.5" /> {f.location}
                           </p>
+                          <a
+                            href={ROWING_IRELAND_EVENTS_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+                          >
+                            Event details on Rowing Ireland <ExternalLink className="h-3 w-3" />
+                          </a>
                         </div>
                       </li>
                     ))}
                   </ul>
+                  )}
+                  <div className="mt-4 text-center">
+                    <a
+                      href={ROWING_IRELAND_EVENTS_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+                    >
+                      Full Rowing Ireland event calendar <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                  </div>
                 </DialogContent>
               </Dialog>
             </div>
