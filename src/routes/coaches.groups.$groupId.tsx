@@ -90,6 +90,7 @@ function GroupDetail() {
 
 function AthletesTab({ groupId }: { groupId: string }) {
   const [athletes, setAthletes] = useState<Athlete[]>([]);
+  const [attendance, setAttendance] = useState<Attendance[]>([]);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Athlete | null>(null);
   const empty = { first_name: "", last_name: "", dob: "", erg_2k: "", notes: "" };
@@ -98,9 +99,20 @@ function AthletesTab({ groupId }: { groupId: string }) {
   const load = useCallback(async () => {
     const { data } = await supabase.from("athletes").select("*").eq("group_id", groupId).order("last_name");
     setAthletes(data ?? []);
+    const ids = (data ?? []).map((a) => a.id);
+    if (ids.length === 0) { setAttendance([]); return; }
+    const { data: att } = await supabase.from("attendance").select("*").in("athlete_id", ids);
+    setAttendance((att ?? []) as Attendance[]);
   }, [groupId]);
 
   useEffect(() => { void load(); }, [load]);
+
+  const attendanceFor = (athleteId: string): { pct: number | null; total: number } => {
+    const rs = attendance.filter((r) => r.athlete_id === athleteId);
+    if (rs.length === 0) return { pct: null, total: 0 };
+    const present = rs.filter((r) => r.status === "present").length;
+    return { pct: Math.round((present / rs.length) * 100), total: rs.length };
+  };
 
   const startCreate = () => { setEditing(null); setForm(empty); setOpen(true); };
   const startEdit = (a: Athlete) => {
@@ -152,16 +164,25 @@ function AthletesTab({ groupId }: { groupId: string }) {
               <th className="p-2">Name</th>
               <th className="p-2">DOB</th>
               <th className="p-2">2k PB</th>
+              <th className="p-2">Avg attendance</th>
               <th className="p-2"></th>
             </tr>
           </thead>
           <tbody>
-            {athletes.length === 0 && <tr><td colSpan={4} className="text-center text-muted-foreground py-6">No athletes yet.</td></tr>}
+            {athletes.length === 0 && <tr><td colSpan={5} className="text-center text-muted-foreground py-6">No athletes yet.</td></tr>}
             {athletes.map((a) => (
               <tr key={a.id} className="border-b">
                 <td className="p-2 font-medium">{a.last_name}, {a.first_name}</td>
                 <td className="p-2 text-muted-foreground">{a.dob ?? "—"}</td>
                 <td className="p-2 tabular-nums">{fmt2k(a.erg_2k_seconds)}</td>
+                <td className="p-2 tabular-nums">
+                  {(() => {
+                    const { pct, total } = attendanceFor(a.id);
+                    if (pct == null) return <span className="text-muted-foreground">—</span>;
+                    const color = pct >= 80 ? "text-green-600" : pct >= 50 ? "text-yellow-600" : "text-red-600";
+                    return <span className={color}>{pct}% <span className="text-xs text-muted-foreground">({total})</span></span>;
+                  })()}
+                </td>
                 <td className="p-2 text-right">
                   <Button size="sm" variant="outline" onClick={() => startEdit(a)}>Edit</Button>{" "}
                   <Button size="sm" variant="destructive" onClick={async () => {
