@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Award, Heart, Users, Waves } from "lucide-react";
+import { ArrowRight, Award, Heart, Users, Waves, Trophy } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL, SITE_URL, SOCIAL } from "@/lib/site";
 import heroLake from "@/assets/hero-lake.jpg";
 import rowingAction from "@/assets/rowing-action.jpg";
 import community from "@/assets/club-community.jpg";
+import boathouse from "@/assets/boathouse.jpg";
 
 /** Structured data for the homepage — describes the club to search engines. */
 const homeJsonLd = {
@@ -169,6 +170,57 @@ function HomePage() {
                 className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 How to join <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About preview */}
+      <section className="bg-background py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div className="overflow-hidden rounded-2xl shadow-elegant">
+              <img
+                src={boathouse}
+                alt="Wooden boathouse on the shore of Lough Leane"
+                width={1600}
+                height={1024}
+                loading="lazy"
+                className="aspect-[4/3] w-full object-cover"
+              />
+            </div>
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">About the club</span>
+              <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+                150 years on the Lakes of Killarney
+              </h2>
+              <p className="mt-5 leading-relaxed text-muted-foreground">
+                Widely considered the oldest rowing club in Killarney, Muckross has been the
+                heartbeat of the local community for over 150 years — from the Traditional
+                Killarney Six and the iconic <em>Elizabeth Rose</em> to athletes who have
+                worn the Green Jersey of Ireland at the Olympic Games.
+              </p>
+              <p className="mt-4 leading-relaxed text-muted-foreground">
+                On any evening at the Old Boathouse you might see a wood-built Killarney Six
+                training alongside a carbon-fibre Olympic scull — past and future, side by side.
+              </p>
+              <ul className="mt-6 grid gap-3 sm:grid-cols-3">
+                {[
+                  { icon: Trophy, label: "Olympic athletes" },
+                  { icon: Award, label: "World medals" },
+                  { icon: Users, label: "All ages welcome" },
+                ].map(({ icon: Icon, label }) => (
+                  <li key={label} className="flex items-center gap-2 text-sm font-medium text-foreground/80">
+                    <Icon className="h-4 w-4 text-secondary" /> {label}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/about"
+                className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Read our full story <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>

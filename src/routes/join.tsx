@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Sun, Sparkles, Users } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL } from "@/lib/site";
 
@@ -63,6 +63,88 @@ function JoinPage() {
                 </ul>
               </div>
             ))}
+          </div>
+
+          {/* Adults & Parents rowing */}
+          <div id="adults-parents" className="mt-20 scroll-mt-24 grid gap-10 lg:grid-cols-[auto_1fr] lg:items-start">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-elegant">
+              <Users className="h-6 w-6 text-secondary" />
+            </div>
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">For grown-ups</span>
+              <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+                Adults & Parents rowing
+              </h2>
+              <p className="mt-4 leading-relaxed text-muted-foreground">
+                You don't have to be a junior to take up rowing. We run dedicated sessions
+                for adults and parents of junior rowers — a relaxed way to learn the sport
+                alongside your kids, get out on Lough Leane and meet other club families.
+              </p>
+              <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
+                {[
+                  "No experience needed",
+                  "Coached intro sessions",
+                  "Train alongside your junior",
+                  "Stable boats to start in",
+                ].map((b) => (
+                  <li key={b} className="flex items-start gap-2 text-sm text-foreground/80">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent-foreground" /> {b}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/contact"
+                search={{ subject: "Adults & Parents rowing" }}
+                className="mt-6 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Get in touch <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Summer & Easter camps */}
+          <div id="camps" className="mt-16 scroll-mt-24 rounded-2xl border border-border/60 bg-card p-8 shadow-soft sm:p-12">
+            <div className="grid gap-10 lg:grid-cols-[auto_1fr] lg:items-start">
+              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-yellow shadow-yellow">
+                <Sun className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">New members</span>
+                <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+                  Easter & Summer camps
+                </h2>
+                <p className="mt-4 leading-relaxed text-muted-foreground">
+                  Our Easter and Summer camps are the best way to try rowing for the first
+                  time. Run by qualified coaches at the Old Boathouse on Lough Leane,
+                  they're open to new members and a friendly first step into the club.
+                </p>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  {[
+                    { title: "Easter Camp", body: "A short, intensive intro over the Easter break — perfect for first-timers." },
+                    { title: "Summer Camp", body: "Longer weeks across the summer, building water skills and crew rowing." },
+                  ].map((c) => (
+                    <div key={c.title} className="rounded-xl border border-border/60 bg-background p-5">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-secondary" />
+                        <h3 className="font-serif text-lg font-semibold text-foreground">{c.title}</h3>
+                      </div>
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.body}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-5 text-sm text-muted-foreground">
+                  Camp dates are announced ahead of each season — get in touch to be added
+                  to the list.
+                </p>
+                <Link
+                  to="/contact"
+                  search={{ subject: "Easter / Summer Camp" }}
+                  className="mt-5 inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-5 py-2.5 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
+                >
+                  Register interest <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
           </div>
 
           <div className="mt-16 overflow-hidden rounded-2xl bg-gradient-yellow p-10 text-center shadow-yellow sm:p-14">

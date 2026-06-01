@@ -203,10 +203,7 @@ function AboutPage() {
             {[
               { title: "Code of Behaviour", body: "Standards of conduct expected of members, coaches and supporters." },
               { title: "Child Safeguarding Statement", body: "How we protect and support our junior rowers." },
-              { title: "Anti-Bullying Policy", body: "Our commitment to a respectful, inclusive club." },
               { title: "Health & Safety Policy", body: "On-water and boathouse safety procedures." },
-              { title: "Club Constitution", body: "The governing rules of Muckross Rowing Club." },
-              { title: "Complaints & Disciplinary Procedure", body: "How concerns are raised and addressed fairly." },
             ].map((doc) => (
               <li key={doc.title}>
                 <a
