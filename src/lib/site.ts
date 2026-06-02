@@ -23,7 +23,6 @@ export const SOCIAL = {
 /** Primary navigation items, shared by header and footer. */
 export const NAV_ITEMS = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
   { to: "/news", label: "News" },
   { to: "/join", label: "Join Us" },
   { to: "/support", label: "Support" },
