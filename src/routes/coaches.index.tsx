@@ -47,6 +47,9 @@ function CoachesHome() {
             <p className="text-sm text-muted-foreground mt-1">Signed in as {user?.email}</p>
           </div>
           <div className="flex gap-2">
+            <Button asChild size="sm" variant="secondary">
+              <Link to="/coaches/rigging">Rigging measurements</Link>
+            </Button>
             {isAdmin && (
               <Button asChild size="sm" variant="default">
                 <Link to="/coaches/admin">Admin panel</Link>
