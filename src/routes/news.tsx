@@ -49,19 +49,14 @@ const posts = [
 const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
 
 const fixtures = [
-  {
-    date: new Date(2026, 6, 11),
-    dateLabel: "Sat 11 Jul 2026",
-    name: "Killarney Regatta",
-    location: "Lough Leane, Killarney",
-    tag: "Home regatta",
-  },
   { date: new Date(2026, 4, 9),  dateLabel: "Sat 9 May 2026",  name: "Lough Rinn Regatta",        location: "Lough Rinn",                tag: "Regatta" },
   { date: new Date(2026, 4, 16), dateLabel: "Sat 16 May 2026", name: "Lee Regatta",                location: "Marina, Cork",              tag: "Regatta" },
   { date: new Date(2026, 4, 23), dateLabel: "Sat 23 May 2026", name: "Castleconnell Sprint Regatta", location: "Castleconnell, Limerick", tag: "Regatta" },
   { date: new Date(2026, 4, 23), dateLabel: "Sat 23 May 2026", name: "Dublin Metropolitan Regatta", location: "Blessington Lake",         tag: "Regatta" },
   { date: new Date(2026, 5, 6),  dateLabel: "Sat 6 Jun 2026",  name: "Munster Branch Regatta",     location: "NRC, Farran Wood, Cork",    tag: "Regatta" },
-  { date: new Date(2026, 5, 20), dateLabel: "Sat 20 Jun 2026", name: "Cork Regatta",               location: "NRC, Farran Wood, Cork",    tag: "Regatta" },
+  { date: new Date(2026, 5, 14), dateLabel: "Sun 14 Jun 2026", name: "Fermoy Sprint Regatta",      location: "Fermoy",                    tag: "Regatta" },
+  { date: new Date(2026, 5, 20), dateLabel: "20–21 Jun 2026",  name: "Cork Regatta",               location: "NRC, Farran Wood, Cork",    tag: "Regatta" },
+  { date: new Date(2026, 5, 27), dateLabel: "27–28 Jun 2026",  name: "Rowing Ireland 1K Classic",  location: "Lough Rinn",                tag: "Regatta" },
   { date: new Date(2026, 6, 10), dateLabel: "10–12 Jul 2026",  name: "Irish Rowing Championships", location: "NRC, Farran Wood, Cork",    tag: "Championship" },
   { date: new Date(2026, 11, 5), dateLabel: "Sat 5 Dec 2026",  name: "Muckross Head",              location: "NRC, Farran Wood, Cork",    tag: "Head race" },
 ];
@@ -109,7 +104,7 @@ function NewsPage() {
                   <DialogHeader>
                     <DialogTitle className="font-serif text-2xl">Upcoming events</DialogTitle>
                     <DialogDescription>
-                      Where the club is racing next. Past events drop off automatically.
+                      Where the club is racing next.
                     </DialogDescription>
                   </DialogHeader>
                   {upcomingFixtures.length === 0 ? (
