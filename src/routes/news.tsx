@@ -49,16 +49,16 @@ const posts = [
 const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
 
 const fixtures = [
-  { date: new Date(2026, 4, 9),  dateLabel: "Sat 9 May 2026",  name: "Lough Rinn Regatta",        location: "Lough Rinn",                tag: "Regatta" },
-  { date: new Date(2026, 4, 16), dateLabel: "Sat 16 May 2026", name: "Lee Regatta",                location: "Marina, Cork",              tag: "Regatta" },
-  { date: new Date(2026, 4, 23), dateLabel: "Sat 23 May 2026", name: "Castleconnell Sprint Regatta", location: "Castleconnell, Limerick", tag: "Regatta" },
-  { date: new Date(2026, 4, 23), dateLabel: "Sat 23 May 2026", name: "Dublin Metropolitan Regatta", location: "Blessington Lake",         tag: "Regatta" },
-  { date: new Date(2026, 5, 6),  dateLabel: "Sat 6 Jun 2026",  name: "Munster Branch Regatta",     location: "NRC, Farran Wood, Cork",    tag: "Regatta" },
-  { date: new Date(2026, 5, 14), dateLabel: "Sun 14 Jun 2026", name: "Fermoy Sprint Regatta",      location: "Fermoy",                    tag: "Regatta" },
-  { date: new Date(2026, 5, 20), dateLabel: "20–21 Jun 2026",  name: "Cork Regatta",               location: "NRC, Farran Wood, Cork",    tag: "Regatta" },
-  { date: new Date(2026, 5, 27), dateLabel: "27–28 Jun 2026",  name: "Rowing Ireland 1K Classic",  location: "Lough Rinn",                tag: "Regatta" },
-  { date: new Date(2026, 6, 10), dateLabel: "10–12 Jul 2026",  name: "Irish Rowing Championships", location: "NRC, Farran Wood, Cork",    tag: "Championship" },
-  { date: new Date(2026, 11, 5), dateLabel: "Sat 5 Dec 2026",  name: "Muckross Head",              location: "NRC, Farran Wood, Cork",    tag: "Head race" },
+  { date: new Date(2026, 4, 9),  endDate: new Date(2026, 4, 9),  dateLabel: "Sat 9 May 2026",  name: "Lough Rinn Regatta",        location: "Lough Rinn",                tag: "Regatta" },
+  { date: new Date(2026, 4, 16), endDate: new Date(2026, 4, 16), dateLabel: "Sat 16 May 2026", name: "Lee Regatta",                location: "Marina, Cork",              tag: "Regatta" },
+  { date: new Date(2026, 4, 23), endDate: new Date(2026, 4, 23), dateLabel: "Sat 23 May 2026", name: "Castleconnell Sprint Regatta", location: "Castleconnell, Limerick", tag: "Regatta" },
+  { date: new Date(2026, 4, 23), endDate: new Date(2026, 4, 23), dateLabel: "Sat 23 May 2026", name: "Dublin Metropolitan Regatta", location: "Blessington Lake",         tag: "Regatta" },
+  { date: new Date(2026, 5, 6),  endDate: new Date(2026, 5, 6),  dateLabel: "Sat 6 Jun 2026",  name: "Munster Branch Regatta",     location: "NRC, Farran Wood, Cork",    tag: "Regatta" },
+  { date: new Date(2026, 5, 14), endDate: new Date(2026, 5, 14), dateLabel: "Sun 14 Jun 2026", name: "Fermoy Sprint Regatta",      location: "Fermoy",                    tag: "Regatta" },
+  { date: new Date(2026, 5, 20), endDate: new Date(2026, 5, 21), dateLabel: "20–21 Jun 2026",  name: "Cork Regatta",               location: "NRC, Farran Wood, Cork",    tag: "Regatta" },
+  { date: new Date(2026, 5, 27), endDate: new Date(2026, 5, 28), dateLabel: "27–28 Jun 2026",  name: "Rowing Ireland 1K Classic",  location: "Lough Rinn",                tag: "Regatta" },
+  { date: new Date(2026, 6, 10), endDate: new Date(2026, 6, 12), dateLabel: "10–12 Jul 2026",  name: "Irish Rowing Championships", location: "NRC, Farran Wood, Cork",    tag: "Championship" },
+  { date: new Date(2026, 11, 5), endDate: new Date(2026, 11, 5), dateLabel: "Sat 5 Dec 2026",  name: "Muckross Head",              location: "NRC, Farran Wood, Cork",    tag: "Head race" },
 ];
 
 function NewsPage() {
@@ -70,7 +70,18 @@ function NewsPage() {
       .filter((f) => f.date.getTime() >= startOfToday.getTime())
       .sort((a, b) => a.date.getTime() - b.date.getTime());
   }, []);
-  const eventDays = useMemo(() => upcomingFixtures.map((f) => f.date), [upcomingFixtures]);
+  const eventDays = useMemo(() => {
+    const days: Date[] = [];
+    for (const f of upcomingFixtures) {
+      const d = new Date(f.date);
+      const end = f.endDate ?? f.date;
+      while (d.getTime() <= end.getTime()) {
+        days.push(new Date(d));
+        d.setDate(d.getDate() + 1);
+      }
+    }
+    return days;
+  }, [upcomingFixtures]);
   const firstFixtureMonth = upcomingFixtures[0]?.date ?? new Date();
 
   return (
@@ -128,7 +139,16 @@ function NewsPage() {
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
-                            <h3 className="font-serif text-base font-bold text-foreground sm:text-lg">{f.name}</h3>
+                            <h3 className="font-serif text-base font-bold sm:text-lg">
+                              <a
+                                href={ROWING_IRELAND_EVENTS_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 text-foreground hover:text-primary hover:underline"
+                              >
+                                {f.name} <ExternalLink className="h-3.5 w-3.5" />
+                              </a>
+                            </h3>
                             <span className="rounded-full border border-border/60 bg-background px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                               {f.tag}
                             </span>
@@ -136,14 +156,6 @@ function NewsPage() {
                           <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                             <MapPin className="h-3.5 w-3.5" /> {f.location}
                           </p>
-                          <a
-                            href={ROWING_IRELAND_EVENTS_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
-                          >
-                            Event details on Rowing Ireland <ExternalLink className="h-3 w-3" />
-                          </a>
                         </div>
                       </li>
                     ))}
