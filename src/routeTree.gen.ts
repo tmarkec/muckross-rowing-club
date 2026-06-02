@@ -16,6 +16,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CoachesIndexRouteImport } from './routes/coaches.index'
+import { Route as CoachesRiggingRouteImport } from './routes/coaches.rigging'
 import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
 import { Route as CoachesAdminRouteImport } from './routes/coaches.admin'
 import { Route as CoachesGroupsGroupIdRouteImport } from './routes/coaches.groups.$groupId'
@@ -55,6 +56,11 @@ const CoachesIndexRoute = CoachesIndexRouteImport.update({
   path: '/coaches/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesRiggingRoute = CoachesRiggingRouteImport.update({
+  id: '/coaches/rigging',
+  path: '/coaches/rigging',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoachesLoginRoute = CoachesLoginRouteImport.update({
   id: '/coaches/login',
   path: '/coaches/login',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRoute
   '/coaches/login': typeof CoachesLoginRoute
+  '/coaches/rigging': typeof CoachesRiggingRoute
   '/coaches/': typeof CoachesIndexRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRoute
   '/coaches/login': typeof CoachesLoginRoute
+  '/coaches/rigging': typeof CoachesRiggingRoute
   '/coaches': typeof CoachesIndexRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRoute
   '/coaches/login': typeof CoachesLoginRoute
+  '/coaches/rigging': typeof CoachesRiggingRoute
   '/coaches/': typeof CoachesIndexRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/support'
     | '/coaches/admin'
     | '/coaches/login'
+    | '/coaches/rigging'
     | '/coaches/'
     | '/coaches/groups/$groupId'
   fileRoutesByTo: FileRoutesByTo
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/support'
     | '/coaches/admin'
     | '/coaches/login'
+    | '/coaches/rigging'
     | '/coaches'
     | '/coaches/groups/$groupId'
   id:
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/support'
     | '/coaches/admin'
     | '/coaches/login'
+    | '/coaches/rigging'
     | '/coaches/'
     | '/coaches/groups/$groupId'
   fileRoutesById: FileRoutesById
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   SupportRoute: typeof SupportRoute
   CoachesAdminRoute: typeof CoachesAdminRoute
   CoachesLoginRoute: typeof CoachesLoginRoute
+  CoachesRiggingRoute: typeof CoachesRiggingRoute
   CoachesIndexRoute: typeof CoachesIndexRoute
   CoachesGroupsGroupIdRoute: typeof CoachesGroupsGroupIdRoute
 }
@@ -211,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/rigging': {
+      id: '/coaches/rigging'
+      path: '/coaches/rigging'
+      fullPath: '/coaches/rigging'
+      preLoaderRoute: typeof CoachesRiggingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/coaches/login': {
       id: '/coaches/login'
       path: '/coaches/login'
@@ -244,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   SupportRoute: SupportRoute,
   CoachesAdminRoute: CoachesAdminRoute,
   CoachesLoginRoute: CoachesLoginRoute,
+  CoachesRiggingRoute: CoachesRiggingRoute,
   CoachesIndexRoute: CoachesIndexRoute,
   CoachesGroupsGroupIdRoute: CoachesGroupsGroupIdRoute,
 }
