@@ -197,13 +197,13 @@ function NewsPage() {
 
       <section className="bg-background py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="space-y-6">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
               <article
                 key={post.title}
-                className="group rounded-2xl border border-border/60 bg-card p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elegant sm:p-8"
+                className="group flex h-full flex-col rounded-2xl border border-border/60 bg-card p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elegant"
               >
-                <div className="flex items-center gap-3 text-xs uppercase tracking-wider text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 font-semibold text-secondary-foreground">
                     {post.category}
                   </span>
@@ -211,10 +211,10 @@ function NewsPage() {
                     <CalendarIcon className="h-3.5 w-3.5" /> {post.date}
                   </span>
                 </div>
-                <h2 className="mt-4 font-serif text-2xl font-bold text-foreground transition-colors group-hover:text-primary sm:text-3xl">
+                <h2 className="mt-4 font-serif text-xl font-bold text-foreground transition-colors group-hover:text-primary sm:text-2xl">
                   {post.title}
                 </h2>
-                <p className="mt-3 leading-relaxed text-muted-foreground">{post.excerpt}</p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{post.excerpt}</p>
               </article>
             ))}
           </div>
