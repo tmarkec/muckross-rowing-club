@@ -51,9 +51,14 @@ function CoachesHome() {
               <Link to="/coaches/rigging">Rigging measurements</Link>
             </Button>
             {isAdmin && (
-              <Button asChild size="sm" variant="default">
-                <Link to="/coaches/admin">Admin panel</Link>
-              </Button>
+              <>
+                <Button asChild size="sm" variant="default">
+                  <Link to="/coaches/posts">News posts</Link>
+                </Button>
+                <Button asChild size="sm" variant="default">
+                  <Link to="/coaches/admin">Admin panel</Link>
+                </Button>
+              </>
             )}
             <Button variant="outline" size="sm" onClick={async () => { await signOut(); void navigate({ to: "/coaches/login" }); }}>Sign out</Button>
           </div>

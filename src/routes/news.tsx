@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import { Calendar as CalendarIcon, MapPin, ExternalLink } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -25,26 +27,15 @@ export const Route = createFileRoute("/news")({
   component: NewsPage,
 });
 
-const posts = [
-  {
-    date: "Coming soon",
-    category: "Announcement",
-    title: "Welcome to the new Muckross Rowing Club website",
-    excerpt: "We're rolling out a refreshed home for the club online — with news, regatta updates and a future members' area for coaches and athletes.",
-  },
-  {
-    date: "Season",
-    category: "Racing",
-    title: "Looking ahead to the regatta season",
-    excerpt: "Crews are training hard ahead of the upcoming season, with regattas across Ireland on the calendar including the famous Killarney Regatta.",
-  },
-  {
-    date: "Year-round",
-    category: "Membership",
-    title: "New rowers always welcome",
-    excerpt: "Whether you've never picked up an oar or you're returning after a break, the club has a place for you. Get in touch to find out more.",
-  },
-];
+type NewsPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  cover_image_url: string | null;
+  author_name: string | null;
+  published_at: string;
+};
 
 const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
 
@@ -63,6 +54,22 @@ const fixtures = [
 
 function NewsPage() {
   const [open, setOpen] = useState(false);
+  const [posts, setPosts] = useState<NewsPost[]>([]);
+  const [postsLoading, setPostsLoading] = useState(true);
+
+  useEffect(() => {
+    void supabase
+      .from("posts")
+      .select("id, slug, title, excerpt, cover_image_url, author_name, published_at")
+      .eq("published", true)
+      .order("published_at", { ascending: false })
+      .limit(60)
+      .then(({ data }) => {
+        setPosts((data ?? []) as NewsPost[]);
+        setPostsLoading(false);
+      });
+  }, []);
+
   const upcomingFixtures = useMemo(() => {
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
