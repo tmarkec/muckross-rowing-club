@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import { Calendar as CalendarIcon, MapPin, ExternalLink } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -25,26 +27,15 @@ export const Route = createFileRoute("/news")({
   component: NewsPage,
 });
 
-const posts = [
-  {
-    date: "Coming soon",
-    category: "Announcement",
-    title: "Welcome to the new Muckross Rowing Club website",
-    excerpt: "We're rolling out a refreshed home for the club online — with news, regatta updates and a future members' area for coaches and athletes.",
-  },
-  {
-    date: "Season",
-    category: "Racing",
-    title: "Looking ahead to the regatta season",
-    excerpt: "Crews are training hard ahead of the upcoming season, with regattas across Ireland on the calendar including the famous Killarney Regatta.",
-  },
-  {
-    date: "Year-round",
-    category: "Membership",
-    title: "New rowers always welcome",
-    excerpt: "Whether you've never picked up an oar or you're returning after a break, the club has a place for you. Get in touch to find out more.",
-  },
-];
+type NewsPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  cover_image_url: string | null;
+  author_name: string | null;
+  published_at: string;
+};
 
 const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
 
@@ -63,6 +54,22 @@ const fixtures = [
 
 function NewsPage() {
   const [open, setOpen] = useState(false);
+  const [posts, setPosts] = useState<NewsPost[]>([]);
+  const [postsLoading, setPostsLoading] = useState(true);
+
+  useEffect(() => {
+    void supabase
+      .from("posts")
+      .select("id, slug, title, excerpt, cover_image_url, author_name, published_at")
+      .eq("published", true)
+      .order("published_at", { ascending: false })
+      .limit(60)
+      .then(({ data }) => {
+        setPosts((data ?? []) as NewsPost[]);
+        setPostsLoading(false);
+      });
+  }, []);
+
   const upcomingFixtures = useMemo(() => {
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
@@ -181,13 +188,19 @@ function NewsPage() {
                 defaultMonth={firstFixtureMonth}
                 modifiers={{ event: eventDays }}
                 modifiersClassNames={{
-                  event: "bg-gradient-navy text-primary-foreground rounded-md font-bold",
+                  event: "bg-gradient-navy text-primary-foreground rounded-md font-bold cursor-pointer",
                 }}
                 className="pointer-events-auto"
+                onDayClick={(day) => {
+                  const isEvent = eventDays.some(
+                    (d) => d.toDateString() === day.toDateString(),
+                  );
+                  if (isEvent) setOpen(true);
+                }}
               />
               <div className="mt-3 flex flex-wrap items-center justify-center gap-3 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy" /> Muckross RC competing
+                  <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy" /> Muckross RC competing — click a highlighted day for details
                 </span>
               </div>
             </div>
@@ -197,33 +210,57 @@ function NewsPage() {
 
       <section className="bg-background py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
-              <article
-                key={post.title}
-                className="group flex h-full flex-col rounded-2xl border border-border/60 bg-card p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elegant"
-              >
-                <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 font-semibold text-secondary-foreground">
-                    {post.category}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <CalendarIcon className="h-3.5 w-3.5" /> {post.date}
-                  </span>
-                </div>
-                <h2 className="mt-4 font-serif text-xl font-bold text-foreground transition-colors group-hover:text-primary sm:text-2xl">
-                  {post.title}
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{post.excerpt}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-12 rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center">
-            <p className="text-sm text-muted-foreground">
-              More news coming soon. Follow the club on social media for live updates from regattas.
-            </p>
-          </div>
+          {postsLoading ? (
+            <p className="text-center text-sm text-muted-foreground">Loading posts…</p>
+          ) : posts.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-border bg-muted/40 p-10 text-center">
+              <p className="text-sm text-muted-foreground">
+                No news posts yet. Check back soon — or follow the club on social media for live updates.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {posts.map((post) => (
+                <Link
+                  key={post.id}
+                  to="/news/$slug"
+                  params={{ slug: post.slug }}
+                  className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elegant"
+                >
+                  {post.cover_image_url ? (
+                    <div className="aspect-[16/10] w-full overflow-hidden bg-muted">
+                      <img
+                        src={post.cover_image_url}
+                        alt=""
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform group-hover:scale-[1.03]"
+                      />
+                    </div>
+                  ) : null}
+                  <div className="flex flex-1 flex-col p-6">
+                    <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
+                      <span className="inline-flex items-center gap-1.5">
+                        <CalendarIcon className="h-3.5 w-3.5" />
+                        {new Date(post.published_at).toLocaleDateString("en-IE", {
+                          day: "numeric", month: "short", year: "numeric",
+                        })}
+                      </span>
+                      {post.author_name && <span>· {post.author_name}</span>}
+                    </div>
+                    <h2 className="mt-3 font-serif text-xl font-bold text-foreground transition-colors group-hover:text-primary sm:text-2xl">
+                      {post.title}
+                    </h2>
+                    {post.excerpt && (
+                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground line-clamp-3">{post.excerpt}</p>
+                    )}
+                    <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-primary">
+                      Read more →
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </SiteLayout>

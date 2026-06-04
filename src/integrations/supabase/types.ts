@@ -152,6 +152,86 @@ export type Database = {
         }
         Relationships: []
       }
+      post_images: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          post_id: string
+          sort_order: number
+          url: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          post_id: string
+          sort_order?: number
+          url: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          post_id?: string
+          sort_order?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_images_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          author_name: string | null
+          author_user_id: string | null
+          content_html: string
+          cover_image_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          published: boolean
+          published_at: string
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_name?: string | null
+          author_user_id?: string | null
+          content_html?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string | null
+          author_user_id?: string | null
+          content_html?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
