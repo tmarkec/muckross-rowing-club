@@ -121,7 +121,7 @@ function PostPage() {
             <div className="mt-12">
               <h2 className="font-serif text-2xl font-bold">Gallery</h2>
               <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-                {images.map((img, i) => (
+                {images.map((img: PostImage, i: number) => (
                   <button
                     key={img.id}
                     type="button"
