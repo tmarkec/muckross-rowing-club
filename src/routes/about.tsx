@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Anchor, Trophy, Globe2, FileText, Download } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
-import boathouse from "@/assets/boathouse.jpg";
-import community from "@/assets/club-community.jpg";
+import boathouseAsset from "@/assets/boathouse.asset.json";
+import communityAsset from "@/assets/club-community.asset.json";
+const boathouse = boathouseAsset.url;
+const community = communityAsset.url;
 
 export const Route = createFileRoute("/about")({
   head: () => ({
