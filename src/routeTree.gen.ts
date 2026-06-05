@@ -59,9 +59,9 @@ const CoachesIndexRoute = CoachesIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsSlugRoute = NewsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => NewsRoute,
+  id: '/news/$slug',
+  path: '/news/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CoachesRiggingRoute = CoachesRiggingRouteImport.update({
   id: '/coaches/rigging',
@@ -193,6 +193,7 @@ export interface RootRouteChildren {
   CoachesLoginRoute: typeof CoachesLoginRoute
   CoachesPostsRoute: typeof CoachesPostsRoute
   CoachesRiggingRoute: typeof CoachesRiggingRoute
+  NewsSlugRoute: typeof NewsSlugRoute
   CoachesIndexRoute: typeof CoachesIndexRoute
   NewsIndexRoute: typeof NewsIndexRoute
   CoachesGroupsGroupIdRoute: typeof CoachesGroupsGroupIdRoute
@@ -251,10 +252,10 @@ declare module '@tanstack/react-router' {
     }
     '/news/$slug': {
       id: '/news/$slug'
-      path: '/$slug'
+      path: '/news/$slug'
       fullPath: '/news/$slug'
       preLoaderRoute: typeof NewsSlugRouteImport
-      parentRoute: typeof NewsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/coaches/rigging': {
       id: '/coaches/rigging'
@@ -304,6 +305,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachesLoginRoute: CoachesLoginRoute,
   CoachesPostsRoute: CoachesPostsRoute,
   CoachesRiggingRoute: CoachesRiggingRoute,
+  NewsSlugRoute: NewsSlugRoute,
   CoachesIndexRoute: CoachesIndexRoute,
   NewsIndexRoute: NewsIndexRoute,
   CoachesGroupsGroupIdRoute: CoachesGroupsGroupIdRoute,
@@ -311,13 +313,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
