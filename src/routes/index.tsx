@@ -2,10 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Award, Heart, Users, Waves, Trophy } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL, SITE_URL, SOCIAL } from "@/lib/site";
-import heroLake from "@/assets/hero-lake.jpg";
-import rowingAction from "@/assets/rowing-action.jpg";
-import community from "@/assets/club-community.jpg";
-import boathouse from "@/assets/boathouse.jpg";
+import heroLakeAsset from "@/assets/hero-lake.asset.json";
+import rowingActionAsset from "@/assets/rowing-action.asset.json";
+import communityAsset from "@/assets/club-community.asset.json";
+import boathouseAsset from "@/assets/boathouse.asset.json";
+const heroLake = heroLakeAsset.url;
+const rowingAction = rowingActionAsset.url;
+const community = communityAsset.url;
+const boathouse = boathouseAsset.url;
 
 /** Structured data for the homepage — describes the club to search engines. */
 const homeJsonLd = {
