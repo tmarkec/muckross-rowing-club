@@ -10,11 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SupportRouteImport } from './routes/support'
-import { Route as NewsRouteImport } from './routes/news'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as CoachesIndexRouteImport } from './routes/coaches.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as CoachesRiggingRouteImport } from './routes/coaches.rigging'
@@ -26,11 +26,6 @@ import { Route as CoachesGroupsGroupIdRouteImport } from './routes/coaches.group
 const SupportRoute = SupportRouteImport.update({
   id: '/support',
   path: '/support',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewsRoute = NewsRouteImport.update({
-  id: '/news',
-  path: '/news',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JoinRoute = JoinRouteImport.update({
@@ -51,6 +46,11 @@ const AboutRoute = AboutRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsIndexRoute = NewsIndexRouteImport.update({
+  id: '/news/',
+  path: '/news/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoachesIndexRoute = CoachesIndexRouteImport.update({
@@ -94,7 +94,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/join': typeof JoinRoute
-  '/news': typeof NewsRouteWithChildren
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRoute
   '/coaches/login': typeof CoachesLoginRoute
@@ -102,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches/': typeof CoachesIndexRoute
+  '/news/': typeof NewsIndexRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
 export interface FileRoutesByTo {
@@ -109,7 +109,6 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/join': typeof JoinRoute
-  '/news': typeof NewsRouteWithChildren
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRoute
   '/coaches/login': typeof CoachesLoginRoute
@@ -117,6 +116,7 @@ export interface FileRoutesByTo {
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches': typeof CoachesIndexRoute
+  '/news': typeof NewsIndexRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
 export interface FileRoutesById {
@@ -125,7 +125,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/join': typeof JoinRoute
-  '/news': typeof NewsRouteWithChildren
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRoute
   '/coaches/login': typeof CoachesLoginRoute
@@ -133,6 +132,7 @@ export interface FileRoutesById {
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches/': typeof CoachesIndexRoute
+  '/news/': typeof NewsIndexRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
 export interface FileRouteTypes {
@@ -142,7 +142,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/join'
-    | '/news'
     | '/support'
     | '/coaches/admin'
     | '/coaches/login'
@@ -150,6 +149,7 @@ export interface FileRouteTypes {
     | '/coaches/rigging'
     | '/news/$slug'
     | '/coaches/'
+    | '/news/'
     | '/coaches/groups/$groupId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -157,7 +157,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/join'
-    | '/news'
     | '/support'
     | '/coaches/admin'
     | '/coaches/login'
@@ -165,6 +164,7 @@ export interface FileRouteTypes {
     | '/coaches/rigging'
     | '/news/$slug'
     | '/coaches'
+    | '/news'
     | '/coaches/groups/$groupId'
   id:
     | '__root__'
@@ -172,7 +172,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/join'
-    | '/news'
     | '/support'
     | '/coaches/admin'
     | '/coaches/login'
@@ -180,6 +179,7 @@ export interface FileRouteTypes {
     | '/coaches/rigging'
     | '/news/$slug'
     | '/coaches/'
+    | '/news/'
     | '/coaches/groups/$groupId'
   fileRoutesById: FileRoutesById
 }
@@ -188,13 +188,13 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   JoinRoute: typeof JoinRoute
-  NewsRoute: typeof NewsRouteWithChildren
   SupportRoute: typeof SupportRoute
   CoachesAdminRoute: typeof CoachesAdminRoute
   CoachesLoginRoute: typeof CoachesLoginRoute
   CoachesPostsRoute: typeof CoachesPostsRoute
   CoachesRiggingRoute: typeof CoachesRiggingRoute
   CoachesIndexRoute: typeof CoachesIndexRoute
+  NewsIndexRoute: typeof NewsIndexRoute
   CoachesGroupsGroupIdRoute: typeof CoachesGroupsGroupIdRoute
 }
 
@@ -205,13 +205,6 @@ declare module '@tanstack/react-router' {
       path: '/support'
       fullPath: '/support'
       preLoaderRoute: typeof SupportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/news': {
-      id: '/news'
-      path: '/news'
-      fullPath: '/news'
-      preLoaderRoute: typeof NewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/join': {
@@ -240,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news/': {
+      id: '/news/'
+      path: '/news'
+      fullPath: '/news/'
+      preLoaderRoute: typeof NewsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/coaches/': {
@@ -294,30 +294,30 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface NewsRouteChildren {
-  NewsSlugRoute: typeof NewsSlugRoute
-}
-
-const NewsRouteChildren: NewsRouteChildren = {
-  NewsSlugRoute: NewsSlugRoute,
-}
-
-const NewsRouteWithChildren = NewsRoute._addFileChildren(NewsRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   JoinRoute: JoinRoute,
-  NewsRoute: NewsRouteWithChildren,
   SupportRoute: SupportRoute,
   CoachesAdminRoute: CoachesAdminRoute,
   CoachesLoginRoute: CoachesLoginRoute,
   CoachesPostsRoute: CoachesPostsRoute,
   CoachesRiggingRoute: CoachesRiggingRoute,
   CoachesIndexRoute: CoachesIndexRoute,
+  NewsIndexRoute: NewsIndexRoute,
   CoachesGroupsGroupIdRoute: CoachesGroupsGroupIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
