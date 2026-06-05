@@ -87,10 +87,6 @@ function HomePage() {
             <h1 className="mt-6 font-serif text-4xl font-bold leading-[1.05] text-primary-foreground sm:text-5xl lg:text-6xl">
               Rowing on the <span className="text-secondary">historic lakes</span> of Killarney
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
-              A welcoming club for rowers of all ages and abilities, beneath the
-              MacGillycuddy's Reeks in the heart of Killarney National Park.
-            </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 to="/join"
