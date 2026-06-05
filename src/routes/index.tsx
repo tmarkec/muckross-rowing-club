@@ -6,10 +6,18 @@ import heroLakeAsset from "@/assets/hero-lake.asset.json";
 import rowingActionAsset from "@/assets/rowing-action.asset.json";
 import communityAsset from "@/assets/club-community.asset.json";
 import boathouseAsset from "@/assets/boathouse.asset.json";
-const heroLake = heroLakeAsset.url;
-const rowingAction = rowingActionAsset.url;
-const community = communityAsset.url;
-const boathouse = boathouseAsset.url;
+import sunsetEightsAsset from "@/assets/sunset-eights.asset.json";
+import juniorsBoatAsset from "@/assets/juniors-boat.asset.json";
+import juniorSquadAsset from "@/assets/junior-squad.asset.json";
+// Hero now uses the "pulling together" rowing-action shot.
+const heroImage = rowingActionAsset.url;
+const pullingTogether = sunsetEightsAsset.url;
+const boathouse = juniorSquadAsset.url;
+const community = juniorsBoatAsset.url;
+// kept for backwards compatibility in JSON-LD references below
+void heroLakeAsset;
+void communityAsset;
+void boathouseAsset;
 
 /** Structured data for the homepage — describes the club to search engines. */
 const homeJsonLd = {
@@ -72,7 +80,7 @@ function HomePage() {
       {/* Hero */}
       <section className="relative h-[88vh] min-h-[560px] w-full overflow-hidden">
         <img
-          src={heroLake}
+          src={heroImage}
           alt="Rowing eight gliding across Lough Leane at sunrise with the MacGillycuddy's Reeks in the background"
           width={1920}
           height={1280}
@@ -143,12 +151,12 @@ function HomePage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="relative overflow-hidden rounded-2xl shadow-elegant">
               <img
-                src={rowingAction}
+                src={pullingTogether}
                 alt="Muckross rowing crew in yellow kit pulling together on the lake"
                 width={1600}
-                height={1024}
+                height={900}
                 loading="lazy"
-                className="aspect-[4/3] w-full object-cover"
+                className="aspect-[16/9] w-full object-cover"
               />
             </div>
             <div>
