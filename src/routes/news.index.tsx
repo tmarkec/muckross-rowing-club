@@ -102,7 +102,7 @@ function NewsPage() {
         </div>
       </section>
 
-      <section className="bg-muted/40 py-16 sm:py-20">
+      <section className="bg-muted/40 py-10 sm:py-12">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-start">
             <div>

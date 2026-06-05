@@ -95,34 +95,33 @@ function SupportPage() {
       </section>
 
       {/* Donate */}
-      <section className="bg-muted/40 py-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-border/60 bg-card p-8 shadow-elegant sm:p-12">
+      <section className="bg-muted/40 py-12 sm:py-14">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-elegant sm:p-8">
             <div className="flex flex-col items-center text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-yellow shadow-yellow">
-                <Heart className="h-6 w-6 text-primary" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-yellow shadow-yellow">
+                <Heart className="h-5 w-5 text-primary" />
               </div>
-              <h2 className="mt-5 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+              <h2 className="mt-4 font-serif text-2xl font-bold text-foreground sm:text-3xl">
                 Make a donation
               </h2>
-              <p className="mt-3 max-w-xl text-base text-muted-foreground">
-                Donations of any size are gratefully received and go directly toward boats,
-                equipment and maintaining the club for the next generation. Bank transfer
-                is the simplest way to give.
+              <p className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base">
+                Donations of any size go directly toward boats, equipment and keeping
+                the club running for the next generation.
               </p>
             </div>
 
             {/* Primary CTA — card / online donation */}
-            <div className="mt-8 flex flex-col items-center">
+            <div className="mt-6 flex flex-col items-center">
               <a
                 href={DONATE_URL}
-                className="group inline-flex w-full max-w-sm items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-elegant transition-all hover:scale-[1.02] hover:bg-primary/90 sm:text-lg"
+                className="group inline-flex w-full max-w-sm items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-elegant transition-all hover:scale-[1.02] hover:bg-primary/90"
               >
-                <CreditCard className="h-5 w-5" />
+                <CreditCard className="h-4 w-4" />
                 Donate by Card
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
               </a>
-              <p className="mt-3 text-xs text-muted-foreground">
+              <p className="mt-2 text-xs text-muted-foreground">
                 Secure online payment · Apple Pay · Google Pay
               </p>
             </div>
@@ -130,32 +129,32 @@ function SupportPage() {
             {/* Secondary — bank transfer */}
             <BankTransferDetails />
 
-            <p className="mt-6 text-center text-xs text-muted-foreground">
-              Please use your name as the payment reference so we can thank you personally.
+            <p className="mt-4 text-center text-xs text-muted-foreground">
+              Please use your name as the payment reference.
             </p>
 
             {/* Become a sponsor — businesses */}
-            <div className="mt-8 rounded-2xl border border-dashed border-border bg-muted/40 p-6 sm:p-7">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-                <div className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-primary shadow-elegant">
-                  <Building2 className="h-5 w-5 text-secondary" />
+            <div className="mt-6 rounded-2xl border border-dashed border-border bg-muted/40 p-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-primary shadow-elegant">
+                  <Building2 className="h-4 w-4 text-secondary" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-serif text-xl font-semibold text-foreground">
+                  <h3 className="font-serif text-lg font-semibold text-foreground">
                     Become a sponsor
                   </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    Interested in supporting Muckross as a club sponsor? Get in touch for
-                    more details and we'll talk through the options together.
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    Interested in supporting Muckross as a sponsor? Get in touch and we'll
+                    talk through the options.
                   </p>
-                  <Link
+                </div>
+                <Link
                     to="/contact"
                     search={{ subject: "Sponsorship enquiry" }}
-                    className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                    className="shrink-0 inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
                   >
-                    Enquire about sponsorship <ArrowRight className="h-4 w-4" />
+                    Enquire <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
-                </div>
               </div>
             </div>
           </div>
@@ -163,25 +162,24 @@ function SupportPage() {
       </section>
 
       {/* Muckross Lotto */}
-      <section className="bg-background py-16">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="overflow-hidden rounded-2xl border border-border/60 bg-gradient-yellow p-6 shadow-yellow sm:p-8">
+      <section className="bg-background py-10 sm:py-12">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-2xl border border-border/60 bg-gradient-yellow p-5 shadow-yellow sm:p-6">
             <div className="flex flex-col items-center text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary shadow-elegant">
-                <Ticket className="h-5 w-5 text-secondary" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-elegant">
+                <Ticket className="h-4 w-4 text-secondary" />
               </div>
-              <span className="mt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary/70">
+              <span className="mt-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary/70">
                 Community fundraiser
               </span>
-              <h2 className="mt-1.5 font-serif text-2xl font-bold text-primary sm:text-3xl">
+              <h2 className="mt-1 font-serif text-xl font-bold text-primary sm:text-2xl">
                 Muckross Lotto
               </h2>
-              <p className="mt-2 max-w-xl text-sm text-primary/80 sm:text-base">
-                Play the Muckross Lotto to support the club and be in with a chance to win.
-                Draw every Saturday at 8:00 PM.
+              <p className="mt-1.5 max-w-md text-sm text-primary/80">
+                Support the club and win — draw every Saturday at 8:00 PM.
               </p>
 
-              <div className="mt-5 w-full max-w-sm">
+              <div className="mt-4 w-full max-w-sm">
                 <LottoCountdown />
               </div>
 
@@ -189,11 +187,11 @@ function SupportPage() {
                 href={LOTTO_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-transform hover:scale-105"
+                className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-transform hover:scale-105"
               >
-                <Ticket className="h-4 w-4" /> Play the Lotto <ArrowRight className="h-4 w-4" />
+                <Ticket className="h-4 w-4" /> Play the Lotto <ArrowRight className="h-3.5 w-3.5" />
               </a>
-              <p className="mt-2.5 text-[11px] text-primary/60">
+              <p className="mt-2 text-[11px] text-primary/60">
                 Play responsibly. Must be 18+ to enter.
               </p>
             </div>
