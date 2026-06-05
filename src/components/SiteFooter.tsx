@@ -29,9 +29,6 @@ export function SiteFooter() {
                 </div>
               </div>
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-primary-foreground/75">
-              Rowing on the historic lakes of Killarney, beneath the MacGillycuddy's Reeks.
-            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-6 md:contents">
