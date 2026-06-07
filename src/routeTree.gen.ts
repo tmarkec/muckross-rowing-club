@@ -23,6 +23,7 @@ import { Route as CoachesPostsRouteImport } from './routes/coaches.posts'
 import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
 import { Route as CoachesAdminRouteImport } from './routes/coaches.admin'
 import { Route as CoachesGroupsGroupIdRouteImport } from './routes/coaches.groups.$groupId'
+import { Route as CoachesAdminRiggingRouteImport } from './routes/coaches.admin.rigging'
 
 const SupportRoute = SupportRouteImport.update({
   id: '/support',
@@ -94,6 +95,11 @@ const CoachesGroupsGroupIdRoute = CoachesGroupsGroupIdRouteImport.update({
   path: '/coaches/groups/$groupId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesAdminRiggingRoute = CoachesAdminRiggingRouteImport.update({
+  id: '/rigging',
+  path: '/rigging',
+  getParentRoute: () => CoachesAdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -102,13 +108,14 @@ export interface FileRoutesByFullPath {
   '/join': typeof JoinRoute
   '/news': typeof NewsRouteWithChildren
   '/support': typeof SupportRoute
-  '/coaches/admin': typeof CoachesAdminRoute
+  '/coaches/admin': typeof CoachesAdminRouteWithChildren
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches/': typeof CoachesIndexRoute
   '/news/': typeof NewsIndexRoute
+  '/coaches/admin/rigging': typeof CoachesAdminRiggingRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
 export interface FileRoutesByTo {
@@ -117,13 +124,14 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/join': typeof JoinRoute
   '/support': typeof SupportRoute
-  '/coaches/admin': typeof CoachesAdminRoute
+  '/coaches/admin': typeof CoachesAdminRouteWithChildren
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches': typeof CoachesIndexRoute
   '/news': typeof NewsIndexRoute
+  '/coaches/admin/rigging': typeof CoachesAdminRiggingRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
 export interface FileRoutesById {
@@ -134,13 +142,14 @@ export interface FileRoutesById {
   '/join': typeof JoinRoute
   '/news': typeof NewsRouteWithChildren
   '/support': typeof SupportRoute
-  '/coaches/admin': typeof CoachesAdminRoute
+  '/coaches/admin': typeof CoachesAdminRouteWithChildren
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches/': typeof CoachesIndexRoute
   '/news/': typeof NewsIndexRoute
+  '/coaches/admin/rigging': typeof CoachesAdminRiggingRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRoute
 }
 export interface FileRouteTypes {
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/coaches/'
     | '/news/'
+    | '/coaches/admin/rigging'
     | '/coaches/groups/$groupId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/coaches'
     | '/news'
+    | '/coaches/admin/rigging'
     | '/coaches/groups/$groupId'
   id:
     | '__root__'
@@ -190,6 +201,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/coaches/'
     | '/news/'
+    | '/coaches/admin/rigging'
     | '/coaches/groups/$groupId'
   fileRoutesById: FileRoutesById
 }
@@ -200,7 +212,7 @@ export interface RootRouteChildren {
   JoinRoute: typeof JoinRoute
   NewsRoute: typeof NewsRouteWithChildren
   SupportRoute: typeof SupportRoute
-  CoachesAdminRoute: typeof CoachesAdminRoute
+  CoachesAdminRoute: typeof CoachesAdminRouteWithChildren
   CoachesLoginRoute: typeof CoachesLoginRoute
   CoachesPostsRoute: typeof CoachesPostsRoute
   CoachesRiggingRoute: typeof CoachesRiggingRoute
@@ -308,6 +320,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesGroupsGroupIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/admin/rigging': {
+      id: '/coaches/admin/rigging'
+      path: '/rigging'
+      fullPath: '/coaches/admin/rigging'
+      preLoaderRoute: typeof CoachesAdminRiggingRouteImport
+      parentRoute: typeof CoachesAdminRoute
+    }
   }
 }
 
@@ -323,6 +342,18 @@ const NewsRouteChildren: NewsRouteChildren = {
 
 const NewsRouteWithChildren = NewsRoute._addFileChildren(NewsRouteChildren)
 
+interface CoachesAdminRouteChildren {
+  CoachesAdminRiggingRoute: typeof CoachesAdminRiggingRoute
+}
+
+const CoachesAdminRouteChildren: CoachesAdminRouteChildren = {
+  CoachesAdminRiggingRoute: CoachesAdminRiggingRoute,
+}
+
+const CoachesAdminRouteWithChildren = CoachesAdminRoute._addFileChildren(
+  CoachesAdminRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -330,7 +361,7 @@ const rootRouteChildren: RootRouteChildren = {
   JoinRoute: JoinRoute,
   NewsRoute: NewsRouteWithChildren,
   SupportRoute: SupportRoute,
-  CoachesAdminRoute: CoachesAdminRoute,
+  CoachesAdminRoute: CoachesAdminRouteWithChildren,
   CoachesLoginRoute: CoachesLoginRoute,
   CoachesPostsRoute: CoachesPostsRoute,
   CoachesRiggingRoute: CoachesRiggingRoute,
