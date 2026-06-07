@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/accordion";
 import { Trash2, Plus } from "lucide-react";
 
-const BOAT_TYPES = ["1x", "2x", "2-", "4x", "4x+", "4+", "8x", "8+"] as const;
+const BOAT_TYPES = ["1x", "2x", "2-", "4x", "4x+", "4+", "8x", "8+", "Offshore"] as const;
 type BoatType = typeof BOAT_TYPES[number];
 type OarCategory = "Sweep" | "Scull" | "Offshore";
 
