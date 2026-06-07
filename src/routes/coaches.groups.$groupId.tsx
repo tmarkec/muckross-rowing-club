@@ -177,8 +177,6 @@ function AthletesTab({ groupId }: { groupId: string }) {
                   <Link
                     to="/coaches/groups/$groupId/athletes/$athleteId"
                     params={{ groupId, athleteId: a.id }}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="text-primary hover:underline"
                   >
                     {a.last_name}, {a.first_name}

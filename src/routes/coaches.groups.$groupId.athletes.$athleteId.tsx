@@ -55,14 +55,14 @@ function AthleteProfile() {
 
   const load = useCallback(async () => {
     setBusy(true);
-    const { data: a } = await supabase.from("athletes").select("*").eq("id", athleteId).maybeSingle();
+    const { data: a } = await supabase.from("athletes").select("*").eq("id", athleteId).eq("group_id", groupId).maybeSingle();
     setAthlete((a as Athlete | null) ?? null);
     if (a) {
       const { data: att } = await supabase.from("attendance").select("*").eq("athlete_id", athleteId).order("session_date", { ascending: false });
       setRecords((att ?? []) as Attendance[]);
     }
     setBusy(false);
-  }, [athleteId]);
+  }, [athleteId, groupId]);
 
   useEffect(() => { if (session) void load(); }, [load, session]);
 
@@ -99,7 +99,7 @@ function AthleteProfile() {
             <Link to="/coaches/groups/$groupId" params={{ groupId }} className="text-xs text-muted-foreground hover:text-primary">← Back to group</Link>
             <h1 className="font-serif text-3xl mt-1">{athlete.first_name} {athlete.last_name}</h1>
           </div>
-          <Button asChild size="sm" variant="outline"><Link to="/coaches">Dashboard</Link></Button>
+          <Button asChild size="sm" variant="outline"><Link to="/coaches">← Back to groups</Link></Button>
         </div>
 
         {/* Stats */}
