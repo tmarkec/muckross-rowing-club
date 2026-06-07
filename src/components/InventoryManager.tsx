@@ -512,6 +512,9 @@ function CoachReadOnlyView({
       const aM = matchesGroup(a.assigned_group) ? 0 : 1;
       const bM = matchesGroup(b.assigned_group) ? 0 : 1;
       if (aM !== bM) return aM - bM;
+      const aT = BOAT_TYPES.indexOf(a.type);
+      const bT = BOAT_TYPES.indexOf(b.type);
+      if (aT !== bT) return aT - bT;
       return a.name.localeCompare(b.name);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
