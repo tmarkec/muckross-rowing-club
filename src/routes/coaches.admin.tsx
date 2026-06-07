@@ -22,6 +22,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { RiggingEditor } from "@/components/RiggingEditor";
+import { InventoryManager } from "@/components/InventoryManager";
 
 export const Route = createFileRoute("/coaches/admin")({
   head: () => ({ meta: [{ title: "Admin — Coaches Corner" }, { name: "robots", content: "noindex" }] }),
@@ -64,11 +65,17 @@ function AdminPage() {
             <TabsTrigger value="groups">Groups</TabsTrigger>
             <TabsTrigger value="posts">Posts</TabsTrigger>
             <TabsTrigger value="rigging">Rigging</TabsTrigger>
+            <TabsTrigger value="boats">Boats & oars</TabsTrigger>
           </TabsList>
           <TabsContent value="coaches"><CoachesTab /></TabsContent>
           <TabsContent value="groups"><GroupsTab /></TabsContent>
           <TabsContent value="posts"><PostsTab /></TabsContent>
           <TabsContent value="rigging"><RiggingEditor /></TabsContent>
+          <TabsContent value="boats">
+            <div className="mt-6">
+              <InventoryManager coachGroupNames={[]} />
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
     </div>

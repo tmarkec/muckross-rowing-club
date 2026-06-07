@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { InventoryManager } from "@/components/InventoryManager";
 
 export const Route = createFileRoute("/coaches/inventory")({
-  head: () => ({ meta: [{ title: "Fleet & Gear Inventory — Coaches Corner" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Boats & Oars — Coaches Corner" }, { name: "robots", content: "noindex" }] }),
   component: InventoryPage,
 });
 
@@ -48,9 +48,9 @@ function InventoryPage() {
       <div className="mx-auto max-w-5xl">
         <div className="mb-6 flex items-center justify-between gap-3 flex-wrap">
           <div>
-            <h1 className="font-serif text-3xl">Fleet & Gear Inventory</h1>
+            <h1 className="font-serif text-3xl">Boats & Oars</h1>
             <p className="text-sm text-muted-foreground">
-              {isAdmin ? "Admin: bulk add and manage all club gear." : "Read-only view of the club fleet."}
+              {isAdmin ? "Admin: bulk add and manage all club boats & oars." : "Read-only view of club boats & oars."}
             </p>
           </div>
           <Button asChild size="sm" variant="outline">

@@ -108,7 +108,7 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
   return (
     <div className="rounded-lg border bg-background p-5">
       <div className="flex items-baseline justify-between mb-3 flex-wrap gap-2">
-        <h2 className="font-serif text-xl">Fleet & Gear summary</h2>
+        <h2 className="font-serif text-xl">Boats & Oars summary</h2>
         <div className="text-xs text-muted-foreground">
           {boats.length} boats · {oarBreakdown.total} oars
         </div>
@@ -191,7 +191,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
         const { error } = await supabase.from("club_oars" as never).insert(payload as never);
         if (error) throw error;
       }
-      toast.success("Fleet configuration saved");
+      toast.success("Boats & oars saved");
       setDraftBoats([]);
       setDraftOars([]);
       await onSaved();
@@ -333,14 +333,14 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
         <div className="flex gap-2">
           {isDirty && <Button variant="outline" size="sm" onClick={() => { setDraftBoats([]); setDraftOars([]); }}>Discard</Button>}
           <Button size="sm" disabled={!isDirty || saving} onClick={saveAll}>
-            {saving ? "Saving…" : "Save entire fleet configuration"}
+            {saving ? "Saving…" : "Save entire boats & oars configuration"}
           </Button>
         </div>
       </div>
 
       {/* Existing inventory list with delete */}
       <section className="rounded-lg border bg-background p-5">
-        <h3 className="font-serif text-lg mb-3">Current fleet ({boats.length})</h3>
+        <h3 className="font-serif text-lg mb-3">Current boats ({boats.length})</h3>
         <ExistingBoatsTable boats={boats} onDelete={deleteBoat} />
       </section>
       <section className="rounded-lg border bg-background p-5">
