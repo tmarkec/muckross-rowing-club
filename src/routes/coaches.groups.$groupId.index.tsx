@@ -235,48 +235,65 @@ function TodayTab({ groupId }: { groupId: string }) {
   const [date, setDate] = useState(todayISO());
   const [isDouble, setIsDouble] = useState(false);
   const [athletes, setAthletes] = useState<Athlete[]>([]);
-  // keyed by `${athleteId}|${part}`
-  const [records, setRecords] = useState<Record<string, Attendance>>({});
+  // saved records (in DB), keyed by `${athleteId}|${part}`
+  const [saved, setSaved] = useState<Record<string, Status>>({});
+  // local draft, keyed by `${athleteId}|${part}` -> "present" | "absent" | undefined
+  const [draft, setDraft] = useState<Record<string, Status | undefined>>({});
+  const [submitting, setSubmitting] = useState(false);
 
   const load = useCallback(async () => {
     const { data: ath } = await supabase.from("athletes").select("*").eq("group_id", groupId).order("last_name");
     setAthletes(ath ?? []);
     const ids = (ath ?? []).map((a) => a.id);
-    if (ids.length === 0) { setRecords({}); return; }
+    if (ids.length === 0) { setSaved({}); setDraft({}); return; }
     const { data: att } = await supabase.from("attendance").select("*").in("athlete_id", ids).eq("session_date", date);
-    const map: Record<string, Attendance> = {};
-    (att ?? []).forEach((r) => { const rec = r as Attendance; map[`${rec.athlete_id}|${rec.session_part}`] = rec; });
-    setRecords(map);
+    const map: Record<string, Status> = {};
+    (att ?? []).forEach((r) => { const rec = r as Attendance; map[`${rec.athlete_id}|${rec.session_part}`] = rec.status; });
+    setSaved(map);
+    setDraft(map); // seed draft from saved
     // auto-detect double if any am/pm rows exist
     if ((att ?? []).some((r: any) => r.session_part === "am" || r.session_part === "pm")) setIsDouble(true);
   }, [groupId, date]);
 
   useEffect(() => { void load(); }, [load]);
 
-  const setStatus = async (athleteId: string, part: SessionPart, status: Status) => {
-    const key = `${athleteId}|${part}`;
-    const existing = records[key];
-    // optimistic
-    setRecords((prev) => ({
-      ...prev,
-      [key]: { ...(existing ?? { id: "tmp", athlete_id: athleteId, session_date: date, session_part: part, notes: null }), status } as Attendance,
-    }));
-    const { data, error } = await supabase
-      .from("attendance")
-      .upsert(
-        { athlete_id: athleteId, session_date: date, session_part: part, status },
-        { onConflict: "athlete_id,session_date,session_part" }
-      )
-      .select()
-      .single();
-    if (error) { toast.error(error.message); void load(); return; }
-    setRecords((prev) => ({ ...prev, [key]: data as Attendance }));
+  const setDraftStatus = (athleteId: string, part: SessionPart, status: Status | undefined) => {
+    setDraft((prev) => ({ ...prev, [`${athleteId}|${part}`]: status }));
   };
 
-  const markAllPresent = async (part: SessionPart) => {
-    await Promise.all(athletes.map((a) => setStatus(a.id, part, "present")));
-    toast.success("All marked present");
+  const markAllPresent = (part: SessionPart) => {
+    setDraft((prev) => {
+      const next = { ...prev };
+      athletes.forEach((a) => { next[`${a.id}|${part}`] = "present"; });
+      return next;
+    });
   };
+
+  const submit = async () => {
+    const parts: SessionPart[] = isDouble ? ["am", "pm"] : ["single"];
+    const rows: { athlete_id: string; session_date: string; session_part: SessionPart; status: Status }[] = [];
+    athletes.forEach((a) => {
+      parts.forEach((p) => {
+        const s = draft[`${a.id}|${p}`];
+        if (s) rows.push({ athlete_id: a.id, session_date: date, session_part: p, status: s });
+      });
+    });
+    if (rows.length === 0) return toast.error("Mark at least one athlete first");
+    setSubmitting(true);
+    const { error } = await supabase
+      .from("attendance")
+      .upsert(rows, { onConflict: "athlete_id,session_date,session_part" });
+    setSubmitting(false);
+    if (error) return toast.error(error.message);
+    toast.success(`Saved ${rows.length} record${rows.length === 1 ? "" : "s"}`);
+    void load();
+  };
+
+  const isDirty = useMemo(() => {
+    const keys = new Set([...Object.keys(saved), ...Object.keys(draft)]);
+    for (const k of keys) if ((saved[k] ?? undefined) !== (draft[k] ?? undefined)) return true;
+    return false;
+  }, [saved, draft]);
 
   const parts: SessionPart[] = isDouble ? ["am", "pm"] : ["single"];
   const partLabel = (p: SessionPart) => (p === "am" ? "AM" : p === "pm" ? "PM" : "Session");
@@ -311,8 +328,8 @@ function TodayTab({ groupId }: { groupId: string }) {
           {/* summary header */}
           <div className="mb-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
             {parts.map((p) => {
-              const present = athletes.filter((a) => records[`${a.id}|${p}`]?.status === "present").length;
-              const absent = athletes.filter((a) => records[`${a.id}|${p}`]?.status === "absent").length;
+              const present = athletes.filter((a) => draft[`${a.id}|${p}`] === "present").length;
+              const absent = athletes.filter((a) => draft[`${a.id}|${p}`] === "absent").length;
               return (
                 <div key={p} className="rounded-md border px-3 py-1.5 flex items-center gap-3">
                   <span className="font-semibold text-foreground">{partLabel(p)}</span>
@@ -336,34 +353,29 @@ function TodayTab({ groupId }: { groupId: string }) {
                   <div className="font-medium truncate">{a.last_name}, {a.first_name}</div>
                   <div className="text-xs text-muted-foreground">2k {fmt2k(a.erg_2k_seconds)}</div>
                 </div>
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-2">
                   {parts.map((p) => {
-                    const status = records[`${a.id}|${p}`]?.status;
+                    const status = draft[`${a.id}|${p}`];
+                    const key = `${a.id}|${p}`;
                     return (
-                      <div key={p} className="flex items-center gap-1.5">
+                      <div key={p} className="flex items-center gap-3">
                         {isDouble && <span className="w-7 text-[10px] font-semibold text-muted-foreground text-right">{partLabel(p)}</span>}
-                        <button
-                          type="button"
-                          onClick={() => setStatus(a.id, p, "present")}
-                          className={cn(
-                            "h-10 min-w-[64px] px-3 rounded-md text-sm font-medium border transition-colors active:scale-95",
-                            status === "present"
-                              ? "bg-green-600 text-white border-green-600"
-                              : "bg-background hover:bg-green-50 border-input"
-                          )}
-                          aria-pressed={status === "present"}
-                        >Present</button>
-                        <button
-                          type="button"
-                          onClick={() => setStatus(a.id, p, "absent")}
-                          className={cn(
-                            "h-10 min-w-[64px] px-3 rounded-md text-sm font-medium border transition-colors active:scale-95",
-                            status === "absent"
-                              ? "bg-red-600 text-white border-red-600"
-                              : "bg-background hover:bg-red-50 border-input"
-                          )}
-                          aria-pressed={status === "absent"}
-                        >Absent</button>
+                        <label htmlFor={`${key}-present`} className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
+                          <Checkbox
+                            id={`${key}-present`}
+                            checked={status === "present"}
+                            onCheckedChange={(c) => setDraftStatus(a.id, p, c ? "present" : undefined)}
+                          />
+                          <span className={cn(status === "present" && "text-green-600 font-medium")}>Present</span>
+                        </label>
+                        <label htmlFor={`${key}-absent`} className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
+                          <Checkbox
+                            id={`${key}-absent`}
+                            checked={status === "absent"}
+                            onCheckedChange={(c) => setDraftStatus(a.id, p, c ? "absent" : undefined)}
+                          />
+                          <span className={cn(status === "absent" && "text-red-600 font-medium")}>Absent</span>
+                        </label>
                       </div>
                     );
                   })}
@@ -371,6 +383,14 @@ function TodayTab({ groupId }: { groupId: string }) {
               </li>
             ))}
           </ul>
+
+          <div className="mt-6 flex items-center justify-end gap-3 border-t pt-4">
+            {isDirty && <span className="text-xs text-muted-foreground">Unsaved changes</span>}
+            <Button type="button" variant="outline" size="sm" onClick={() => setDraft(saved)} disabled={!isDirty || submitting}>Reset</Button>
+            <Button type="button" onClick={submit} disabled={submitting || !isDirty}>
+              {submitting ? "Saving…" : "Submit attendance"}
+            </Button>
+          </div>
         </>
       )}
     </div>
