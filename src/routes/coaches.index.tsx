@@ -51,7 +51,7 @@ function CoachesHome() {
               <Link to="/coaches/rigging">Rigging measurements</Link>
             </Button>
             <Button asChild size="sm" variant="secondary">
-              <Link to="/coaches/inventory">Fleet & gear</Link>
+              <Link to="/coaches/inventory">Boats & oars</Link>
             </Button>
             {isAdmin && (
               <Button asChild size="sm" variant="default">
