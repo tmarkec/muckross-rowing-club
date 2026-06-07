@@ -617,7 +617,7 @@ function CoachReadOnlyView({
         <Accordion type="single" collapsible>
           <AccordionItem value="private">
             <AccordionTrigger className="rounded-lg border bg-muted/40 px-4">
-              Private Owner Fleets ({privateBoats.length})
+              Privately owned boats ({privateBoats.length})
             </AccordionTrigger>
             <AccordionContent className="rounded-b-lg border border-t-0 bg-background px-4 pt-3">
               <div className="overflow-x-auto">
