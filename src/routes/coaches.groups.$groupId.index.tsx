@@ -10,6 +10,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger,
 } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/coaches/groups/$groupId/")({
@@ -193,7 +194,9 @@ function AthletesTab({ groupId }: { groupId: string }) {
                 <td className="p-2 text-right">
                   <Button size="sm" variant="outline" onClick={() => startEdit(a)}>Edit</Button>{" "}
                   <Button size="sm" variant="destructive" onClick={async () => {
-                    if (!confirm(`Delete ${a.first_name} ${a.last_name}?`)) return;
+                    if (!confirm(`Delete ${a.first_name} ${a.last_name}? This permanently removes the athlete and all attendance records.`)) return;
+                    const { error: attErr } = await supabase.from("attendance").delete().eq("athlete_id", a.id);
+                    if (attErr) return toast.error(attErr.message);
                     const { error } = await supabase.from("athletes").delete().eq("id", a.id);
                     if (error) return toast.error(error.message);
                     toast.success("Deleted"); void load();
