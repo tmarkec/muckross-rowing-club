@@ -9,9 +9,10 @@ import boathouseAsset from "@/assets/boathouse.asset.json";
 import sunsetEightsAsset from "@/assets/sunset-eights.asset.json";
 import juniorsBoatAsset from "@/assets/juniors-boat.asset.json";
 import juniorSquadAsset from "@/assets/junior-squad.asset.json";
-// Hero now uses the "pulling together" rowing-action shot.
-const heroImage = rowingActionAsset.url;
-const pullingTogether = sunsetEightsAsset.url;
+// Hero uses the "pulling together" sunset eight — wider composition reads
+// better on desktop than the tighter rowing-action crop.
+const heroImage = sunsetEightsAsset.url;
+const pullingTogether = rowingActionAsset.url;
 const boathouse = juniorSquadAsset.url;
 const community = juniorsBoatAsset.url;
 // kept for backwards compatibility in JSON-LD references below
