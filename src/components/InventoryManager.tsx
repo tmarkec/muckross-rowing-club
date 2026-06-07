@@ -341,20 +341,20 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
         </div>
       </div>
 
-      {/* Existing inventory list with delete */}
+      {/* Existing inventory list with edit + delete */}
       <section className="rounded-lg border bg-background p-5">
         <h3 className="font-serif text-lg mb-3">Current boats ({boats.length})</h3>
-        <ExistingBoatsTable boats={boats} onDelete={deleteBoat} />
+        <ExistingBoatsTable boats={boats} onDelete={deleteBoat} onSaved={onSaved} />
       </section>
       <section className="rounded-lg border bg-background p-5">
         <h3 className="font-serif text-lg mb-3">Current oars ({oars.length} sets)</h3>
-        <ExistingOarsTable oars={oars} onDelete={deleteOar} />
+        <ExistingOarsTable oars={oars} onDelete={deleteOar} onSaved={onSaved} />
       </section>
     </div>
   );
 }
 
-function ExistingBoatsTable({ boats, onDelete }: { boats: Boat[]; onDelete: (id: string) => void }) {
+function ExistingBoatsTable({ boats, onDelete, onSaved }: { boats: Boat[]; onDelete: (id: string) => void; onSaved: () => void | Promise<void> }) {
   if (boats.length === 0) return <p className="text-sm text-muted-foreground">No boats yet.</p>;
   return (
     <div className="overflow-x-auto">
@@ -363,23 +363,61 @@ function ExistingBoatsTable({ boats, onDelete }: { boats: Boat[]; onDelete: (id:
           <tr><th className="py-2 pr-2">Name</th><th className="py-2 pr-2">Class</th><th className="py-2 pr-2">Group</th><th className="py-2 pr-2">Private</th><th className="py-2 pr-2">Notes</th><th></th></tr>
         </thead>
         <tbody>
-          {boats.map((b) => (
-            <tr key={b.id} className="border-t">
-              <td className="py-1 pr-2 font-medium">{b.name}</td>
-              <td className="py-1 pr-2"><Badge variant="outline">{b.type}</Badge></td>
-              <td className="py-1 pr-2">{b.assigned_group ?? "—"}</td>
-              <td className="py-1 pr-2">{b.is_private ? "Yes" : "—"}</td>
-              <td className="py-1 pr-2 text-muted-foreground">{b.notes ?? ""}</td>
-              <td className="py-1"><Button size="icon" variant="ghost" onClick={() => onDelete(b.id)}><Trash2 className="h-4 w-4" /></Button></td>
-            </tr>
-          ))}
+          {boats.map((b) => <EditableBoatRow key={b.id} boat={b} onDelete={onDelete} onSaved={onSaved} />)}
         </tbody>
       </table>
     </div>
   );
 }
 
-function ExistingOarsTable({ oars, onDelete }: { oars: Oar[]; onDelete: (id: string) => void }) {
+function EditableBoatRow({ boat, onDelete, onSaved }: { boat: Boat; onDelete: (id: string) => void; onSaved: () => void | Promise<void> }) {
+  const [name, setName] = useState(boat.name);
+  const [type, setType] = useState<BoatType>(boat.type);
+  const [group, setGroup] = useState(boat.assigned_group ?? "");
+  const [isPrivate, setIsPrivate] = useState(boat.is_private);
+  const [notes, setNotes] = useState(boat.notes ?? "");
+  const [saving, setSaving] = useState(false);
+
+  const dirty =
+    name !== boat.name || type !== boat.type || group !== (boat.assigned_group ?? "") ||
+    isPrivate !== boat.is_private || notes !== (boat.notes ?? "");
+
+  const save = async () => {
+    if (!name.trim()) { toast.error("Name is required"); return; }
+    setSaving(true);
+    const { error } = await supabase.from("club_boats" as never).update({
+      name: name.trim(), type, assigned_group: group.trim() || null,
+      is_private: isPrivate, notes: notes.trim() || null,
+    } as never).eq("id", boat.id);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success("Boat updated");
+    void onSaved();
+  };
+
+  return (
+    <tr className="border-t">
+      <td className="py-1 pr-2"><Input value={name} onChange={(e) => setName(e.target.value)} /></td>
+      <td className="py-1 pr-2">
+        <Select value={type} onValueChange={(v) => setType(v as BoatType)}>
+          <SelectTrigger className="w-20"><SelectValue /></SelectTrigger>
+          <SelectContent>{BOAT_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+        </Select>
+      </td>
+      <td className="py-1 pr-2"><Input className="w-24" value={group} onChange={(e) => setGroup(e.target.value)} placeholder="—" /></td>
+      <td className="py-1 pr-2"><Checkbox checked={isPrivate} onCheckedChange={(v) => setIsPrivate(!!v)} /></td>
+      <td className="py-1 pr-2"><Input value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="optional" /></td>
+      <td className="py-1">
+        <div className="flex gap-1">
+          <Button size="sm" variant="outline" disabled={!dirty || saving} onClick={save}>{saving ? "…" : "Save"}</Button>
+          <Button size="icon" variant="ghost" onClick={() => onDelete(boat.id)}><Trash2 className="h-4 w-4" /></Button>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+function ExistingOarsTable({ oars, onDelete, onSaved }: { oars: Oar[]; onDelete: (id: string) => void; onSaved: () => void | Promise<void> }) {
   if (oars.length === 0) return <p className="text-sm text-muted-foreground">No oars yet.</p>;
   return (
     <div className="overflow-x-auto">
@@ -388,18 +426,58 @@ function ExistingOarsTable({ oars, onDelete }: { oars: Oar[]; onDelete: (id: str
           <tr><th className="py-2 pr-2">Category</th><th className="py-2 pr-2">Qty</th><th className="py-2 pr-2">Group</th><th className="py-2 pr-2">Brand / notes</th><th></th></tr>
         </thead>
         <tbody>
-          {oars.map((o) => (
-            <tr key={o.id} className="border-t">
-              <td className="py-1 pr-2"><Badge variant="secondary">{o.category}</Badge></td>
-              <td className="py-1 pr-2">{o.quantity}</td>
-              <td className="py-1 pr-2">{o.assigned_group ?? "—"}</td>
-              <td className="py-1 pr-2 text-muted-foreground">{o.brand_notes ?? ""}</td>
-              <td className="py-1"><Button size="icon" variant="ghost" onClick={() => onDelete(o.id)}><Trash2 className="h-4 w-4" /></Button></td>
-            </tr>
-          ))}
+          {oars.map((o) => <EditableOarRow key={o.id} oar={o} onDelete={onDelete} onSaved={onSaved} />)}
         </tbody>
       </table>
     </div>
+  );
+}
+
+function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: string) => void; onSaved: () => void | Promise<void> }) {
+  const [category, setCategory] = useState<OarCategory>(oar.category);
+  const [quantity, setQuantity] = useState(oar.quantity);
+  const [group, setGroup] = useState(oar.assigned_group ?? "");
+  const [brandNotes, setBrandNotes] = useState(oar.brand_notes ?? "");
+  const [saving, setSaving] = useState(false);
+
+  const dirty =
+    category !== oar.category || quantity !== oar.quantity ||
+    group !== (oar.assigned_group ?? "") || brandNotes !== (oar.brand_notes ?? "");
+
+  const save = async () => {
+    setSaving(true);
+    const { error } = await supabase.from("club_oars" as never).update({
+      category, quantity: Math.max(0, Number(quantity) || 0),
+      assigned_group: group.trim() || null, brand_notes: brandNotes.trim() || null,
+    } as never).eq("id", oar.id);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success("Oar set updated");
+    void onSaved();
+  };
+
+  return (
+    <tr className="border-t">
+      <td className="py-1 pr-2">
+        <Select value={category} onValueChange={(v) => setCategory(v as OarCategory)}>
+          <SelectTrigger className="w-24"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Scull">Scull</SelectItem>
+            <SelectItem value="Sweep">Sweep</SelectItem>
+            <SelectItem value="Offshore">Offshore</SelectItem>
+          </SelectContent>
+        </Select>
+      </td>
+      <td className="py-1 pr-2"><Input type="number" min={0} className="w-20" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} /></td>
+      <td className="py-1 pr-2"><Input className="w-24" value={group} onChange={(e) => setGroup(e.target.value)} placeholder="—" /></td>
+      <td className="py-1 pr-2"><Input value={brandNotes} onChange={(e) => setBrandNotes(e.target.value)} placeholder="optional" /></td>
+      <td className="py-1">
+        <div className="flex gap-1">
+          <Button size="sm" variant="outline" disabled={!dirty || saving} onClick={save}>{saving ? "…" : "Save"}</Button>
+          <Button size="icon" variant="ghost" onClick={() => onDelete(oar.id)}><Trash2 className="h-4 w-4" /></Button>
+        </div>
+      </td>
+    </tr>
   );
 }
 
