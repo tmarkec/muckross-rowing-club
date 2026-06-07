@@ -20,6 +20,8 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { RiggingEditor } from "@/components/RiggingEditor";
 
 export const Route = createFileRoute("/coaches/admin")({
   head: () => ({ meta: [{ title: "Admin — Coaches Corner" }, { name: "robots", content: "noindex" }] }),
@@ -60,22 +62,12 @@ function AdminPage() {
           <TabsList>
             <TabsTrigger value="coaches">Coaches</TabsTrigger>
             <TabsTrigger value="groups">Groups</TabsTrigger>
-            <TabsTrigger value="assignments">Assignments</TabsTrigger>
+            <TabsTrigger value="rigging">Rigging</TabsTrigger>
           </TabsList>
           <TabsContent value="coaches"><CoachesTab /></TabsContent>
           <TabsContent value="groups"><GroupsTab /></TabsContent>
-          <TabsContent value="assignments"><AssignmentsTab /></TabsContent>
+          <TabsContent value="rigging"><RiggingEditor /></TabsContent>
         </Tabs>
-
-        <div className="mt-6 rounded-lg border bg-background p-4 flex items-center justify-between gap-3 flex-wrap">
-          <div>
-            <div className="font-serif text-base">Rigging measurements</div>
-            <p className="text-xs text-muted-foreground">Edit boat-by-boat oar/inboard/span ranges shown to coaches.</p>
-          </div>
-          <Button asChild size="sm">
-            <Link to="/coaches/admin/rigging">Open editor →</Link>
-          </Button>
-        </div>
       </div>
     </div>
   );
@@ -90,6 +82,8 @@ function CoachesTab() {
   const reset = useServerFn(adminResetCoachPassword);
 
   const [coaches, setCoaches] = useState<Coach[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", fullName: "", role: "coach" as "coach" | "admin" });
@@ -99,8 +93,14 @@ function CoachesTab() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await list();
+      const [data, { data: g }, { data: a }] = await Promise.all([
+        list(),
+        supabase.from("groups").select("id, name, description").order("name"),
+        supabase.from("group_coaches").select("group_id, coach_user_id"),
+      ]);
       setCoaches(data);
+      setGroups(g ?? []);
+      setAssignments(a ?? []);
     } catch (e) { toast.error((e as Error).message); }
     setLoading(false);
   }, [list]);
@@ -129,10 +129,24 @@ function CoachesTab() {
     } catch (e) { toast.error((e as Error).message); }
   };
 
+  const toggleAssign = async (groupId: string, userId: string, checked: boolean) => {
+    if (checked) {
+      const { error } = await supabase.from("group_coaches").insert({ group_id: groupId, coach_user_id: userId });
+      if (error) return toast.error(error.message);
+    } else {
+      const { error } = await supabase.from("group_coaches").delete().eq("group_id", groupId).eq("coach_user_id", userId);
+      if (error) return toast.error(error.message);
+    }
+    void load();
+  };
+
   return (
     <div className="mt-6 rounded-lg border bg-background p-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="font-serif text-xl">Coaches & admins</h2>
+        <div>
+          <h2 className="font-serif text-xl">Coaches & admins</h2>
+          <p className="text-xs text-muted-foreground mt-1">Assign each coach to one or more groups using the “Groups” button.</p>
+        </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild><Button size="sm">Add coach</Button></DialogTrigger>
           <DialogContent>
@@ -162,11 +176,40 @@ function CoachesTab() {
               <div>
                 <div className="font-medium">{c.full_name || "—"}</div>
                 <div className="text-sm text-muted-foreground">{c.email}</div>
-                <div className="flex gap-1 mt-1">
+                <div className="flex gap-1 mt-1 flex-wrap">
                   {c.roles.map((r) => <Badge key={r} variant="secondary">{r}</Badge>)}
+                  {assignments
+                    .filter((a) => a.coach_user_id === c.user_id)
+                    .map((a) => {
+                      const g = groups.find((gg) => gg.id === a.group_id);
+                      return g ? <Badge key={a.group_id} variant="outline">{g.name}</Badge> : null;
+                    })}
                 </div>
               </div>
               <div className="flex gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button size="sm" variant="outline">Groups</Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-64">
+                    <div className="font-medium text-sm mb-2">Assign to groups</div>
+                    {groups.length === 0 ? (
+                      <p className="text-xs text-muted-foreground">Create groups first.</p>
+                    ) : (
+                      <div className="space-y-2 max-h-64 overflow-auto">
+                        {groups.map((g) => {
+                          const assigned = assignments.some((a) => a.group_id === g.id && a.coach_user_id === c.user_id);
+                          return (
+                            <label key={g.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                              <Checkbox checked={assigned} onCheckedChange={(v) => toggleAssign(g.id, c.user_id, !!v)} />
+                              <span>{g.name}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </PopoverContent>
+                </Popover>
                 <Button size="sm" variant="outline" onClick={() => { setResetting(c.user_id); setNewPw(""); }}>Reset password</Button>
                 <Button size="sm" variant="destructive" onClick={async () => {
                   if (!confirm(`Delete ${c.email}?`)) return;
@@ -268,71 +311,4 @@ function GroupsTab() {
   );
 }
 
-/* ---------------- Assignments ---------------- */
-
-function AssignmentsTab() {
-  const listCoaches = useServerFn(adminListCoaches);
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [coaches, setCoaches] = useState<Coach[]>([]);
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
-
-  const load = useCallback(async () => {
-    const [{ data: g }, all, { data: a }] = await Promise.all([
-      supabase.from("groups").select("id, name, description").order("name"),
-      listCoaches(),
-      supabase.from("group_coaches").select("group_id, coach_user_id"),
-    ]);
-    setGroups(g ?? []);
-    setCoaches(all.filter((c) => c.roles.includes("coach") || c.roles.includes("admin")));
-    setAssignments(a ?? []);
-  }, [listCoaches]);
-
-  useEffect(() => { void load(); }, [load]);
-
-  const toggle = async (groupId: string, userId: string, checked: boolean) => {
-    if (checked) {
-      const { error } = await supabase.from("group_coaches").insert({ group_id: groupId, coach_user_id: userId });
-      if (error) return toast.error(error.message);
-    } else {
-      const { error } = await supabase.from("group_coaches").delete().eq("group_id", groupId).eq("coach_user_id", userId);
-      if (error) return toast.error(error.message);
-    }
-    void load();
-  };
-
-  return (
-    <div className="mt-6 rounded-lg border bg-background p-6">
-      <h2 className="font-serif text-xl mb-4">Group ↔ Coach assignments</h2>
-      {groups.length === 0 ? <p className="text-sm text-muted-foreground">Create groups first.</p> : coaches.length === 0 ? <p className="text-sm text-muted-foreground">Create coach accounts first.</p> : (
-        <div className="overflow-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left p-2">Coach</th>
-                {groups.map((g) => <th key={g.id} className="p-2 text-center">{g.name}</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {coaches.map((c) => (
-                <tr key={c.user_id} className="border-b">
-                  <td className="p-2">
-                    <div className="font-medium">{c.full_name || c.email}</div>
-                    <div className="text-xs text-muted-foreground">{c.email}</div>
-                  </td>
-                  {groups.map((g) => {
-                    const assigned = assignments.some((a) => a.group_id === g.id && a.coach_user_id === c.user_id);
-                    return (
-                      <td key={g.id} className="p-2 text-center">
-                        <Checkbox checked={assigned} onCheckedChange={(v) => toggle(g.id, c.user_id, !!v)} />
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-}
+/* Assignments are managed inline within CoachesTab. */
