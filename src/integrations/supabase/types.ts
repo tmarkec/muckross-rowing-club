@@ -102,6 +102,72 @@ export type Database = {
           },
         ]
       }
+      club_boats: {
+        Row: {
+          assigned_group: string | null
+          created_at: string
+          id: string
+          is_private: boolean
+          name: string
+          notes: string | null
+          status: string
+          type: Database["public"]["Enums"]["boat_type"]
+          updated_at: string
+        }
+        Insert: {
+          assigned_group?: string | null
+          created_at?: string
+          id?: string
+          is_private?: boolean
+          name: string
+          notes?: string | null
+          status?: string
+          type: Database["public"]["Enums"]["boat_type"]
+          updated_at?: string
+        }
+        Update: {
+          assigned_group?: string | null
+          created_at?: string
+          id?: string
+          is_private?: boolean
+          name?: string
+          notes?: string | null
+          status?: string
+          type?: Database["public"]["Enums"]["boat_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      club_oars: {
+        Row: {
+          assigned_group: string | null
+          brand_notes: string | null
+          category: Database["public"]["Enums"]["oar_category"]
+          created_at: string
+          id: string
+          quantity: number
+          updated_at: string
+        }
+        Insert: {
+          assigned_group?: string | null
+          brand_notes?: string | null
+          category: Database["public"]["Enums"]["oar_category"]
+          created_at?: string
+          id?: string
+          quantity?: number
+          updated_at?: string
+        }
+        Update: {
+          assigned_group?: string | null
+          brand_notes?: string | null
+          category?: Database["public"]["Enums"]["oar_category"]
+          created_at?: string
+          id?: string
+          quantity?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       group_coaches: {
         Row: {
           coach_user_id: string
@@ -339,6 +405,8 @@ export type Database = {
     Enums: {
       app_role: "admin" | "coach" | "athlete"
       attendance_status: "present" | "absent" | "late" | "excused"
+      boat_type: "1x" | "2x" | "2-" | "4x" | "4+" | "8x" | "8+"
+      oar_category: "Sweep" | "Scull"
       session_part: "single" | "am" | "pm"
     }
     CompositeTypes: {
@@ -469,6 +537,8 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "coach", "athlete"],
       attendance_status: ["present", "absent", "late", "excused"],
+      boat_type: ["1x", "2x", "2-", "4x", "4+", "8x", "8+"],
+      oar_category: ["Sweep", "Scull"],
       session_part: ["single", "am", "pm"],
     },
   },
