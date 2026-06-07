@@ -88,7 +88,7 @@ function HomePage() {
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-hero" />
-        <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-center px-4 pb-32 pt-24 sm:px-6 lg:px-8 lg:pb-40">
+        <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col px-4 pb-16 pt-20 sm:px-6 lg:px-8 lg:pb-20 lg:pt-24">
           <div className="max-w-2xl">
             <span className="inline-block rounded-full border border-secondary/40 bg-primary/30 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-secondary backdrop-blur-sm">
               Killarney · Co. Kerry
@@ -96,7 +96,9 @@ function HomePage() {
             <h1 className="mt-6 font-serif text-4xl font-bold leading-[1.05] text-primary-foreground sm:text-5xl lg:text-6xl">
               Rowing on the <span className="text-secondary">historic lakes</span> of Killarney
             </h1>
-            <div className="mt-8 flex flex-wrap gap-3">
+          </div>
+          <div className="max-w-2xl mt-auto">
+            <div className="flex flex-wrap gap-3">
               <Link
                 to="/join"
                 className="inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-6 py-3 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
