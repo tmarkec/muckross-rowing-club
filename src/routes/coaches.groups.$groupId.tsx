@@ -165,27 +165,25 @@ function AthletesTab({ groupId }: { groupId: string }) {
           <thead>
             <tr className="border-b text-left">
               <th className="p-2">Name</th>
-              <th className="p-2">DOB</th>
-              <th className="p-2">2k PB</th>
               <th className="p-2">Attendance (this month)</th>
               <th className="p-2"></th>
             </tr>
           </thead>
           <tbody>
-            {athletes.length === 0 && <tr><td colSpan={5} className="text-center text-muted-foreground py-6">No athletes yet.</td></tr>}
+            {athletes.length === 0 && <tr><td colSpan={3} className="text-center text-muted-foreground py-6">No athletes yet.</td></tr>}
             {athletes.map((a) => (
               <tr key={a.id} className="border-b">
                 <td className="p-2 font-medium">
                   <Link
                     to="/coaches/groups/$groupId/athletes/$athleteId"
                     params={{ groupId, athleteId: a.id }}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-primary hover:underline"
                   >
                     {a.last_name}, {a.first_name}
                   </Link>
                 </td>
-                <td className="p-2 text-muted-foreground">{a.dob ?? "—"}</td>
-                <td className="p-2 tabular-nums">{fmt2k(a.erg_2k_seconds)}</td>
                 <td className="p-2 tabular-nums">
                   {(() => {
                     const { pct, total } = attendanceFor(a.id);
