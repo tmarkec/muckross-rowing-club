@@ -116,7 +116,7 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
         <div>
-          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Oars</div>
+          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Oars ({oarBreakdown.total} total)</div>
           <div className="flex gap-2 flex-wrap">
             <Badge variant="secondary">{oarBreakdown.scull} Sculling</Badge>
             <Badge variant="secondary">{oarBreakdown.sweep} Sweep</Badge>
@@ -124,8 +124,9 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
           </div>
         </div>
         <div>
-          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Boats by class</div>
+          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Boats by class ({boats.length} total)</div>
           <div className="flex gap-2 flex-wrap">
+            <Badge>Total: {boats.length}</Badge>
             {BOAT_TYPES.map((t) => (
               <Badge key={t} variant="outline">{t}: {boatBreakdown.get(t) ?? 0}</Badge>
             ))}
