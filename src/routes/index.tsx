@@ -12,12 +12,12 @@ import juniorSquadAsset from "@/assets/junior-squad.asset.json";
 // Hero uses the "pulling together" sunset eight — wider composition reads
 // better on desktop than the tighter rowing-action crop.
 const heroImage = sunsetEightsAsset.url;
-const pullingTogether = rowingActionAsset.url;
+const pullingTogether = communityAsset.url;
 const boathouse = juniorSquadAsset.url;
 const community = juniorsBoatAsset.url;
 // kept for backwards compatibility in JSON-LD references below
 void heroLakeAsset;
-void communityAsset;
+void rowingActionAsset;
 void boathouseAsset;
 
 /** Structured data for the homepage — describes the club to search engines. */
