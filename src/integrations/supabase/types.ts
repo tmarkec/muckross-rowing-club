@@ -405,8 +405,8 @@ export type Database = {
     Enums: {
       app_role: "admin" | "coach" | "athlete"
       attendance_status: "present" | "absent" | "late" | "excused"
-      boat_type: "1x" | "2x" | "2-" | "4x" | "4+" | "8x" | "8+"
-      oar_category: "Sweep" | "Scull"
+      boat_type: "1x" | "2x" | "2-" | "4x" | "4+" | "8x" | "8+" | "4x+"
+      oar_category: "Sweep" | "Scull" | "Offshore"
       session_part: "single" | "am" | "pm"
     }
     CompositeTypes: {
@@ -537,8 +537,8 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "coach", "athlete"],
       attendance_status: ["present", "absent", "late", "excused"],
-      boat_type: ["1x", "2x", "2-", "4x", "4+", "8x", "8+"],
-      oar_category: ["Sweep", "Scull"],
+      boat_type: ["1x", "2x", "2-", "4x", "4+", "8x", "8+", "4x+"],
+      oar_category: ["Sweep", "Scull", "Offshore"],
       session_part: ["single", "am", "pm"],
     },
   },
