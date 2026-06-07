@@ -66,6 +66,16 @@ function AdminPage() {
           <TabsContent value="groups"><GroupsTab /></TabsContent>
           <TabsContent value="assignments"><AssignmentsTab /></TabsContent>
         </Tabs>
+
+        <div className="mt-6 rounded-lg border bg-background p-4 flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <div className="font-serif text-base">Rigging measurements</div>
+            <p className="text-xs text-muted-foreground">Edit boat-by-boat oar/inboard/span ranges shown to coaches.</p>
+          </div>
+          <Button asChild size="sm">
+            <Link to="/coaches/admin/rigging">Open editor →</Link>
+          </Button>
+        </div>
       </div>
     </div>
   );

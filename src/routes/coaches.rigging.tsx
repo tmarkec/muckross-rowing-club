@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
@@ -19,83 +20,7 @@ export const Route = createFileRoute("/coaches/rigging")({
 
 type Row = { boat: string; oar: string; inboard: string; spanOrSpread: string };
 type Section = { sculling: Row[]; sweep?: Row[] };
-
-const DATA: Record<string, { label: string; sections: Section }> = {
-  "j17_18_m": {
-    label: "J17 & J18 Male (Senior Juniors)",
-    sections: {
-      sculling: [
-        { boat: "Single Scull (1x)", oar: "286 – 288", inboard: "87 – 89", spanOrSpread: "158 – 160" },
-        { boat: "Double Scull (2x)", oar: "286 – 288", inboard: "87 – 89", spanOrSpread: "159 – 160" },
-        { boat: "Quad Scull (4x)",   oar: "287 – 289", inboard: "88 – 89", spanOrSpread: "159 – 161" },
-      ],
-      sweep: [
-        { boat: "Pair (2-)",         oar: "370 – 372", inboard: "114 – 116", spanOrSpread: "84 – 86" },
-        { boat: "Coxed Four (4+)",   oar: "370 – 372", inboard: "114 – 115", spanOrSpread: "84 – 85" },
-        { boat: "Coxless Four (4-)", oar: "371 – 373", inboard: "113 – 115", spanOrSpread: "83 – 85" },
-        { boat: "Eight (8+)",        oar: "371 – 373", inboard: "113 – 114", spanOrSpread: "83 – 84" },
-      ],
-    },
-  },
-  "j17_18_f": {
-    label: "J17 & J18 Female (Senior Juniors)",
-    sections: {
-      sculling: [
-        { boat: "Single Scull (1x)", oar: "284 – 286", inboard: "86 – 88", spanOrSpread: "157 – 159" },
-        { boat: "Double Scull (2x)", oar: "284 – 286", inboard: "86 – 88", spanOrSpread: "158 – 159" },
-        { boat: "Quad Scull (4x)",   oar: "285 – 287", inboard: "87 – 88", spanOrSpread: "158 – 160" },
-      ],
-      sweep: [
-        { boat: "Pair (2-)",         oar: "368 – 370", inboard: "113 – 115", spanOrSpread: "83 – 85" },
-        { boat: "Coxed Four (4+)",   oar: "368 – 370", inboard: "113 – 114", spanOrSpread: "83 – 84" },
-        { boat: "Coxless Four (4-)", oar: "369 – 371", inboard: "112 – 114", spanOrSpread: "82 – 84" },
-        { boat: "Eight (8+)",        oar: "369 – 371", inboard: "112 – 113", spanOrSpread: "82 – 83" },
-      ],
-    },
-  },
-  "j15_16_m": {
-    label: "J15 & J16 Male",
-    sections: {
-      sculling: [
-        { boat: "Single Scull (1x)", oar: "284 – 286", inboard: "86 – 88", spanOrSpread: "157 – 159" },
-        { boat: "Double Scull (2x)", oar: "284 – 286", inboard: "86 – 88", spanOrSpread: "158 – 159" },
-        { boat: "Quad Scull (4x)",   oar: "285 – 287", inboard: "87 – 88", spanOrSpread: "158 – 160" },
-      ],
-      sweep: [
-        { boat: "Pair (2-)",         oar: "368 – 370", inboard: "113 – 115", spanOrSpread: "83 – 85" },
-        { boat: "Coxed Four (4+)",   oar: "368 – 370", inboard: "113 – 114", spanOrSpread: "83 – 84" },
-        { boat: "Coxless Four (4-)", oar: "369 – 371", inboard: "112 – 114", spanOrSpread: "82 – 84" },
-        { boat: "Eight (8+)",        oar: "369 – 371", inboard: "112 – 113", spanOrSpread: "82 – 83" },
-      ],
-    },
-  },
-  "j15_16_f": {
-    label: "J15 & J16 Female",
-    sections: {
-      sculling: [
-        { boat: "Single Scull (1x)", oar: "282 – 284", inboard: "85 – 87", spanOrSpread: "156 – 158" },
-        { boat: "Double Scull (2x)", oar: "282 – 284", inboard: "85 – 87", spanOrSpread: "156 – 158" },
-        { boat: "Quad Scull (4x)",   oar: "283 – 285", inboard: "86 – 87", spanOrSpread: "157 – 159" },
-      ],
-      sweep: [
-        { boat: "Pair (2-)",         oar: "366 – 368", inboard: "112 – 114", spanOrSpread: "82 – 84" },
-        { boat: "Coxed Four (4+)",   oar: "366 – 368", inboard: "112 – 113", spanOrSpread: "82 – 83" },
-        { boat: "Coxless Four (4-)", oar: "367 – 369", inboard: "111 – 113", spanOrSpread: "81 – 83" },
-        { boat: "Eight (8+)",        oar: "367 – 369", inboard: "112 – 113", spanOrSpread: "82 – 84" },
-      ],
-    },
-  },
-  "j14_mixed": {
-    label: "J14 & Younger (Mixed / Development) — Sculling only",
-    sections: {
-      sculling: [
-        { boat: "Single Scull (1x)", oar: "280 – 283", inboard: "85 – 87", spanOrSpread: "156 – 158" },
-        { boat: "Double Scull (2x)", oar: "280 – 283", inboard: "85 – 87", spanOrSpread: "156 – 158" },
-        { boat: "Coxed Quad (4x+)",  oar: "281 – 284", inboard: "86 – 87", spanOrSpread: "157 – 159" },
-      ],
-    },
-  },
-};
+type Category = { key: string; label: string; sections: Section };
 
 function RigTable({ rows, spanLabel }: { rows: Row[]; spanLabel: "Span" | "Spread" }) {
   return (
@@ -169,13 +94,44 @@ function RigginGuideModal() {
 function RiggingPage() {
   const { loading, session, isCoach, isAdmin } = useAuth();
   const navigate = useNavigate();
-  const [category, setCategory] = useState<keyof typeof DATA>("j17_18_m");
+  const [data, setData] = useState<Category[]>([]);
+  const [category, setCategory] = useState<string>("");
+  const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
     if (!loading && !session) void navigate({ to: "/coaches/login" });
   }, [loading, session, navigate]);
 
-  const current = useMemo(() => DATA[category], [category]);
+  useEffect(() => {
+    if (!session) return;
+    void supabase
+      .from("rigging_measurements")
+      .select("category_key, category_label, section, boat, oar_range, inboard_range, span_or_spread_range, sort_order")
+      .order("category_label").order("section").order("sort_order")
+      .then(({ data: rows }) => {
+        const map = new Map<string, Category>();
+        (rows ?? []).forEach((r) => {
+          let cat = map.get(r.category_key);
+          if (!cat) {
+            cat = { key: r.category_key, label: r.category_label, sections: { sculling: [] } };
+            map.set(r.category_key, cat);
+          }
+          const row: Row = { boat: r.boat, oar: r.oar_range, inboard: r.inboard_range, spanOrSpread: r.span_or_spread_range };
+          if (r.section === "sweep") {
+            if (!cat.sections.sweep) cat.sections.sweep = [];
+            cat.sections.sweep.push(row);
+          } else {
+            cat.sections.sculling.push(row);
+          }
+        });
+        const list = Array.from(map.values());
+        setData(list);
+        if (list.length > 0) setCategory((c) => c || list[0].key);
+        setDataLoading(false);
+      });
+  }, [session]);
+
+  const current = useMemo(() => data.find((c) => c.key === category), [data, category]);
 
   if (loading || !session) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
@@ -196,6 +152,11 @@ function RiggingPage() {
           </div>
           <div className="flex gap-2">
             <RigginGuideModal />
+            {isAdmin && (
+              <Button asChild size="sm" variant="outline">
+                <Link to="/coaches/admin/rigging">Edit ranges</Link>
+              </Button>
+            )}
             <Button asChild size="sm" variant="outline">
               <Link to="/coaches">← Dashboard</Link>
             </Button>
@@ -203,14 +164,18 @@ function RiggingPage() {
         </div>
 
         <div className="rounded-lg border bg-background p-6">
+          {dataLoading ? <p className="text-sm text-muted-foreground">Loading…</p> : data.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No rigging data yet. Ask an admin to add some.</p>
+          ) : !current ? null : (
+          <>
           <div className="flex flex-wrap items-end gap-4 mb-6">
             <div className="min-w-[260px]">
               <label className="text-sm font-medium mb-1 block">Category</label>
-              <Select value={category} onValueChange={(v) => setCategory(v as keyof typeof DATA)}>
+              <Select value={category} onValueChange={(v) => setCategory(v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {Object.entries(DATA).map(([k, v]) => (
-                    <SelectItem key={k} value={k}>{v.label}</SelectItem>
+                  {data.map((c) => (
+                    <SelectItem key={c.key} value={c.key}>{c.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -229,6 +194,8 @@ function RiggingPage() {
               </section>
             )}
           </div>
+          </>
+          )}
         </div>
       </div>
     </div>
