@@ -5,6 +5,7 @@ import { Calendar as CalendarIcon, MapPin, ExternalLink } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
+import { WeatherWidget } from "@/components/WeatherWidget";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
@@ -99,6 +100,9 @@ function NewsPage() {
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
             Race results, announcements and stories from the club.
           </p>
+          <div className="mt-5 flex justify-center">
+            <WeatherWidget />
+          </div>
         </div>
       </section>
 
@@ -226,6 +230,7 @@ function NewsPage() {
                   key={post.id}
                   to="/news/$slug"
                   params={{ slug: post.slug }}
+                  preload="intent"
                   className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elegant"
                 >
                   {post.cover_image_url ? (

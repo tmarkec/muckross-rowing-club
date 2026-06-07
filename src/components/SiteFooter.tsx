@@ -3,6 +3,7 @@ import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
 import logo from "@/assets/muckross-logo.png";
 import { CLUB_EMAIL, NAV_ITEMS, SOCIAL } from "@/lib/site";
 import { FooterLottoCountdown } from "./FooterLottoCountdown";
+import { WeatherWidget } from "./WeatherWidget";
 
 /**
  * Site-wide footer: brand blurb, primary nav mirror, members links,
@@ -82,8 +83,8 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-primary-foreground/15 pt-6 text-xs text-primary-foreground/60 sm:flex-row">
           <p>© {new Date().getFullYear()} Muckross Rowing Club. All rights reserved.</p>
-          <div className="flex items-center gap-3">
-            <span>Rowing on the lakes of Killarney</span>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <WeatherWidget variant="compact" />
             <span aria-hidden="true">·</span>
             <Link
               to="/coaches/login"
