@@ -108,7 +108,10 @@ function AthletesTab({ groupId }: { groupId: string }) {
   useEffect(() => { void load(); }, [load]);
 
   const attendanceFor = (athleteId: string): { pct: number | null; total: number } => {
-    const rs = attendance.filter((r) => r.athlete_id === athleteId);
+    // Average attendance for the CURRENT calendar month only.
+    const now = new Date();
+    const ym = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const rs = attendance.filter((r) => r.athlete_id === athleteId && r.session_date.startsWith(ym));
     if (rs.length === 0) return { pct: null, total: 0 };
     const present = rs.filter((r) => r.status === "present").length;
     return { pct: Math.round((present / rs.length) * 100), total: rs.length };
@@ -164,7 +167,7 @@ function AthletesTab({ groupId }: { groupId: string }) {
               <th className="p-2">Name</th>
               <th className="p-2">DOB</th>
               <th className="p-2">2k PB</th>
-              <th className="p-2">Avg attendance</th>
+              <th className="p-2">Attendance (this month)</th>
               <th className="p-2"></th>
             </tr>
           </thead>
@@ -172,7 +175,15 @@ function AthletesTab({ groupId }: { groupId: string }) {
             {athletes.length === 0 && <tr><td colSpan={5} className="text-center text-muted-foreground py-6">No athletes yet.</td></tr>}
             {athletes.map((a) => (
               <tr key={a.id} className="border-b">
-                <td className="p-2 font-medium">{a.last_name}, {a.first_name}</td>
+                <td className="p-2 font-medium">
+                  <Link
+                    to="/coaches/groups/$groupId/athletes/$athleteId"
+                    params={{ groupId, athleteId: a.id }}
+                    className="text-primary hover:underline"
+                  >
+                    {a.last_name}, {a.first_name}
+                  </Link>
+                </td>
                 <td className="p-2 text-muted-foreground">{a.dob ?? "—"}</td>
                 <td className="p-2 tabular-nums">{fmt2k(a.erg_2k_seconds)}</td>
                 <td className="p-2 tabular-nums">
