@@ -21,6 +21,7 @@ import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as CoachesRiggingRouteImport } from './routes/coaches.rigging'
 import { Route as CoachesPostsRouteImport } from './routes/coaches.posts'
 import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
+import { Route as CoachesInventoryRouteImport } from './routes/coaches.inventory'
 import { Route as CoachesAdminRouteImport } from './routes/coaches.admin'
 import { Route as CoachesGroupsGroupIdRouteImport } from './routes/coaches.groups.$groupId'
 import { Route as CoachesAdminRiggingRouteImport } from './routes/coaches.admin.rigging'
@@ -87,6 +88,11 @@ const CoachesLoginRoute = CoachesLoginRouteImport.update({
   path: '/coaches/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesInventoryRoute = CoachesInventoryRouteImport.update({
+  id: '/coaches/inventory',
+  path: '/coaches/inventory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoachesAdminRoute = CoachesAdminRouteImport.update({
   id: '/coaches/admin',
   path: '/coaches/admin',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/news': typeof NewsRouteWithChildren
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
+  '/coaches/inventory': typeof CoachesInventoryRoute
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/join': typeof JoinRoute
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
+  '/coaches/inventory': typeof CoachesInventoryRoute
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/news': typeof NewsRouteWithChildren
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
+  '/coaches/inventory': typeof CoachesInventoryRoute
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/support'
     | '/coaches/admin'
+    | '/coaches/inventory'
     | '/coaches/login'
     | '/coaches/posts'
     | '/coaches/rigging'
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/join'
     | '/support'
     | '/coaches/admin'
+    | '/coaches/inventory'
     | '/coaches/login'
     | '/coaches/posts'
     | '/coaches/rigging'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/support'
     | '/coaches/admin'
+    | '/coaches/inventory'
     | '/coaches/login'
     | '/coaches/posts'
     | '/coaches/rigging'
@@ -237,6 +249,7 @@ export interface RootRouteChildren {
   NewsRoute: typeof NewsRouteWithChildren
   SupportRoute: typeof SupportRoute
   CoachesAdminRoute: typeof CoachesAdminRouteWithChildren
+  CoachesInventoryRoute: typeof CoachesInventoryRoute
   CoachesLoginRoute: typeof CoachesLoginRoute
   CoachesPostsRoute: typeof CoachesPostsRoute
   CoachesRiggingRoute: typeof CoachesRiggingRoute
@@ -330,6 +343,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/inventory': {
+      id: '/coaches/inventory'
+      path: '/coaches/inventory'
+      fullPath: '/coaches/inventory'
+      preLoaderRoute: typeof CoachesInventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/coaches/admin': {
       id: '/coaches/admin'
       path: '/coaches/admin'
@@ -414,6 +434,7 @@ const rootRouteChildren: RootRouteChildren = {
   NewsRoute: NewsRouteWithChildren,
   SupportRoute: SupportRoute,
   CoachesAdminRoute: CoachesAdminRouteWithChildren,
+  CoachesInventoryRoute: CoachesInventoryRoute,
   CoachesLoginRoute: CoachesLoginRoute,
   CoachesPostsRoute: CoachesPostsRoute,
   CoachesRiggingRoute: CoachesRiggingRoute,
@@ -423,3 +444,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
