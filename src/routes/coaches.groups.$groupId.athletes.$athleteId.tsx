@@ -106,7 +106,7 @@ function AthleteProfile() {
         <div className="grid gap-3 sm:grid-cols-4 mb-6">
           <Stat label="Date of birth" value={athlete.dob ?? "—"} sub={athlete.dob ? `Age ${ageFromDob(athlete.dob)}` : undefined} />
           <Stat label="2 km PB" value={fmt2k(athlete.erg_2k_seconds)} />
-          <Stat label="Lifetime attendance" value={lifetimePct == null ? "—" : `${lifetimePct}%`} sub={`${records.filter(r => r.status === "present").length}/${records.length} sessions`} />
+          <Stat label="Overall attendance" value={lifetimePct == null ? "—" : `${lifetimePct}%`} sub={`${records.filter(r => r.status === "present").length}/${records.length} sessions`} />
           <Stat label="Months recorded" value={`${monthly.length}`} />
         </div>
 
