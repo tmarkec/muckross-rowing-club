@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/coaches/groups/$groupId")({
+export const Route = createFileRoute("/coaches/groups/$groupId/")({
   head: () => ({ meta: [{ title: "Group — Coaches Corner" }, { name: "robots", content: "noindex" }] }),
   component: GroupDetail,
 });
