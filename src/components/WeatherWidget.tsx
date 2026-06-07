@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cloud, CloudDrizzle, CloudRain, CloudSnow, Sun, CloudSun, Wind, Loader2 } from "lucide-react";
+import { Cloud, CloudDrizzle, CloudRain, CloudSnow, Sun, CloudSun, Wind, Loader2, ExternalLink, Thermometer } from "lucide-react";
 
 /**
  * Live conditions on Lough Leane, powered by Open-Meteo (no API key required).
@@ -7,6 +7,9 @@ import { Cloud, CloudDrizzle, CloudRain, CloudSnow, Sun, CloudSun, Wind, Loader2
  */
 const LAT = 52.02;
 const LON = -9.51;
+
+// Windy.com — most reliable wind forecast for rowers — centred on Lough Leane / Muckross.
+const WINDY_URL = `https://www.windy.com/?${LAT},${LON},11`;
 
 type Current = {
   temperature_2m: number;
@@ -83,19 +86,45 @@ export function WeatherWidget({ variant = "full" }: { variant?: "full" | "compac
 
   const Icon = codeToIcon(data.weather_code);
   return (
-    <div className="inline-flex flex-wrap items-center gap-x-4 gap-y-1 rounded-full border border-border/60 bg-card px-4 py-2 text-xs shadow-soft">
-      <span className="font-semibold uppercase tracking-wider text-muted-foreground">Lough Leane now</span>
-      <span className="inline-flex items-center gap-1.5 text-foreground">
-        <Icon className="h-4 w-4 text-primary" />
-        <span className="font-medium">{codeToLabel(data.weather_code)}</span>
-      </span>
-      <span className="inline-flex items-center gap-1 text-foreground">
-        <span className="font-semibold tabular-nums">{Math.round(data.temperature_2m)}°C</span>
-      </span>
-      <span className="inline-flex items-center gap-1 text-foreground">
-        <Wind className="h-3.5 w-3.5 text-muted-foreground" />
-        <span className="tabular-nums">{Math.round(data.wind_speed_10m)} km/h</span>
-      </span>
+    <div className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-elegant">
+      <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
+            <Icon className="h-7 w-7 text-primary" />
+          </div>
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
+              Muckross weather forecast
+            </p>
+            <p className="mt-0.5 font-serif text-lg font-semibold text-foreground">
+              {codeToLabel(data.weather_code)} on Lough Leane
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-5 text-sm">
+          <span className="inline-flex items-center gap-1.5 text-foreground">
+            <Thermometer className="h-4 w-4 text-primary" />
+            <span className="text-xl font-bold tabular-nums">{Math.round(data.temperature_2m)}°C</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-foreground">
+            <Wind className="h-4 w-4 text-primary" />
+            <span className="text-xl font-bold tabular-nums">{Math.round(data.wind_speed_10m)}</span>
+            <span className="text-xs font-medium text-muted-foreground">km/h wind</span>
+          </span>
+        </div>
+      </div>
+      <a
+        href={WINDY_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-between gap-2 border-t border-border/60 bg-muted/40 px-5 py-3 text-xs font-semibold text-primary transition-colors hover:bg-muted/70 sm:px-6"
+      >
+        <span className="inline-flex items-center gap-2">
+          <Wind className="h-3.5 w-3.5" />
+          Detailed wind forecast on Windy.com (best for rowers)
+        </span>
+        <ExternalLink className="h-3.5 w-3.5" />
+      </a>
     </div>
   );
 }
