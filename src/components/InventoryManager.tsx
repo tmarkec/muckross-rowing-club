@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/accordion";
 import { Trash2, Plus } from "lucide-react";
 
-const BOAT_TYPES = ["1x", "2x", "2-", "4x", "4+", "8x", "8+"] as const;
+const BOAT_TYPES = ["1x", "2x", "2-", "4x", "4x+", "4+", "8x", "8+"] as const;
 type BoatType = typeof BOAT_TYPES[number];
-type OarCategory = "Sweep" | "Scull";
+type OarCategory = "Sweep" | "Scull" | "Offshore";
 
 type Boat = {
   id: string;
@@ -96,7 +96,8 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
   const oarBreakdown = useMemo(() => {
     const sweep = oars.filter((o) => o.category === "Sweep").reduce((a, o) => a + (o.quantity || 0), 0);
     const scull = oars.filter((o) => o.category === "Scull").reduce((a, o) => a + (o.quantity || 0), 0);
-    return { sweep, scull, total: sweep + scull };
+    const offshore = oars.filter((o) => o.category === "Offshore").reduce((a, o) => a + (o.quantity || 0), 0);
+    return { sweep, scull, offshore, total: sweep + scull + offshore };
   }, [oars]);
 
   const boatBreakdown = useMemo(() => {
@@ -119,6 +120,7 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
           <div className="flex gap-2 flex-wrap">
             <Badge variant="secondary">{oarBreakdown.scull} Sculling</Badge>
             <Badge variant="secondary">{oarBreakdown.sweep} Sweep</Badge>
+            <Badge variant="secondary">{oarBreakdown.offshore} Offshore</Badge>
           </div>
         </div>
         <div>
@@ -309,6 +311,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
                         <SelectContent>
                           <SelectItem value="Scull">Scull</SelectItem>
                           <SelectItem value="Sweep">Sweep</SelectItem>
+                          <SelectItem value="Offshore">Offshore</SelectItem>
                         </SelectContent>
                       </Select>
                     </td>
