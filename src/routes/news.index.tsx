@@ -182,9 +182,10 @@ function NewsPage() {
               </Dialog>
             </div>
 
-            <div className="mx-auto w-fit rounded-2xl border border-border/60 bg-card p-3 shadow-soft [--cell-size:1.75rem]">
+            <div className="mx-auto w-fit rounded-2xl border border-border/60 bg-card p-2 shadow-soft [--cell-size:1.5rem]">
               <Calendar
                 mode="single"
+                weekStartsOn={1}
                 defaultMonth={firstFixtureMonth}
                 modifiers={{ event: eventDays }}
                 modifiersClassNames={{
