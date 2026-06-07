@@ -62,13 +62,88 @@ function AdminPage() {
           <TabsList>
             <TabsTrigger value="coaches">Coaches</TabsTrigger>
             <TabsTrigger value="groups">Groups</TabsTrigger>
+            <TabsTrigger value="posts">Posts</TabsTrigger>
             <TabsTrigger value="rigging">Rigging</TabsTrigger>
           </TabsList>
           <TabsContent value="coaches"><CoachesTab /></TabsContent>
           <TabsContent value="groups"><GroupsTab /></TabsContent>
+          <TabsContent value="posts"><PostsTab /></TabsContent>
           <TabsContent value="rigging"><RiggingEditor /></TabsContent>
         </Tabs>
       </div>
+    </div>
+  );
+}
+
+/* ---------------- Posts ---------------- */
+
+type PostRow = {
+  id: string; slug: string; title: string; published: boolean;
+  published_at: string; author_name: string | null;
+};
+
+function PostsTab() {
+  const [posts, setPosts] = useState<PostRow[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("posts")
+      .select("id, slug, title, published, published_at, author_name")
+      .order("published_at", { ascending: false });
+    if (error) toast.error(error.message);
+    setPosts((data ?? []) as PostRow[]);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { void load(); }, [load]);
+
+  return (
+    <div className="mt-6 rounded-lg border bg-background p-6">
+      <div className="flex justify-between items-center mb-4 gap-3 flex-wrap">
+        <div>
+          <h2 className="font-serif text-xl">News posts</h2>
+          <p className="text-xs text-muted-foreground mt-1">Write, edit and publish posts shown on the club website.</p>
+        </div>
+        <Button asChild size="sm">
+          <Link to="/coaches/posts">New post / open editor →</Link>
+        </Button>
+      </div>
+
+      {loading ? <p className="text-sm text-muted-foreground">Loading…</p> : posts.length === 0 ? (
+        <p className="text-sm text-muted-foreground py-4">No posts yet. Click "New post" to write one.</p>
+      ) : (
+        <div className="divide-y">
+          {posts.map((p) => (
+            <div key={p.id} className="py-3 flex items-center justify-between gap-3 flex-wrap">
+              <div className="min-w-0">
+                <div className="font-medium truncate">{p.title}</div>
+                <div className="text-xs text-muted-foreground mt-0.5 flex flex-wrap items-center gap-2">
+                  <span>{new Date(p.published_at).toLocaleDateString()}</span>
+                  {p.author_name && <span>· {p.author_name}</span>}
+                  <Badge variant={p.published ? "default" : "secondary"}>{p.published ? "Published" : "Draft"}</Badge>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button asChild size="sm" variant="ghost">
+                  <Link to="/news/$slug" params={{ slug: p.slug }} target="_blank">View</Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link to="/coaches/posts">Edit</Link>
+                </Button>
+                <Button size="sm" variant="destructive" onClick={async () => {
+                  if (!confirm(`Delete post "${p.title}"?`)) return;
+                  const { error } = await supabase.from("posts").delete().eq("id", p.id);
+                  if (error) return toast.error(error.message);
+                  toast.success("Deleted");
+                  void load();
+                }}>Delete</Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
