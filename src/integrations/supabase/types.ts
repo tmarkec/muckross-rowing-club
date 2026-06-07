@@ -256,6 +256,48 @@ export type Database = {
         }
         Relationships: []
       }
+      rigging_measurements: {
+        Row: {
+          boat: string
+          category_key: string
+          category_label: string
+          created_at: string
+          id: string
+          inboard_range: string
+          oar_range: string
+          section: string
+          sort_order: number
+          span_or_spread_range: string
+          updated_at: string
+        }
+        Insert: {
+          boat: string
+          category_key: string
+          category_label: string
+          created_at?: string
+          id?: string
+          inboard_range: string
+          oar_range: string
+          section: string
+          sort_order?: number
+          span_or_spread_range: string
+          updated_at?: string
+        }
+        Update: {
+          boat?: string
+          category_key?: string
+          category_label?: string
+          created_at?: string
+          id?: string
+          inboard_range?: string
+          oar_range?: string
+          section?: string
+          sort_order?: number
+          span_or_spread_range?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
