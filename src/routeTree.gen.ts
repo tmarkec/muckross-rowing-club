@@ -24,6 +24,7 @@ import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
 import { Route as CoachesAdminRouteImport } from './routes/coaches.admin'
 import { Route as CoachesGroupsGroupIdRouteImport } from './routes/coaches.groups.$groupId'
 import { Route as CoachesAdminRiggingRouteImport } from './routes/coaches.admin.rigging'
+import { Route as CoachesGroupsGroupIdIndexRouteImport } from './routes/coaches.groups.$groupId.index'
 import { Route as CoachesGroupsGroupIdAthletesAthleteIdRouteImport } from './routes/coaches.groups.$groupId.athletes.$athleteId'
 
 const SupportRoute = SupportRouteImport.update({
@@ -101,6 +102,12 @@ const CoachesAdminRiggingRoute = CoachesAdminRiggingRouteImport.update({
   path: '/rigging',
   getParentRoute: () => CoachesAdminRoute,
 } as any)
+const CoachesGroupsGroupIdIndexRoute =
+  CoachesGroupsGroupIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => CoachesGroupsGroupIdRoute,
+  } as any)
 const CoachesGroupsGroupIdAthletesAthleteIdRoute =
   CoachesGroupsGroupIdAthletesAthleteIdRouteImport.update({
     id: '/athletes/$athleteId',
@@ -124,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/news/': typeof NewsIndexRoute
   '/coaches/admin/rigging': typeof CoachesAdminRiggingRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRouteWithChildren
+  '/coaches/groups/$groupId/': typeof CoachesGroupsGroupIdIndexRoute
   '/coaches/groups/$groupId/athletes/$athleteId': typeof CoachesGroupsGroupIdAthletesAthleteIdRoute
 }
 export interface FileRoutesByTo {
@@ -140,7 +148,7 @@ export interface FileRoutesByTo {
   '/coaches': typeof CoachesIndexRoute
   '/news': typeof NewsIndexRoute
   '/coaches/admin/rigging': typeof CoachesAdminRiggingRoute
-  '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRouteWithChildren
+  '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdIndexRoute
   '/coaches/groups/$groupId/athletes/$athleteId': typeof CoachesGroupsGroupIdAthletesAthleteIdRoute
 }
 export interface FileRoutesById {
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/news/': typeof NewsIndexRoute
   '/coaches/admin/rigging': typeof CoachesAdminRiggingRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRouteWithChildren
+  '/coaches/groups/$groupId/': typeof CoachesGroupsGroupIdIndexRoute
   '/coaches/groups/$groupId/athletes/$athleteId': typeof CoachesGroupsGroupIdAthletesAthleteIdRoute
 }
 export interface FileRouteTypes {
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/news/'
     | '/coaches/admin/rigging'
     | '/coaches/groups/$groupId'
+    | '/coaches/groups/$groupId/'
     | '/coaches/groups/$groupId/athletes/$athleteId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '/news/'
     | '/coaches/admin/rigging'
     | '/coaches/groups/$groupId'
+    | '/coaches/groups/$groupId/'
     | '/coaches/groups/$groupId/athletes/$athleteId'
   fileRoutesById: FileRoutesById
 }
@@ -340,6 +351,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesAdminRiggingRouteImport
       parentRoute: typeof CoachesAdminRoute
     }
+    '/coaches/groups/$groupId/': {
+      id: '/coaches/groups/$groupId/'
+      path: '/'
+      fullPath: '/coaches/groups/$groupId/'
+      preLoaderRoute: typeof CoachesGroupsGroupIdIndexRouteImport
+      parentRoute: typeof CoachesGroupsGroupIdRoute
+    }
     '/coaches/groups/$groupId/athletes/$athleteId': {
       id: '/coaches/groups/$groupId/athletes/$athleteId'
       path: '/athletes/$athleteId'
@@ -375,10 +393,12 @@ const CoachesAdminRouteWithChildren = CoachesAdminRoute._addFileChildren(
 )
 
 interface CoachesGroupsGroupIdRouteChildren {
+  CoachesGroupsGroupIdIndexRoute: typeof CoachesGroupsGroupIdIndexRoute
   CoachesGroupsGroupIdAthletesAthleteIdRoute: typeof CoachesGroupsGroupIdAthletesAthleteIdRoute
 }
 
 const CoachesGroupsGroupIdRouteChildren: CoachesGroupsGroupIdRouteChildren = {
+  CoachesGroupsGroupIdIndexRoute: CoachesGroupsGroupIdIndexRoute,
   CoachesGroupsGroupIdAthletesAthleteIdRoute:
     CoachesGroupsGroupIdAthletesAthleteIdRoute,
 }
