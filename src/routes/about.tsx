@@ -24,7 +24,14 @@ function AboutPage() {
   return (
     <SiteLayout>
       <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
+        <img
+          src={community}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover opacity-15"
+        />
+        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="font-serif text-3xl font-bold sm:text-4xl">150 Years on the Lakes of Killarney</h1>
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
             From the Killarney Six to the Olympic Games, the heritage and ambition of Muckross Rowing Club.
