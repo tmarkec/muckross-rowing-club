@@ -196,7 +196,7 @@ function HomePage() {
             <div className="overflow-hidden rounded-2xl shadow-elegant">
               <img
                 src={boathouse}
-                alt="Wooden boathouse on the shore of Lough Leane"
+                alt="The historic stone Old Boathouse at Muckross, covered in ivy"
                 width={1600}
                 height={1024}
                 loading="lazy"
