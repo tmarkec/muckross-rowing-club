@@ -57,15 +57,15 @@ function SupportPage() {
               <p>
                 Running a rowing club is relentless work behind the scenes. Our biggest
                 ongoing cost is petrol for the safety launches that follow every crew on
-                the water, closely followed by the regular bills — electricity, water,
-                insurance — that keep the boathouse open year-round.
+                the water, closely followed by the regular bills (electricity, water and
+                insurance) that keep the boathouse open year-round.
               </p>
               <p>
-                Then there's the constant small maintenance: pontoons, doors, roofing
-                and the dozens of repairs that never stop on a building sat on the
-                shore of Lough Leane. And of course the equipment itself — boat
-                repairs, replacement oars, new ergometers and, when the time comes,
-                new racing shells from{" "}
+                On top of that there's the ongoing upkeep of both the old and new
+                boathouses and the pontoons, with the dozens of small repairs that come
+                with buildings sat on the shore of the lake. And of course the equipment
+                itself: boat repairs, replacement oars, new ergometers and, when the time
+                comes, new racing shells from{" "}
                 <a
                   href="https://www.filippiboats.it/en/"
                   target="_blank"
