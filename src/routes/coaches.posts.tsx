@@ -155,6 +155,7 @@ function PostEditor({
   const [publishedAt, setPublishedAt] = useState<string>(
     (post?.published_at ?? new Date().toISOString()).slice(0, 10),
   );
+  const originalPublishedAt = (post?.published_at ?? "").slice(0, 10);
   const [coverUrl, setCoverUrl] = useState<string | null>(post?.cover_image_url ?? null);
   const [images, setImages] = useState<PostImage[]>([]);
   const [saving, setSaving] = useState(false);
@@ -214,7 +215,7 @@ function PostEditor({
     if (!slug.trim()) return toast.error("Slug is required");
     setSaving(true);
     try {
-      const payload = {
+      const payload: Record<string, unknown> = {
         title: title.trim(),
         slug: slugify(slug),
         excerpt: excerpt.trim() || null,
@@ -222,8 +223,11 @@ function PostEditor({
         cover_image_url: coverUrl,
         author_name: authorName.trim() || null,
         published,
-        published_at: new Date(publishedAt).toISOString(),
       };
+      // Only write published_at on create, or on edit when the user actually changed it
+      if (!post || publishedAt !== originalPublishedAt) {
+        payload.published_at = new Date(publishedAt).toISOString();
+      }
 
       let postId = post?.id;
       if (post) {
