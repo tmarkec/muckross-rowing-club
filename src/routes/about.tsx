@@ -3,8 +3,10 @@ import { ArrowRight, Anchor, Trophy, Globe2, Users, Sparkles, Heart } from "luci
 import { SiteLayout } from "@/components/SiteLayout";
 import boathouseAsset from "@/assets/boathouse.asset.json";
 import communityAsset from "@/assets/club-community.asset.json";
+import juniorSquadAsset from "@/assets/junior-squad.asset.json";
 const boathouse = boathouseAsset.url;
 const community = communityAsset.url;
+const juniorSquad = juniorSquadAsset.url;
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -130,7 +132,7 @@ function AboutPage() {
               </ul>
             </div>
             <div className="overflow-hidden rounded-2xl shadow-elegant">
-              <img src={community} alt="Muckross rowing crew on the dock" width={1600} height={1024} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+              <img src={juniorSquad} alt="Muckross junior squad on the dock" width={1600} height={1024} loading="lazy" className="aspect-[4/3] w-full object-cover" />
             </div>
           </div>
         </div>
