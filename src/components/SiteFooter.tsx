@@ -48,6 +48,14 @@ export function SiteFooter() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link
+                  to="/club-info"
+                  className="text-primary-foreground/80 transition-colors hover:text-secondary"
+                >
+                  Club info & documents
+                </Link>
+              </li>
             </ul>
           </div>
 

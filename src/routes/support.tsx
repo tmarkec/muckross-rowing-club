@@ -57,15 +57,15 @@ function SupportPage() {
               <p>
                 Running a rowing club is relentless work behind the scenes. Our biggest
                 ongoing cost is petrol for the safety launches that follow every crew on
-                the water, closely followed by the regular bills — electricity, water,
-                insurance — that keep the boathouse open year-round.
+                the water, closely followed by the regular bills (electricity, water and
+                insurance) that keep the boathouse open year-round.
               </p>
               <p>
-                Then there's the constant small maintenance: pontoons, doors, roofing
-                and the dozens of repairs that never stop on a building sat on the
-                shore of Lough Leane. And of course the equipment itself — boat
-                repairs, replacement oars, new ergometers and, when the time comes,
-                new racing shells from{" "}
+                On top of that there's the ongoing upkeep of both the old and new
+                boathouses and the pontoons, with the dozens of small repairs that come
+                with buildings sat on the shore of the lake. And of course the equipment
+                itself: boat repairs, replacement oars, new ergometers and, when the time
+                comes, new racing shells from{" "}
                 <a
                   href="https://www.filippiboats.it/en/"
                   target="_blank"
@@ -176,7 +176,7 @@ function SupportPage() {
                 Muckross Lotto
               </h2>
               <p className="mt-1.5 max-w-md text-sm text-primary/80">
-                Support the club and win — draw every Saturday at 8:00 PM.
+                Support the club and win. Draw every Saturday at 8:00 PM.
               </p>
 
               <div className="mt-4 w-full max-w-sm">
@@ -218,7 +218,7 @@ function SupportPage() {
             </p>
             <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
               Whether you're a new member, a parent or guardian of a junior, a life-long member,
-              a lover of sport, or a friend of Muckross — your help from time to time is greatly
+              a lover of sport, or a friend of Muckross, your help from time to time is greatly
               appreciated. There's so much to choose from…
             </p>
           </div>

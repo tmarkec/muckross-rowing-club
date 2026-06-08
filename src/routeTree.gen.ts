@@ -13,6 +13,7 @@ import { Route as SupportRouteImport } from './routes/support'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ClubInfoRouteImport } from './routes/club-info'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
@@ -46,6 +47,11 @@ const JoinRoute = JoinRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClubInfoRoute = ClubInfoRouteImport.update({
+  id: '/club-info',
+  path: '/club-info',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -124,6 +130,7 @@ const CoachesGroupsGroupIdAthletesAthleteIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/club-info': typeof ClubInfoRoute
   '/contact': typeof ContactRoute
   '/join': typeof JoinRoute
   '/news': typeof NewsRouteWithChildren
@@ -144,6 +151,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/club-info': typeof ClubInfoRoute
   '/contact': typeof ContactRoute
   '/join': typeof JoinRoute
   '/support': typeof SupportRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/club-info': typeof ClubInfoRoute
   '/contact': typeof ContactRoute
   '/join': typeof JoinRoute
   '/news': typeof NewsRouteWithChildren
@@ -185,6 +194,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/club-info'
     | '/contact'
     | '/join'
     | '/news'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/club-info'
     | '/contact'
     | '/join'
     | '/support'
@@ -223,6 +234,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/club-info'
     | '/contact'
     | '/join'
     | '/news'
@@ -244,6 +256,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ClubInfoRoute: typeof ClubInfoRoute
   ContactRoute: typeof ContactRoute
   JoinRoute: typeof JoinRoute
   NewsRoute: typeof NewsRouteWithChildren
@@ -285,6 +298,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/club-info': {
+      id: '/club-info'
+      path: '/club-info'
+      fullPath: '/club-info'
+      preLoaderRoute: typeof ClubInfoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -429,6 +449,7 @@ const CoachesGroupsGroupIdRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ClubInfoRoute: ClubInfoRoute,
   ContactRoute: ContactRoute,
   JoinRoute: JoinRoute,
   NewsRoute: NewsRouteWithChildren,

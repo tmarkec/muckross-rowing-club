@@ -40,8 +40,8 @@ function JoinPage() {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="font-serif text-3xl font-bold sm:text-4xl">Join Muckross</h1>
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
-            New rowers welcome from age 11 right through to masters. Dare to try a sport like
-            no other — find your crew, your fitness and your community on Lough Leane.
+            New rowers welcome from age 11 right through to masters. Dare to try a sport
+            like no other, find your crew, your fitness and your community on Lough Leane.
           </p>
         </div>
       </section>
@@ -77,7 +77,7 @@ function JoinPage() {
               </h2>
               <p className="mt-4 leading-relaxed text-muted-foreground">
                 You don't have to be a junior to take up rowing. We run dedicated sessions
-                for adults and parents of junior rowers — a relaxed way to learn the sport
+                for adults and parents of junior rowers, a relaxed way to learn the sport
                 alongside your kids, get out on Lough Leane and meet other club families.
               </p>
               <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
@@ -85,7 +85,7 @@ function JoinPage() {
                   "No experience needed",
                   "Coached intro sessions",
                   "Train alongside your junior",
-                  "Stable boats to start in",
+                  "Beginner-friendly boats",
                 ].map((b) => (
                   <li key={b} className="flex items-start gap-2 text-sm text-foreground/80">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent-foreground" /> {b}
@@ -115,13 +115,13 @@ function JoinPage() {
                 </h2>
                 <p className="mt-4 leading-relaxed text-muted-foreground">
                   Our Easter and Summer camps are the best way to try rowing for the first
-                  time. Run by qualified coaches at the Old Boathouse on Lough Leane,
-                  they're open to new members and a friendly first step into the club.
+                  time and join the rowing club. Run at Muckross, they're open to new
+                  members and a friendly first step into the club.
                 </p>
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   {[
-                    { title: "Easter Camp", body: "A short, intensive intro over the Easter break — perfect for first-timers." },
-                    { title: "Summer Camp", body: "Longer weeks across the summer, building water skills and crew rowing." },
+                    { title: "Easter Camp", body: "A short intro over the Easter break, perfect for getting a taste of rowing before the season ends." },
+                    { title: "Summer Camp", body: "Longer weeks across the summer, building water skills and crew rowing. We welcome new members to join us for the remainder of the season and become part of the club." },
                   ].map((c) => (
                     <div key={c.title} className="rounded-xl border border-border/60 bg-background p-5">
                       <div className="flex items-center gap-2">
@@ -133,8 +133,8 @@ function JoinPage() {
                   ))}
                 </div>
                 <p className="mt-5 text-sm text-muted-foreground">
-                  Camp dates are announced ahead of each season — get in touch to be added
-                  to the list.
+                  Camp dates will be announced in the news section of this site, as well
+                  as on our Facebook and Instagram.
                 </p>
                 <Link
                   to="/contact"
@@ -152,8 +152,7 @@ function JoinPage() {
               Membership & payments via ClubForce
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base text-primary/80">
-              Sign up, renew your annual membership or pay-per-event for one-off
-              sessions and trial rows — all handled in one place on ClubForce.
+              Sign up or renew your annual membership in one place on ClubForce.
               For anything else, get in touch.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
