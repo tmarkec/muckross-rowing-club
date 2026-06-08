@@ -96,8 +96,7 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
   const oarBreakdown = useMemo(() => {
     const sweep = oars.filter((o) => o.category === "Sweep").reduce((a, o) => a + (o.quantity || 0), 0);
     const scull = oars.filter((o) => o.category === "Scull").reduce((a, o) => a + (o.quantity || 0), 0);
-    const offshore = oars.filter((o) => o.category === "Offshore").reduce((a, o) => a + (o.quantity || 0), 0);
-    return { sweep, scull, offshore, total: sweep + scull + offshore };
+    return { sweep, scull, total: sweep + scull };
   }, [oars]);
 
   const boatBreakdown = useMemo(() => {
@@ -120,7 +119,6 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
           <div className="flex gap-2 flex-wrap">
             <Badge variant="secondary">{oarBreakdown.scull} Sculling</Badge>
             <Badge variant="secondary">{oarBreakdown.sweep} Sweep</Badge>
-            <Badge variant="secondary">{oarBreakdown.offshore} Offshore</Badge>
           </div>
         </div>
         <div>
