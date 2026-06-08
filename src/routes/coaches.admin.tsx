@@ -137,7 +137,7 @@ function PostsTab() {
                   <Link to="/news/$slug" params={{ slug: p.slug }} target="_blank">View</Link>
                 </Button>
                 <Button asChild size="sm" variant="outline">
-                  <Link to="/coaches/posts">Edit</Link>
+                  <Link to="/coaches/posts" search={{ id: p.id }}>Edit</Link>
                 </Button>
                 <Button size="sm" variant="destructive" onClick={async () => {
                   if (!confirm(`Delete post "${p.title}"?`)) return;
