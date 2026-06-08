@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Calendar as CalendarIcon, MapPin, ExternalLink } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import juniorsBoatAsset from "@/assets/juniors-boat.asset.json";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { WeatherWidget } from "@/components/WeatherWidget";
@@ -94,8 +95,15 @@ function NewsPage() {
 
   return (
     <SiteLayout>
-      <section className="bg-gradient-navy py-12 text-primary-foreground sm:py-16">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
+      <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
+        <img
+          src={juniorsBoatAsset.url}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover opacity-15"
+        />
+        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="font-serif text-3xl font-bold sm:text-4xl">Club News</h1>
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
             Race results, announcements and stories from the club.
