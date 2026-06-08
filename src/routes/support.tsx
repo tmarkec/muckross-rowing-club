@@ -4,7 +4,7 @@ import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, CreditCard, Users
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 import { CLUBFORCE_URL as LOTTO_URL } from "@/lib/site";
-import juniorsBoatAsset from "@/assets/juniors-boat.asset.json";
+import heroAsset from "@/assets/hero-launch.jpg.asset.json";
 
 // TODO: Replace with real Stripe / iDonate.ie / GoFundMe link when payments are set up.
 const DONATE_URL = "#donate-bank";
@@ -34,7 +34,7 @@ function SupportPage() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
         <img
-          src={juniorsBoatAsset.url}
+          src={heroAsset.url}
           alt=""
           aria-hidden="true"
           loading="lazy"

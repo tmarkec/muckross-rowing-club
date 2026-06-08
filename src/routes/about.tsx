@@ -3,6 +3,7 @@ import { ArrowRight, Anchor, Trophy, Globe2, Users, Sparkles, Heart } from "luci
 import { SiteLayout } from "@/components/SiteLayout";
 import boathouseAsset from "@/assets/boathouse.asset.json";
 import communityAsset from "@/assets/club-community.asset.json";
+import heroFogAsset from "@/assets/hero-eight-fog.jpg.asset.json";
 import juniorSquadAsset from "@/assets/junior-squad.asset.json";
 const boathouse = boathouseAsset.url;
 const community = communityAsset.url;
@@ -25,7 +26,7 @@ function AboutPage() {
     <SiteLayout>
       <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
         <img
-          src={community}
+          src={heroFogAsset.url}
           alt=""
           aria-hidden="true"
           loading="lazy"
