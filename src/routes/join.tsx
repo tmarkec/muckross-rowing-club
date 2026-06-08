@@ -77,7 +77,7 @@ function JoinPage() {
               </h2>
               <p className="mt-4 leading-relaxed text-muted-foreground">
                 You don't have to be a junior to take up rowing. We run dedicated sessions
-                for adults and parents of junior rowers — a relaxed way to learn the sport
+                for adults and parents of junior rowers, a relaxed way to learn the sport
                 alongside your kids, get out on Lough Leane and meet other club families.
               </p>
               <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
