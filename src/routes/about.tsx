@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Anchor, Trophy, Globe2, FileText, Download } from "lucide-react";
+import { ArrowRight, Anchor, Trophy, Globe2, Users, Sparkles, Heart } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import boathouseAsset from "@/assets/boathouse.asset.json";
 import communityAsset from "@/assets/club-community.asset.json";
@@ -121,10 +121,10 @@ function AboutPage() {
                   </div>
                 </li>
                 <li className="flex gap-4">
-                  <Anchor className="mt-0.5 h-5 w-5 flex-none text-secondary" />
+                <Anchor className="mt-0.5 h-5 w-5 flex-none text-secondary" />
                   <div>
                     <p className="font-semibold text-foreground">Coupe de la Jeunesse & Home Internationals</p>
-                    <p className="text-sm text-muted-foreground">A staple of the Irish junior and senior teams, with regular medals at Europe's leading junior regatta.</p>
+                    <p className="text-sm text-muted-foreground">Muckross athletes have regularly represented Ireland on the junior and senior squads, winning medals on the international stage.</p>
                   </div>
                 </li>
               </ul>
