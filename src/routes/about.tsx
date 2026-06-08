@@ -97,7 +97,7 @@ function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">1990s — Present</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">1990s to Present</span>
               <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">From Lough Leane to the world stage</h2>
               <p className="mt-5 leading-relaxed text-muted-foreground">
                 In the 1990s Muckross expanded beyond traditional lake rowing into
