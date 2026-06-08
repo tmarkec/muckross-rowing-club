@@ -1,5 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect, useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,12 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { RichTextEditor } from "@/components/RichTextEditor";
 import { X, Upload, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/coaches/posts")({
   head: () => ({ meta: [{ title: "Posts — Admin" }, { name: "robots", content: "noindex" }] }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    id: typeof search.id === "string" ? search.id : undefined,
+  }),
   component: PostsAdminPage,
 });
 
@@ -43,95 +45,43 @@ function slugify(input: string) {
 function PostsAdminPage() {
   const { loading, session, isAdmin, user } = useAuth();
   const navigate = useNavigate();
+  const { id } = Route.useSearch();
 
   useEffect(() => {
     if (!loading && !session) void navigate({ to: "/coaches/login" });
     if (!loading && session && !isAdmin) void navigate({ to: "/coaches" });
   }, [loading, session, isAdmin, navigate]);
 
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [listLoading, setListLoading] = useState(false);
   const [editing, setEditing] = useState<Post | null>(null);
-  const [mode, setMode] = useState<"list" | "edit">("list");
+  const [fetching, setFetching] = useState(false);
 
-  const load = useCallback(async () => {
-    setListLoading(true);
-    const { data, error } = await supabase
+  useEffect(() => {
+    if (!isAdmin) return;
+    if (!id) { setEditing(null); return; }
+    setFetching(true);
+    void supabase
       .from("posts")
       .select("id, slug, title, excerpt, content_html, cover_image_url, author_name, published, published_at")
-      .order("published_at", { ascending: false });
-    if (error) toast.error(error.message);
-    setPosts((data ?? []) as Post[]);
-    setListLoading(false);
-  }, []);
+      .eq("id", id)
+      .single()
+      .then(({ data, error }) => {
+        if (error) toast.error(error.message);
+        setEditing((data ?? null) as Post | null);
+        setFetching(false);
+      });
+  }, [isAdmin, id]);
 
-  useEffect(() => { if (isAdmin) void load(); }, [isAdmin, load]);
-
-  if (loading || !session || !isAdmin) {
+  if (loading || !session || !isAdmin || fetching) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
   }
 
-  if (mode === "edit") {
-    return (
-      <PostEditor
-        post={editing}
-        defaultAuthor={user?.user_metadata?.full_name || user?.email || ""}
-        onClose={() => { setEditing(null); setMode("list"); void load(); }}
-      />
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-muted/30 px-4 py-12">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-6 flex items-center justify-between gap-3 flex-wrap">
-          <div>
-            <h1 className="font-serif text-3xl">News posts</h1>
-            <p className="text-sm text-muted-foreground">Write, edit and publish news posts shown on the club website.</p>
-          </div>
-          <div className="flex gap-2">
-            <Button asChild size="sm" variant="outline"><Link to="/coaches">← Dashboard</Link></Button>
-            <Button size="sm" onClick={() => { setEditing(null); setMode("edit"); }}>New post</Button>
-          </div>
-        </div>
-
-        <div className="rounded-lg border bg-background p-6">
-          {listLoading ? (
-            <p className="text-sm text-muted-foreground">Loading…</p>
-          ) : posts.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-4">No posts yet. Click "New post" to write one.</p>
-          ) : (
-            <div className="divide-y">
-              {posts.map((p) => (
-                <div key={p.id} className="py-3 flex items-center justify-between gap-3 flex-wrap">
-                  <div className="min-w-0">
-                    <div className="font-medium truncate">{p.title}</div>
-                    <div className="text-xs text-muted-foreground mt-0.5 flex flex-wrap items-center gap-2">
-                      <span>{new Date(p.published_at).toLocaleDateString()}</span>
-                      {p.author_name && <span>· {p.author_name}</span>}
-                      <Badge variant={p.published ? "default" : "secondary"}>{p.published ? "Published" : "Draft"}</Badge>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button asChild size="sm" variant="ghost">
-                      <Link to="/news/$slug" params={{ slug: p.slug }} target="_blank">View</Link>
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => { setEditing(p); setMode("edit"); }}>Edit</Button>
-                    <Button size="sm" variant="destructive" onClick={async () => {
-                      if (!confirm(`Delete post "${p.title}"?`)) return;
-                      const { error } = await supabase.from("posts").delete().eq("id", p.id);
-                      if (error) return toast.error(error.message);
-                      toast.success("Deleted");
-                      void load();
-                    }}>Delete</Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    <PostEditor
+      key={editing?.id ?? "new"}
+      post={editing}
+      defaultAuthor={user?.user_metadata?.full_name || user?.email || ""}
+      onClose={() => navigate({ to: "/coaches/admin" })}
+    />
   );
 }
 
