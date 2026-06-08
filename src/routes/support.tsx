@@ -176,7 +176,7 @@ function SupportPage() {
                 Muckross Lotto
               </h2>
               <p className="mt-1.5 max-w-md text-sm text-primary/80">
-                Support the club and win — draw every Saturday at 8:00 PM.
+                Support the club and win. Draw every Saturday at 8:00 PM.
               </p>
 
               <div className="mt-4 w-full max-w-sm">
@@ -218,7 +218,7 @@ function SupportPage() {
             </p>
             <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
               Whether you're a new member, a parent or guardian of a junior, a life-long member,
-              a lover of sport, or a friend of Muckross — your help from time to time is greatly
+              a lover of sport, or a friend of Muckross, your help from time to time is greatly
               appreciated. There's so much to choose from…
             </p>
           </div>
