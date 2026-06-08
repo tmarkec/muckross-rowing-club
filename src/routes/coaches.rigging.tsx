@@ -81,6 +81,24 @@ function RigginGuideModal() {
             Span is used for sculling (pin-to-pin across the boat). Spread is used for
             sweep (pin to the boat's centreline).
           </p>
+          <p>
+            <span className="font-semibold text-foreground">Span (Sculling)</span> is the
+            total distance measured directly across the boat from pin to pin (typically
+            159 cm – 161 cm), dictating handle overlap and initial catch load.{" "}
+            <span className="font-semibold text-foreground">Spread (Sweep)</span> is
+            measured from a single pin to the boat's center keel line (typically
+            83 cm – 85 cm) for one-oared rowing.
+          </p>
+          <p>
+            Altering these positions shifts the pivot point relative to the athlete's
+            seat: widening the distance (pushing the pins out) reduces the blade's
+            entry angle at the catch and decreases leverage, creating a lighter, easier
+            stroke feel ideal for smaller or developing rowers. Conversely, narrowing
+            the distance (pulling the pins in) forces a much sharper catch angle that
+            drastically increases the initial leverage and resistance, creating a
+            significantly heavier, high-torque load suited for powerful, heavyweight
+            athletes.
+          </p>
           <p className="text-xs">
             These figures are club guidance ranges — always confirm against the boat
             manufacturer's specification and adjust for individual athlete biomechanics.

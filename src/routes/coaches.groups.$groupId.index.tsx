@@ -274,11 +274,11 @@ function TodayTab({ groupId }: { groupId: string }) {
     const rows: { athlete_id: string; session_date: string; session_part: SessionPart; status: Status }[] = [];
     athletes.forEach((a) => {
       parts.forEach((p) => {
-        const s = draft[`${a.id}|${p}`];
-        if (s) rows.push({ athlete_id: a.id, session_date: date, session_part: p, status: s });
+        const s: Status = draft[`${a.id}|${p}`] ?? "absent";
+        rows.push({ athlete_id: a.id, session_date: date, session_part: p, status: s });
       });
     });
-    if (rows.length === 0) return toast.error("Mark at least one athlete first");
+    if (rows.length === 0) return toast.error("No athletes to record");
     setSubmitting(true);
     const { error } = await supabase
       .from("attendance")
@@ -329,13 +329,12 @@ function TodayTab({ groupId }: { groupId: string }) {
           <div className="mb-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
             {parts.map((p) => {
               const present = athletes.filter((a) => draft[`${a.id}|${p}`] === "present").length;
-              const absent = athletes.filter((a) => draft[`${a.id}|${p}`] === "absent").length;
+              const absent = athletes.length - present;
               return (
                 <div key={p} className="rounded-md border px-3 py-1.5 flex items-center gap-3">
                   <span className="font-semibold text-foreground">{partLabel(p)}</span>
                   <span><span className="text-green-600 font-medium">{present}</span> present</span>
                   <span><span className="text-red-600 font-medium">{absent}</span> absent</span>
-                  <span>{athletes.length - present - absent} unmarked</span>
                   <button
                     type="button"
                     onClick={() => markAllPresent(p)}
@@ -358,25 +357,18 @@ function TodayTab({ groupId }: { groupId: string }) {
                     const status = draft[`${a.id}|${p}`];
                     const key = `${a.id}|${p}`;
                     return (
-                      <div key={p} className="flex items-center gap-3">
+                      <label
+                        key={p}
+                        htmlFor={key}
+                        className="flex items-center gap-2 cursor-pointer select-none"
+                      >
                         {isDouble && <span className="w-7 text-[10px] font-semibold text-muted-foreground text-right">{partLabel(p)}</span>}
-                        <label htmlFor={`${key}-present`} className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
-                          <Checkbox
-                            id={`${key}-present`}
-                            checked={status === "present"}
-                            onCheckedChange={(c) => setDraftStatus(a.id, p, c ? "present" : undefined)}
-                          />
-                          <span className={cn(status === "present" && "text-green-600 font-medium")}>Present</span>
-                        </label>
-                        <label htmlFor={`${key}-absent`} className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
-                          <Checkbox
-                            id={`${key}-absent`}
-                            checked={status === "absent"}
-                            onCheckedChange={(c) => setDraftStatus(a.id, p, c ? "absent" : undefined)}
-                          />
-                          <span className={cn(status === "absent" && "text-red-600 font-medium")}>Absent</span>
-                        </label>
-                      </div>
+                        <Checkbox
+                          id={key}
+                          checked={status === "present"}
+                          onCheckedChange={(c) => setDraftStatus(a.id, p, c ? "present" : "absent")}
+                        />
+                      </label>
                     );
                   })}
                 </div>

@@ -1,0 +1,1 @@
+UPDATE public.rigging_measurements SET category_label = 'J17 & J18 Female' WHERE category_key = 'j17_18_f'; UPDATE public.rigging_measurements SET category_label = 'J17 & J18 Male' WHERE category_key = 'j17_18_m';
