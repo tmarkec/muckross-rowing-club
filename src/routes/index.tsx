@@ -125,14 +125,14 @@ function HomePage() {
               More than a sport, a community
             </h2>
             <p className="mt-4 text-base text-muted-foreground">
-              From learn-to-row beginners to seasoned competitors, Muckross brings together
-              people who share a love of the water and the lakes of Killarney.
+              From learn-to-row beginners to seasoned competitors, Muckross brings
+              together people who share a love of rowing on the lakes of Killarney.
             </p>
           </div>
 
           <div className="mt-14 grid gap-8 md:grid-cols-3">
             {[
-              { icon: Waves, title: "Iconic Waters", body: "Train and race on Lough Leane — one of Ireland's most beautiful lakes, shaped by mountains and ancient woodland." },
+              { icon: Waves, title: "Scenic Waters", body: "Train on Lough Leane, one of Ireland's most beautiful lakes, shaped by mountains and ancient woodland." },
               { icon: Users, title: "All Abilities", body: "Junior, senior, masters and recreational rowing. Whether you've never rowed before or have raced competitively, you're welcome." },
               { icon: Award, title: "Proud Heritage", body: "A long-standing fixture of Irish rowing, with a presence at regattas across the country including the famous Killarney Regatta." },
             ].map(({ icon: Icon, title, body }) => (
@@ -170,10 +170,10 @@ function HomePage() {
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
                 Our rowers train year-round, taking to the water at dawn and competing at
                 regattas across Ireland. The yellow of Muckross is a familiar sight on the
-                start line — and on the podium.
+                start line, and on the podium.
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                We welcome new members every season. No experience is needed — just
+                We welcome new members every season. No experience is needed, just
                 enthusiasm and a willingness to be part of a crew.
               </p>
               <Link
@@ -207,14 +207,14 @@ function HomePage() {
                 150 years on the Lakes of Killarney
               </h2>
               <p className="mt-5 leading-relaxed text-muted-foreground">
-                Widely considered the oldest rowing club in Killarney, Muckross has been the
-                heartbeat of the local community for over 150 years — from the Traditional
-                Killarney Six and the iconic <em>Elizabeth Rose</em> to athletes who have
-                worn the Green Jersey of Ireland at the Olympic Games.
+                Widely considered the oldest rowing club in Killarney, Muckross has been
+                the heartbeat of the local community for over 150 years, from the
+                Traditional Killarney Six and the iconic <em>Elizabeth Rose</em> to
+                athletes who have worn the Green Jersey of Ireland at the Olympic Games.
               </p>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                On any evening at the Old Boathouse you might see a wood-built Killarney Six
-                training alongside a carbon-fibre Olympic scull — past and future, side by side.
+                On any evening at Muckross you might see a wood-built Killarney six
+                training alongside a carbon-fibre Olympic scull, past and future side by side.
               </p>
               <ul className="mt-6 grid gap-3 sm:grid-cols-3">
                 {[
@@ -254,7 +254,7 @@ function HomePage() {
             Become part of the Muckross story
           </h2>
           <p className="mt-4 text-base text-primary-foreground/80 sm:text-lg">
-            Memberships, pay-per-row and club fees are all handled through ClubForce.
+            Memberships and club fees are all handled through ClubForce.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a
