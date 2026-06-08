@@ -274,11 +274,11 @@ function TodayTab({ groupId }: { groupId: string }) {
     const rows: { athlete_id: string; session_date: string; session_part: SessionPart; status: Status }[] = [];
     athletes.forEach((a) => {
       parts.forEach((p) => {
-        const s = draft[`${a.id}|${p}`];
-        if (s) rows.push({ athlete_id: a.id, session_date: date, session_part: p, status: s });
+        const s: Status = draft[`${a.id}|${p}`] ?? "absent";
+        rows.push({ athlete_id: a.id, session_date: date, session_part: p, status: s });
       });
     });
-    if (rows.length === 0) return toast.error("Mark at least one athlete first");
+    if (rows.length === 0) return toast.error("No athletes to record");
     setSubmitting(true);
     const { error } = await supabase
       .from("attendance")
