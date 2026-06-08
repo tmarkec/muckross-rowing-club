@@ -215,7 +215,16 @@ function PostEditor({
     if (!slug.trim()) return toast.error("Slug is required");
     setSaving(true);
     try {
-      const payload: Record<string, unknown> = {
+      const payload: {
+        title: string;
+        slug: string;
+        excerpt: string | null;
+        content_html: string;
+        cover_image_url: string | null;
+        author_name: string | null;
+        published: boolean;
+        published_at?: string;
+      } = {
         title: title.trim(),
         slug: slugify(slug),
         excerpt: excerpt.trim() || null,
