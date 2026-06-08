@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Sun, Sparkles, Users } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL } from "@/lib/site";
+import juniorsBoatAsset from "@/assets/juniors-boat.asset.json";
 
 export const Route = createFileRoute("/join")({
   head: () => ({
@@ -36,8 +37,15 @@ const tiers = [
 function JoinPage() {
   return (
     <SiteLayout>
-      <section className="bg-gradient-navy py-12 text-primary-foreground sm:py-16">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
+      <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
+        <img
+          src={juniorsBoatAsset.url}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover opacity-15"
+        />
+        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="font-serif text-3xl font-bold sm:text-4xl">Join Muckross</h1>
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
             New rowers welcome from age 11 right through to masters. Dare to try a sport

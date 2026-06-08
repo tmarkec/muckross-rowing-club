@@ -3,6 +3,7 @@ import { useState, type MouseEvent } from "react";
 import { Mail, MapPin, Send, Navigation } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL } from "@/lib/site";
+import juniorsBoatAsset from "@/assets/juniors-boat.asset.json";
 
 const LAT = 52.02188586501607;
 const LNG = -9.508196213456204;
@@ -49,8 +50,15 @@ function ContactPage() {
 
   return (
     <SiteLayout>
-      <section className="bg-gradient-navy py-12 text-primary-foreground sm:py-16">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
+      <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
+        <img
+          src={juniorsBoatAsset.url}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover opacity-15"
+        />
+        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="font-serif text-3xl font-bold sm:text-4xl">Contact the Club</h1>
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
             We'd love to hear from you — whether you're keen to row or just curious about the club.
