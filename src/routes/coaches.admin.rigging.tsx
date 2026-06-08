@@ -213,7 +213,7 @@ function RiggingAdminPage() {
               </div>
               <div>
                 <Label>Category label (shown to coaches)</Label>
-                <Input required placeholder="J17 & J18 Male (Senior Juniors)" value={form.category_label} onChange={(e) => setForm({ ...form, category_label: e.target.value })} />
+                <Input required placeholder="J17 & J18 Male" value={form.category_label} onChange={(e) => setForm({ ...form, category_label: e.target.value })} />
               </div>
               <div>
                 <Label>Boat</Label>
