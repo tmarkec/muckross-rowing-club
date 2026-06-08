@@ -97,7 +97,7 @@ function NewsPage() {
     <SiteLayout>
       <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
         <img
-          src={juniorsBoatAsset.url}
+          src={heroAsset.url}
           alt=""
           aria-hidden="true"
           loading="lazy"
