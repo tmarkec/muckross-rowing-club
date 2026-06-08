@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Calendar as CalendarIcon, MapPin, ExternalLink } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
-import juniorsBoatAsset from "@/assets/juniors-boat.asset.json";
+import heroAsset from "@/assets/hero-juniors-group.jpg.asset.json";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { WeatherWidget } from "@/components/WeatherWidget";
