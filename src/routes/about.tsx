@@ -25,7 +25,7 @@ function AboutPage() {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="font-serif text-3xl font-bold sm:text-4xl">150 Years on the Lakes of Killarney</h1>
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
-            From the Killarney Six to the Olympic Games — the heritage and ambition of Muckross Rowing Club.
+            From the Killarney Six to the Olympic Games, the heritage and ambition of Muckross Rowing Club.
           </p>
         </div>
       </section>
@@ -40,13 +40,13 @@ function AboutPage() {
               <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">Our home on Lough Leane</h2>
               <p className="mt-5 leading-relaxed text-muted-foreground">
                 Muckross Rowing Club is based in Killarney, Co. Kerry, on the shores of
-                Lough Leane — the largest of Killarney's three lakes. Surrounded by
+                Lough Leane, the largest of Killarney's three lakes. Surrounded by
                 ancient oak woodland and the MacGillycuddy's Reeks, our rowing waters are
                 among the most scenic in Europe.
               </p>
               <p className="mt-4 leading-relaxed text-muted-foreground">
                 Widely considered the oldest rowing club in Killarney, Muckross has been
-                the heartbeat of the local community for over 150 years — deeply
+                the heartbeat of the local community for over 150 years, deeply
                 intertwined with the families who lived and worked on the Muckross Estate.
                 Our distinctive yellow kit is known across the national regatta circuit.
               </p>
@@ -70,7 +70,7 @@ function AboutPage() {
               {
                 year: "Mid-1800s",
                 title: "Foundations",
-                body: "Muckross is founded as Killarney's oldest rowing club, synonymous with the Traditional Killarney Six — a unique fixed-seat racing style on the Lakes of Killarney.",
+                body: "Muckross is founded as Killarney's oldest rowing club, synonymous with the Traditional Killarney Six, a unique fixed-seat racing style on the Lakes of Killarney.",
               },
               {
                 year: "1924",
