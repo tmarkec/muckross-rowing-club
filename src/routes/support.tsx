@@ -4,6 +4,7 @@ import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, CreditCard, Users
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 import { CLUBFORCE_URL as LOTTO_URL } from "@/lib/site";
+import juniorsBoatAsset from "@/assets/juniors-boat.asset.json";
 
 // TODO: Replace with real Stripe / iDonate.ie / GoFundMe link when payments are set up.
 const DONATE_URL = "#donate-bank";
@@ -31,8 +32,15 @@ function SupportPage() {
   return (
     <SiteLayout>
       {/* Hero */}
-      <section className="bg-gradient-navy py-12 text-primary-foreground sm:py-16">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
+      <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
+        <img
+          src={juniorsBoatAsset.url}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover opacity-15"
+        />
+        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="font-serif text-3xl font-bold sm:text-4xl">
             Support Muckross
           </h1>
