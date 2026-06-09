@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { PacingZoneTable, GuidanceModalButton } from "@/components/CoachesPaceCalculator";
 
 export const Route = createFileRoute("/coaches/groups/$groupId/athletes/$athleteId")({
   head: () => ({ meta: [{ title: "Athlete profile — Coaches Corner" }, { name: "robots", content: "noindex" }] }),
@@ -39,6 +40,14 @@ function ageFromDob(dob: string | null): string {
   const diff = Date.now() - d.getTime();
   const age = new Date(diff).getUTCFullYear() - 1970;
   return `${age}`;
+}
+
+function ageNumberFromDob(dob: string | null): number | null {
+  if (!dob) return null;
+  const d = new Date(dob);
+  if (isNaN(d.getTime())) return null;
+  const diff = Date.now() - d.getTime();
+  return new Date(diff).getUTCFullYear() - 1970;
 }
 
 function AthleteProfile() {
@@ -116,6 +125,35 @@ function AthleteProfile() {
             <p className="mt-1 text-sm whitespace-pre-wrap">{athlete.notes}</p>
           </div>
         )}
+
+        {/* Pacing zones */}
+        <div className="mb-6 rounded-lg border bg-background p-6">
+          <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+            <h2 className="font-serif text-xl">Training pace zones</h2>
+            {athlete.erg_2k_seconds != null && (ageNumberFromDob(athlete.dob) ?? 99) >= 14 && (
+              <GuidanceModalButton />
+            )}
+          </div>
+          {(() => {
+            const age = ageNumberFromDob(athlete.dob);
+            if (age != null && age < 14) {
+              return (
+                <div className="rounded-md border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100">
+                  📊 Pacing zones are not applicable to U14 athletes. Focus should remain
+                  entirely on technical mastery, team boat dynamics, and active fun!
+                </div>
+              );
+            }
+            if (athlete.erg_2k_seconds == null) {
+              return (
+                <p className="text-sm text-muted-foreground">
+                  No 2 km score on file. Enter a test time to view your pacing profiles.
+                </p>
+              );
+            }
+            return <PacingZoneTable twoKSeconds={athlete.erg_2k_seconds} />;
+          })()}
+        </div>
 
         <div className="rounded-lg border bg-background p-6">
           <h2 className="font-serif text-xl mb-4">Attendance by month</h2>

@@ -21,6 +21,7 @@ import { Route as CoachesIndexRouteImport } from './routes/coaches.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as CoachesRiggingRouteImport } from './routes/coaches.rigging'
 import { Route as CoachesPostsRouteImport } from './routes/coaches.posts'
+import { Route as CoachesPaceRouteImport } from './routes/coaches.pace'
 import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
 import { Route as CoachesInventoryRouteImport } from './routes/coaches.inventory'
 import { Route as CoachesAdminRouteImport } from './routes/coaches.admin'
@@ -89,6 +90,11 @@ const CoachesPostsRoute = CoachesPostsRouteImport.update({
   path: '/coaches/posts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesPaceRoute = CoachesPaceRouteImport.update({
+  id: '/coaches/pace',
+  path: '/coaches/pace',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoachesLoginRoute = CoachesLoginRouteImport.update({
   id: '/coaches/login',
   path: '/coaches/login',
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
   '/coaches/inventory': typeof CoachesInventoryRoute
   '/coaches/login': typeof CoachesLoginRoute
+  '/coaches/pace': typeof CoachesPaceRoute
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
   '/coaches/inventory': typeof CoachesInventoryRoute
   '/coaches/login': typeof CoachesLoginRoute
+  '/coaches/pace': typeof CoachesPaceRoute
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
   '/coaches/inventory': typeof CoachesInventoryRoute
   '/coaches/login': typeof CoachesLoginRoute
+  '/coaches/pace': typeof CoachesPaceRoute
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
@@ -202,6 +211,7 @@ export interface FileRouteTypes {
     | '/coaches/admin'
     | '/coaches/inventory'
     | '/coaches/login'
+    | '/coaches/pace'
     | '/coaches/posts'
     | '/coaches/rigging'
     | '/news/$slug'
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/coaches/admin'
     | '/coaches/inventory'
     | '/coaches/login'
+    | '/coaches/pace'
     | '/coaches/posts'
     | '/coaches/rigging'
     | '/news/$slug'
@@ -242,6 +253,7 @@ export interface FileRouteTypes {
     | '/coaches/admin'
     | '/coaches/inventory'
     | '/coaches/login'
+    | '/coaches/pace'
     | '/coaches/posts'
     | '/coaches/rigging'
     | '/news/$slug'
@@ -264,6 +276,7 @@ export interface RootRouteChildren {
   CoachesAdminRoute: typeof CoachesAdminRouteWithChildren
   CoachesInventoryRoute: typeof CoachesInventoryRoute
   CoachesLoginRoute: typeof CoachesLoginRoute
+  CoachesPaceRoute: typeof CoachesPaceRoute
   CoachesPostsRoute: typeof CoachesPostsRoute
   CoachesRiggingRoute: typeof CoachesRiggingRoute
   CoachesIndexRoute: typeof CoachesIndexRoute
@@ -354,6 +367,13 @@ declare module '@tanstack/react-router' {
       path: '/coaches/posts'
       fullPath: '/coaches/posts'
       preLoaderRoute: typeof CoachesPostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coaches/pace': {
+      id: '/coaches/pace'
+      path: '/coaches/pace'
+      fullPath: '/coaches/pace'
+      preLoaderRoute: typeof CoachesPaceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/coaches/login': {
@@ -457,6 +477,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachesAdminRoute: CoachesAdminRouteWithChildren,
   CoachesInventoryRoute: CoachesInventoryRoute,
   CoachesLoginRoute: CoachesLoginRoute,
+  CoachesPaceRoute: CoachesPaceRoute,
   CoachesPostsRoute: CoachesPostsRoute,
   CoachesRiggingRoute: CoachesRiggingRoute,
   CoachesIndexRoute: CoachesIndexRoute,
