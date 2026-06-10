@@ -54,6 +54,9 @@ function CoachesHome() {
               <Link to="/coaches/pace">Pace calculator</Link>
             </Button>
             <Button asChild size="sm" variant="secondary">
+              <Link to="/coaches/program">Training program</Link>
+            </Button>
+            <Button asChild size="sm" variant="secondary">
               <Link to="/coaches/inventory">Boats & oars</Link>
             </Button>
             {isAdmin && (
