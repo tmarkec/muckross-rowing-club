@@ -514,6 +514,8 @@ function CoachReadOnlyView({
 
   const publicBoats = boats.filter((b) => !b.is_private);
   const privateBoats = boats.filter((b) => b.is_private);
+  const publicOars = oars.filter((o) => !o.is_private);
+  const privateOars = oars.filter((o) => o.is_private);
 
   const sortedPublicBoats = useMemo(() => {
     const arr = filter(publicBoats, (b) => `${b.name} ${b.type} ${b.notes ?? ""}`);
@@ -530,7 +532,7 @@ function CoachReadOnlyView({
   }, [publicBoats, search, coachGroupNames]);
 
   const sortedOars = useMemo(() => {
-    const arr = filter(oars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
+    const arr = filter(publicOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
     return [...arr].sort((a, b) => {
       const aM = matchesGroup(a.assigned_group) ? 0 : 1;
       const bM = matchesGroup(b.assigned_group) ? 0 : 1;
@@ -538,93 +540,64 @@ function CoachReadOnlyView({
       return a.category.localeCompare(b.category);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [oars, search, coachGroupNames]);
+  }, [publicOars, search, coachGroupNames]);
+
+  const sortedPrivateOars = useMemo(() => {
+    const arr = filter(privateOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
+    return [...arr].sort((a, b) => a.category.localeCompare(b.category));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [privateOars, search]);
 
   return (
     <div className="space-y-4">
       <Input placeholder="Search by group, name, brand…" value={search} onChange={(e) => setSearch(e.target.value)} />
 
-      <section className="rounded-lg border bg-background p-5">
-        <h3 className="font-serif text-lg mb-3">Boats</h3>
-        {sortedPublicBoats.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No boats found.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="text-left text-xs text-muted-foreground uppercase border-b">
-                <tr>
-                  <th className="py-2 pr-3">Boat type</th>
-                  <th className="py-2 pr-3">Name</th>
-                  <th className="py-2 pr-3">Group</th>
-                  <th className="py-2 pr-3">Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedPublicBoats.map((b) => {
-                  const mine = matchesGroup(b.assigned_group);
-                  return (
-                    <tr key={b.id} className={`border-b last:border-0 ${mine ? "bg-primary/5" : ""}`}>
-                      <td className="py-2 pr-3"><Badge variant="outline">{b.type}</Badge></td>
-                      <td className="py-2 pr-3 font-medium">{b.name}</td>
-                      <td className="py-2 pr-3">
-                        {b.assigned_group ? (
-                          <Badge variant={mine ? "default" : "secondary"}>{b.assigned_group}</Badge>
-                        ) : (
-                          <span className="text-muted-foreground">—</span>
-                        )}
-                      </td>
-                      <td className="py-2 pr-3 text-muted-foreground">{b.notes || "—"}</td>
+      <Accordion type="multiple" defaultValue={["boats", "oars"]} className="space-y-3">
+        <AccordionItem value="boats" className="border-0">
+          <AccordionTrigger className="rounded-lg border bg-muted/40 px-4">
+            Boats ({sortedPublicBoats.length})
+          </AccordionTrigger>
+          <AccordionContent className="rounded-b-lg border border-t-0 bg-background px-4 pt-3">
+            {sortedPublicBoats.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No boats found.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="text-left text-xs text-muted-foreground uppercase border-b">
+                    <tr>
+                      <th className="py-2 pr-3">Boat type</th>
+                      <th className="py-2 pr-3">Name</th>
+                      <th className="py-2 pr-3">Group</th>
+                      <th className="py-2 pr-3">Notes</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+                  </thead>
+                  <tbody>
+                    {sortedPublicBoats.map((b) => {
+                      const mine = matchesGroup(b.assigned_group);
+                      return (
+                        <tr key={b.id} className={`border-b last:border-0 ${mine ? "bg-primary/5" : ""}`}>
+                          <td className="py-2 pr-3"><Badge variant="outline">{b.type}</Badge></td>
+                          <td className="py-2 pr-3 font-medium">{b.name}</td>
+                          <td className="py-2 pr-3">
+                            {b.assigned_group ? (
+                              <Badge variant={mine ? "default" : "secondary"}>{b.assigned_group}</Badge>
+                            ) : (
+                              <span className="text-muted-foreground">—</span>
+                            )}
+                          </td>
+                          <td className="py-2 pr-3 text-muted-foreground">{b.notes || "—"}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </AccordionContent>
+        </AccordionItem>
 
-      <section className="rounded-lg border bg-background p-5">
-        <h3 className="font-serif text-lg mb-3">Oars</h3>
-        {sortedOars.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No oars found.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="text-left text-xs text-muted-foreground uppercase border-b">
-                <tr>
-                  <th className="py-2 pr-3">Category</th>
-                  <th className="py-2 pr-3">Qty</th>
-                  <th className="py-2 pr-3">Group</th>
-                  <th className="py-2 pr-3">Brand / notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedOars.map((o) => {
-                  const mine = matchesGroup(o.assigned_group);
-                  return (
-                    <tr key={o.id} className={`border-b last:border-0 ${mine ? "bg-primary/5" : ""}`}>
-                      <td className="py-2 pr-3"><Badge variant="secondary">{o.category}</Badge></td>
-                      <td className="py-2 pr-3 font-medium">×{o.quantity}</td>
-                      <td className="py-2 pr-3">
-                        {o.assigned_group ? (
-                          <Badge variant={mine ? "default" : "outline"}>{o.assigned_group}</Badge>
-                        ) : (
-                          <span className="text-muted-foreground">—</span>
-                        )}
-                      </td>
-                      <td className="py-2 pr-3 text-muted-foreground">{o.brand_notes || "—"}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
-      {privateBoats.length > 0 && (
-        <Accordion type="single" collapsible>
-          <AccordionItem value="private">
+        {privateBoats.length > 0 && (
+          <AccordionItem value="private-boats" className="border-0">
             <AccordionTrigger className="rounded-lg border bg-muted/40 px-4">
               Privately owned boats ({privateBoats.length})
             </AccordionTrigger>
@@ -655,8 +628,85 @@ function CoachReadOnlyView({
               </div>
             </AccordionContent>
           </AccordionItem>
-        </Accordion>
-      )}
+        )}
+
+        <AccordionItem value="oars" className="border-0">
+          <AccordionTrigger className="rounded-lg border bg-muted/40 px-4">
+            Oars ({sortedOars.length})
+          </AccordionTrigger>
+          <AccordionContent className="rounded-b-lg border border-t-0 bg-background px-4 pt-3">
+            {sortedOars.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No oars found.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="text-left text-xs text-muted-foreground uppercase border-b">
+                    <tr>
+                      <th className="py-2 pr-3">Category</th>
+                      <th className="py-2 pr-3">Qty</th>
+                      <th className="py-2 pr-3">Group</th>
+                      <th className="py-2 pr-3">Brand / notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortedOars.map((o) => {
+                      const mine = matchesGroup(o.assigned_group);
+                      return (
+                        <tr key={o.id} className={`border-b last:border-0 ${mine ? "bg-primary/5" : ""}`}>
+                          <td className="py-2 pr-3"><Badge variant="secondary">{o.category}</Badge></td>
+                          <td className="py-2 pr-3 font-medium">×{o.quantity}</td>
+                          <td className="py-2 pr-3">
+                            {o.assigned_group ? (
+                              <Badge variant={mine ? "default" : "outline"}>{o.assigned_group}</Badge>
+                            ) : (
+                              <span className="text-muted-foreground">—</span>
+                            )}
+                          </td>
+                          <td className="py-2 pr-3 text-muted-foreground">{o.brand_notes || "—"}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </AccordionContent>
+        </AccordionItem>
+
+        {sortedPrivateOars.length > 0 && (
+          <AccordionItem value="private-oars" className="border-0">
+            <AccordionTrigger className="rounded-lg border bg-muted/40 px-4">
+              Privately owned oars ({sortedPrivateOars.reduce((a, o) => a + (o.quantity || 0), 0)})
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-lg border border-t-0 bg-background px-4 pt-3">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="text-left text-xs text-muted-foreground uppercase border-b">
+                    <tr>
+                      <th className="py-2 pr-3">Category</th>
+                      <th className="py-2 pr-3">Qty</th>
+                      <th className="py-2 pr-3">Group</th>
+                      <th className="py-2 pr-3">Brand / notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortedPrivateOars.map((o) => (
+                      <tr key={o.id} className="border-b last:border-0">
+                        <td className="py-2 pr-3"><Badge variant="secondary">{o.category}</Badge></td>
+                        <td className="py-2 pr-3 font-medium">×{o.quantity}</td>
+                        <td className="py-2 pr-3">
+                          {o.assigned_group ? <Badge variant="outline">{o.assigned_group}</Badge> : <span className="text-muted-foreground">—</span>}
+                        </td>
+                        <td className="py-2 pr-3 text-muted-foreground">{o.brand_notes || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        )}
+      </Accordion>
     </div>
   );
 }
