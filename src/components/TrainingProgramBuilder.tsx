@@ -58,6 +58,12 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
   const [weeks, setWeeks] = useState<WeekRow[]>(() => [emptyWeek(), emptyWeek(), emptyWeek(), emptyWeek()]);
   const [presets, setPresets] = useState<Preset[]>([]);
   const [assigning, setAssigning] = useState<{ wi: number; day: DayName; slot: "am" | "pm" } | null>(null);
+  const [customTitle, setCustomTitle] = useState("");
+  const [customBody, setCustomBody] = useState("");
+
+  useEffect(() => {
+    if (!assigning) { setCustomTitle(""); setCustomBody(""); }
+  }, [assigning]);
 
   useEffect(() => { void loadPresets(); }, []);
   async function loadPresets() {
@@ -85,6 +91,19 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
       ...c,
       dayOff: p.title.toLowerCase().includes("day off"),
       [assigning.slot]: { title: p.title, body: p.body },
+    }));
+    setAssigning(null);
+  }
+
+  function assignCustom() {
+    if (!assigning) return;
+    const title = customTitle.trim();
+    const body = customBody.trim();
+    if (!title) { toast.error("Add a session title"); return; }
+    updateCell(assigning.wi, assigning.day, (c) => ({
+      ...c,
+      dayOff: false,
+      [assigning.slot]: { title, body },
     }));
     setAssigning(null);
   }
@@ -298,6 +317,30 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
               </button>
             ))}
             {presets.length === 0 && <p className="text-sm text-muted-foreground">No presets yet.</p>}
+          </div>
+          <div className="rounded-md border border-dashed p-3 space-y-2 bg-muted/20">
+            <div className="flex items-center justify-between gap-2">
+              <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Or add a one-off session
+              </Label>
+              <span className="text-[10px] text-muted-foreground">Not saved — this planner only</span>
+            </div>
+            <Input
+              placeholder="Session title (e.g. UT2 90min steady)"
+              value={customTitle}
+              onChange={(e) => setCustomTitle(e.target.value)}
+            />
+            <Textarea
+              rows={3}
+              placeholder="Session details / workout body (optional)"
+              value={customBody}
+              onChange={(e) => setCustomBody(e.target.value)}
+            />
+            <div className="flex justify-end">
+              <Button size="sm" onClick={assignCustom} disabled={!customTitle.trim()}>
+                Add custom session
+              </Button>
+            </div>
           </div>
           <DialogFooter className="flex-wrap gap-2 sm:justify-between">
             {assigning && (
