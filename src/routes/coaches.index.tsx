@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { Ruler, Gauge, CalendarRange, Anchor, ShieldCheck, LogOut } from "lucide-react";
 
 type Group = { id: string; name: string; description: string | null };
 
@@ -41,32 +42,50 @@ function CoachesHome() {
   return (
     <div className="min-h-screen bg-muted/30 px-4 py-12">
       <div className="mx-auto max-w-4xl">
-        <div className="flex justify-between items-start mb-8 gap-3 flex-wrap">
-          <div>
-            <h1 className="font-serif text-3xl">Coaches Corner</h1>
-            <p className="text-sm text-muted-foreground mt-1">Signed in as {user?.email}</p>
+        <div className="mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+          <div className="min-w-0">
+            <h1 className="font-serif text-2xl sm:text-3xl">Coaches Corner</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1 truncate">Signed in as {user?.email}</p>
           </div>
-          <div className="flex gap-2">
-            <Button asChild size="sm" variant="secondary">
-              <Link to="/coaches/rigging">Rigging measurements</Link>
-            </Button>
-            <Button asChild size="sm" variant="secondary">
-              <Link to="/coaches/pace">Pace calculator</Link>
-            </Button>
-            <Button asChild size="sm" variant="secondary">
-              <Link to="/coaches/program">Training program</Link>
-            </Button>
-            <Button asChild size="sm" variant="secondary">
-              <Link to="/coaches/inventory">Boats & oars</Link>
-            </Button>
-            {isAdmin && (
-              <Button asChild size="sm" variant="default">
-                <Link to="/coaches/admin">Admin panel</Link>
-              </Button>
-            )}
-            <Button variant="outline" size="sm" onClick={async () => { await signOut(); void navigate({ to: "/coaches/login" }); }}>Sign out</Button>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="shrink-0"
+            onClick={async () => { await signOut(); void navigate({ to: "/coaches/login" }); }}
+          >
+            <LogOut className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Sign out</span>
+          </Button>
         </div>
+
+        {(isCoach || isAdmin) && (
+          <nav aria-label="Coach tools" className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+            {[
+              { to: "/coaches/rigging", label: "Rigging", icon: Ruler },
+              { to: "/coaches/pace", label: "Pace calculator", icon: Gauge },
+              { to: "/coaches/program", label: "Training program", icon: CalendarRange },
+              { to: "/coaches/inventory", label: "Boats & oars", icon: Anchor },
+            ].map(({ to, label, icon: Icon }) => (
+              <Link
+                key={to}
+                to={to}
+                className="flex items-center gap-2 rounded-lg border bg-background px-3 py-2.5 text-sm font-medium text-foreground transition hover:border-primary hover:bg-muted"
+              >
+                <Icon className="h-4 w-4 shrink-0 text-primary" />
+                <span className="truncate">{label}</span>
+              </Link>
+            ))}
+            {isAdmin && (
+              <Link
+                to="/coaches/admin"
+                className="flex items-center gap-2 rounded-lg border border-primary bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+              >
+                <ShieldCheck className="h-4 w-4 shrink-0" />
+                <span className="truncate">Admin panel</span>
+              </Link>
+            )}
+          </nav>
+        )}
 
         {!isCoach && !isAdmin ? (
           <div className="rounded-lg border bg-background p-6">
