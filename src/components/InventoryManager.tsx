@@ -154,7 +154,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
     setDraftBoats((d) => [...d, ...rows]);
   };
   const addOarRow = () => {
-    setDraftOars((d) => [...d, { key: uid(), category: "Scull", quantity: 1, assigned_group: "", brand_notes: "" }]);
+    setDraftOars((d) => [...d, { key: uid(), category: "Scull", quantity: 1, assigned_group: "", brand_notes: "", is_private: false }]);
   };
 
   const updateBoat = (key: string, patch: Partial<DraftBoat>) =>
@@ -190,6 +190,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
           quantity: Math.max(0, Number(o.quantity) || 0),
           assigned_group: o.assigned_group.trim() || null,
           brand_notes: o.brand_notes.trim() || null,
+          is_private: o.is_private,
         }));
         const { error } = await supabase.from("club_oars" as never).insert(payload as never);
         if (error) throw error;
