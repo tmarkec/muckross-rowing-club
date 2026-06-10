@@ -1,0 +1,1 @@
+ALTER TYPE public.boat_type ADD VALUE IF NOT EXISTS '4-';
