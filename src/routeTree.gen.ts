@@ -20,6 +20,7 @@ import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as CoachesIndexRouteImport } from './routes/coaches.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as CoachesRiggingRouteImport } from './routes/coaches.rigging'
+import { Route as CoachesProgramRouteImport } from './routes/coaches.program'
 import { Route as CoachesPostsRouteImport } from './routes/coaches.posts'
 import { Route as CoachesPaceRouteImport } from './routes/coaches.pace'
 import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
@@ -85,6 +86,11 @@ const CoachesRiggingRoute = CoachesRiggingRouteImport.update({
   path: '/coaches/rigging',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesProgramRoute = CoachesProgramRouteImport.update({
+  id: '/coaches/program',
+  path: '/coaches/program',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoachesPostsRoute = CoachesPostsRouteImport.update({
   id: '/coaches/posts',
   path: '/coaches/posts',
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/pace': typeof CoachesPaceRoute
   '/coaches/posts': typeof CoachesPostsRoute
+  '/coaches/program': typeof CoachesProgramRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches/': typeof CoachesIndexRoute
@@ -167,6 +174,7 @@ export interface FileRoutesByTo {
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/pace': typeof CoachesPaceRoute
   '/coaches/posts': typeof CoachesPostsRoute
+  '/coaches/program': typeof CoachesProgramRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches': typeof CoachesIndexRoute
@@ -189,6 +197,7 @@ export interface FileRoutesById {
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/pace': typeof CoachesPaceRoute
   '/coaches/posts': typeof CoachesPostsRoute
+  '/coaches/program': typeof CoachesProgramRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches/': typeof CoachesIndexRoute
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
     | '/coaches/login'
     | '/coaches/pace'
     | '/coaches/posts'
+    | '/coaches/program'
     | '/coaches/rigging'
     | '/news/$slug'
     | '/coaches/'
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
     | '/coaches/login'
     | '/coaches/pace'
     | '/coaches/posts'
+    | '/coaches/program'
     | '/coaches/rigging'
     | '/news/$slug'
     | '/coaches'
@@ -255,6 +266,7 @@ export interface FileRouteTypes {
     | '/coaches/login'
     | '/coaches/pace'
     | '/coaches/posts'
+    | '/coaches/program'
     | '/coaches/rigging'
     | '/news/$slug'
     | '/coaches/'
@@ -278,6 +290,7 @@ export interface RootRouteChildren {
   CoachesLoginRoute: typeof CoachesLoginRoute
   CoachesPaceRoute: typeof CoachesPaceRoute
   CoachesPostsRoute: typeof CoachesPostsRoute
+  CoachesProgramRoute: typeof CoachesProgramRoute
   CoachesRiggingRoute: typeof CoachesRiggingRoute
   CoachesIndexRoute: typeof CoachesIndexRoute
   CoachesGroupsGroupIdRoute: typeof CoachesGroupsGroupIdRouteWithChildren
@@ -360,6 +373,13 @@ declare module '@tanstack/react-router' {
       path: '/coaches/rigging'
       fullPath: '/coaches/rigging'
       preLoaderRoute: typeof CoachesRiggingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coaches/program': {
+      id: '/coaches/program'
+      path: '/coaches/program'
+      fullPath: '/coaches/program'
+      preLoaderRoute: typeof CoachesProgramRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/coaches/posts': {
@@ -479,6 +499,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachesLoginRoute: CoachesLoginRoute,
   CoachesPaceRoute: CoachesPaceRoute,
   CoachesPostsRoute: CoachesPostsRoute,
+  CoachesProgramRoute: CoachesProgramRoute,
   CoachesRiggingRoute: CoachesRiggingRoute,
   CoachesIndexRoute: CoachesIndexRoute,
   CoachesGroupsGroupIdRoute: CoachesGroupsGroupIdRouteWithChildren,
@@ -486,13 +507,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
