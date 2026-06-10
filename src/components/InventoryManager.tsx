@@ -429,7 +429,7 @@ function ExistingOarsTable({ oars, onDelete, onSaved }: { oars: Oar[]; onDelete:
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead className="text-left text-xs text-muted-foreground uppercase">
-          <tr><th className="py-2 pr-2">Category</th><th className="py-2 pr-2">Qty</th><th className="py-2 pr-2">Group</th><th className="py-2 pr-2">Brand / notes</th><th></th></tr>
+          <tr><th className="py-2 pr-2">Category</th><th className="py-2 pr-2">Qty</th><th className="py-2 pr-2">Group</th><th className="py-2 pr-2">Private</th><th className="py-2 pr-2">Brand / notes</th><th></th></tr>
         </thead>
         <tbody>
           {oars.map((o) => <EditableOarRow key={o.id} oar={o} onDelete={onDelete} onSaved={onSaved} />)}
@@ -444,17 +444,20 @@ function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: s
   const [quantity, setQuantity] = useState(oar.quantity);
   const [group, setGroup] = useState(oar.assigned_group ?? "");
   const [brandNotes, setBrandNotes] = useState(oar.brand_notes ?? "");
+  const [isPrivate, setIsPrivate] = useState(oar.is_private);
   const [saving, setSaving] = useState(false);
 
   const dirty =
     category !== oar.category || quantity !== oar.quantity ||
-    group !== (oar.assigned_group ?? "") || brandNotes !== (oar.brand_notes ?? "");
+    group !== (oar.assigned_group ?? "") || brandNotes !== (oar.brand_notes ?? "") ||
+    isPrivate !== oar.is_private;
 
   const save = async () => {
     setSaving(true);
     const { error } = await supabase.from("club_oars" as never).update({
       category, quantity: Math.max(0, Number(quantity) || 0),
       assigned_group: group.trim() || null, brand_notes: brandNotes.trim() || null,
+      is_private: isPrivate,
     } as never).eq("id", oar.id);
     setSaving(false);
     if (error) return toast.error(error.message);
@@ -476,6 +479,7 @@ function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: s
       </td>
       <td className="py-1 pr-2"><Input type="number" min={0} className="w-20" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} /></td>
       <td className="py-1 pr-2"><Input className="w-24" value={group} onChange={(e) => setGroup(e.target.value)} placeholder="—" /></td>
+      <td className="py-1 pr-2"><Checkbox checked={isPrivate} onCheckedChange={(v) => setIsPrivate(!!v)} /></td>
       <td className="py-1 pr-2"><Input value={brandNotes} onChange={(e) => setBrandNotes(e.target.value)} placeholder="optional" /></td>
       <td className="py-1">
         <div className="flex gap-1">
