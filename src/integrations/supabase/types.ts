@@ -145,6 +145,7 @@ export type Database = {
           category: Database["public"]["Enums"]["oar_category"]
           created_at: string
           id: string
+          is_private: boolean
           quantity: number
           updated_at: string
         }
@@ -154,6 +155,7 @@ export type Database = {
           category: Database["public"]["Enums"]["oar_category"]
           created_at?: string
           id?: string
+          is_private?: boolean
           quantity?: number
           updated_at?: string
         }
@@ -163,6 +165,7 @@ export type Database = {
           category?: Database["public"]["Enums"]["oar_category"]
           created_at?: string
           id?: string
+          is_private?: boolean
           quantity?: number
           updated_at?: string
         }
