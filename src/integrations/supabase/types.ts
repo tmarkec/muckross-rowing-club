@@ -448,6 +448,7 @@ export type Database = {
         | "8+"
         | "4x+"
         | "Offshore"
+        | "4-"
       oar_category: "Sweep" | "Scull" | "Offshore"
       session_part: "single" | "am" | "pm"
     }
@@ -579,7 +580,18 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "coach", "athlete"],
       attendance_status: ["present", "absent", "late", "excused"],
-      boat_type: ["1x", "2x", "2-", "4x", "4+", "8x", "8+", "4x+", "Offshore"],
+      boat_type: [
+        "1x",
+        "2x",
+        "2-",
+        "4x",
+        "4+",
+        "8x",
+        "8+",
+        "4x+",
+        "Offshore",
+        "4-",
+      ],
       oar_category: ["Sweep", "Scull", "Offshore"],
       session_part: ["single", "am", "pm"],
     },
