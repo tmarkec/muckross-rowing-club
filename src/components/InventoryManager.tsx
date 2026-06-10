@@ -35,6 +35,7 @@ type Oar = {
   quantity: number;
   assigned_group: string | null;
   brand_notes: string | null;
+  is_private: boolean;
 };
 
 type DraftBoat = {
@@ -51,6 +52,7 @@ type DraftOar = {
   quantity: number;
   assigned_group: string;
   brand_notes: string;
+  is_private: boolean;
 };
 
 const uid = () => Math.random().toString(36).slice(2, 10);
