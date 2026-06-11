@@ -119,9 +119,10 @@ function AthletesTab({ groupId }: { groupId: string }) {
     return { pct: Math.round((present / rs.length) * 100), total: rs.length };
   };
 
-  const startCreate = () => { setEditing(null); setForm(empty); setOpen(true); };
+  const startCreate = () => { setEditing(null); setForm(empty); setNameError(false); setOpen(true); };
   const startEdit = (a: Athlete) => {
     setEditing(a);
+    setNameError(false);
     setForm({
       first_name: a.first_name, last_name: a.last_name,
       dob: a.dob ?? "", erg_2k: a.erg_2k_seconds != null ? fmt2k(a.erg_2k_seconds) : "",
