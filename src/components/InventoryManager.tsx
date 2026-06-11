@@ -61,18 +61,21 @@ export function InventoryManager({ coachGroupNames = [] }: { coachGroupNames?: s
   const { isAdmin } = useAuth();
   const [boats, setBoats] = useState<Boat[]>([]);
   const [oars, setOars] = useState<Oar[]>([]);
+  const [allGroupNames, setAllGroupNames] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [b, o] = await Promise.all([
+    const [b, o, g] = await Promise.all([
       supabase.from("club_boats" as never).select("*").order("type").order("name"),
       supabase.from("club_oars" as never).select("*").order("category"),
+      supabase.from("groups").select("name"),
     ]);
     if (b.error) toast.error(b.error.message);
     if (o.error) toast.error(o.error.message);
     setBoats(((b.data as unknown) as Boat[]) ?? []);
     setOars(((o.data as unknown) as Oar[]) ?? []);
+    setAllGroupNames((((g.data as unknown) as Array<{ name: string }>) ?? []).map((x) => x.name));
     setLoading(false);
   }, []);
 
@@ -86,7 +89,7 @@ export function InventoryManager({ coachGroupNames = [] }: { coachGroupNames?: s
       ) : isAdmin ? (
         <AdminBatchEntry boats={boats} oars={oars} onSaved={load} />
       ) : (
-        <CoachReadOnlyView boats={boats} oars={oars} coachGroupNames={coachGroupNames} />
+        <CoachReadOnlyView boats={boats} oars={oars} coachGroupNames={coachGroupNames} allGroupNames={allGroupNames} />
       )}
     </div>
   );
@@ -494,8 +497,8 @@ function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: s
 /* ---------- Coach read-only ---------- */
 
 function CoachReadOnlyView({
-  boats, oars, coachGroupNames,
-}: { boats: Boat[]; oars: Oar[]; coachGroupNames: string[] }) {
+  boats, oars, coachGroupNames, allGroupNames,
+}: { boats: Boat[]; oars: Oar[]; coachGroupNames: string[]; allGroupNames: string[] }) {
   const [search, setSearch] = useState("");
 
   const groupSet = useMemo(
@@ -503,6 +506,12 @@ function CoachReadOnlyView({
     [coachGroupNames],
   );
   const matchesGroup = (g: string | null) => !!g && groupSet.has(g.toLowerCase());
+
+  const allGroupSet = useMemo(
+    () => new Set(allGroupNames.map((g) => g.toLowerCase())),
+    [allGroupNames],
+  );
+  const isUnmatched = (g: string | null) => !g || !g.trim() || !allGroupSet.has(g.trim().toLowerCase());
 
   const filter = <T extends { assigned_group: string | null; }>(rows: T[], extra: (r: T) => string) => {
     const q = search.trim().toLowerCase();
@@ -516,6 +525,8 @@ function CoachReadOnlyView({
   const privateBoats = boats.filter((b) => b.is_private);
   const publicOars = oars.filter((o) => !o.is_private);
   const privateOars = oars.filter((o) => o.is_private);
+  const unmatchedOars = publicOars.filter((o) => isUnmatched(o.assigned_group));
+  const matchedPublicOars = publicOars.filter((o) => !isUnmatched(o.assigned_group));
 
   const sortedPublicBoats = useMemo(() => {
     const arr = filter(publicBoats, (b) => `${b.name} ${b.type} ${b.notes ?? ""}`);
@@ -532,7 +543,7 @@ function CoachReadOnlyView({
   }, [publicBoats, search, coachGroupNames]);
 
   const sortedOars = useMemo(() => {
-    const arr = filter(publicOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
+    const arr = filter(matchedPublicOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
     return [...arr].sort((a, b) => {
       const aM = matchesGroup(a.assigned_group) ? 0 : 1;
       const bM = matchesGroup(b.assigned_group) ? 0 : 1;
@@ -540,7 +551,13 @@ function CoachReadOnlyView({
       return a.category.localeCompare(b.category);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [publicOars, search, coachGroupNames]);
+  }, [matchedPublicOars, search, coachGroupNames]);
+
+  const sortedUnmatchedOars = useMemo(() => {
+    const arr = filter(unmatchedOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
+    return [...arr].sort((a, b) => a.category.localeCompare(b.category));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unmatchedOars, search]);
 
   const sortedPrivateOars = useMemo(() => {
     const arr = filter(privateOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
@@ -691,6 +708,40 @@ function CoachReadOnlyView({
                   </thead>
                   <tbody>
                     {sortedPrivateOars.map((o) => (
+                      <tr key={o.id} className="border-b last:border-0">
+                        <td className="py-2 pr-3"><Badge variant="secondary">{o.category}</Badge></td>
+                        <td className="py-2 pr-3 font-medium">×{o.quantity}</td>
+                        <td className="py-2 pr-3">
+                          {o.assigned_group ? <Badge variant="outline">{o.assigned_group}</Badge> : <span className="text-muted-foreground">—</span>}
+                        </td>
+                        <td className="py-2 pr-3 text-muted-foreground">{o.brand_notes || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        )}
+
+        {sortedUnmatchedOars.length > 0 && (
+          <AccordionItem value="unmatched-oars" className="border-0">
+            <AccordionTrigger className="rounded-lg border bg-muted/40 px-4">
+              Unmatched oars ({sortedUnmatchedOars.reduce((a, o) => a + (o.quantity || 0), 0)})
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-lg border border-t-0 bg-background px-4 pt-3">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="text-left text-xs text-muted-foreground uppercase border-b">
+                    <tr>
+                      <th className="py-2 pr-3">Category</th>
+                      <th className="py-2 pr-3">Qty</th>
+                      <th className="py-2 pr-3">Group</th>
+                      <th className="py-2 pr-3">Brand / notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortedUnmatchedOars.map((o) => (
                       <tr key={o.id} className="border-b last:border-0">
                         <td className="py-2 pr-3"><Badge variant="secondary">{o.category}</Badge></td>
                         <td className="py-2 pr-3 font-medium">×{o.quantity}</td>
