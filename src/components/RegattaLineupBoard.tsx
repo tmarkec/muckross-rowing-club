@@ -16,9 +16,9 @@ import {
   Sheet, SheetContent, SheetHeader, SheetTitle,
 } from "@/components/ui/sheet";
 import {
-  Accordion, AccordionContent, AccordionItem, AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Plus, Printer, RotateCcw, Trash2, X, Search } from "lucide-react";
+  Popover, PopoverContent, PopoverTrigger,
+} from "@/components/ui/popover";
+import { Plus, Printer, RotateCcw, Trash2, X, Search, Users } from "lucide-react";
 
 type Group = { id: string; name: string };
 type Athlete = { id: string; first_name: string; last_name: string };
@@ -127,6 +127,11 @@ export default function RegattaLineupBoard() {
       return;
     }
     if (selectedAthlete) {
+      // Prevent same athlete in the same crew twice
+      if (Object.values(crew.seats).includes(selectedAthlete)) {
+        toast.error("That athlete is already in this crew.");
+        return;
+      }
       assignSeat(crewId, seat, selectedAthlete);
       setSelectedAthlete(null);
       return;
@@ -184,24 +189,30 @@ export default function RegattaLineupBoard() {
       <div className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)] print:block">
         {/* Roster */}
         <aside className="print:hidden">
-          {/* Mobile accordion */}
+          {/* Mobile dropdown */}
           <div className="lg:hidden">
-            <Accordion type="single" collapsible defaultValue="roster">
-              <AccordionItem value="roster" className="border rounded-lg bg-background px-3">
-                <AccordionTrigger className="text-sm">View Group Roster ({athletes.length})</AccordionTrigger>
-                <AccordionContent>
-                  <Roster
-                    athletes={filteredAthletes}
-                    search={search}
-                    setSearch={setSearch}
-                    selectedAthlete={selectedAthlete}
-                    setSelectedAthlete={setSelectedAthlete}
-                    assignmentCount={assignmentCount}
-                    maxHeight="60vh"
-                  />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="w-full justify-between">
+                  <span className="flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    {selectedAthlete ? athleteName(selectedAthlete) : `Group Roster (${athletes.length})`}
+                  </span>
+                  <span className="text-xs text-muted-foreground">Browse ▾</span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[calc(100vw-2rem)] p-2" align="start">
+                <Roster
+                  athletes={filteredAthletes}
+                  search={search}
+                  setSearch={setSearch}
+                  selectedAthlete={selectedAthlete}
+                  setSelectedAthlete={setSelectedAthlete}
+                  assignmentCount={assignmentCount}
+                  maxHeight="55vh"
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           {/* Desktop fixed-height roster */}
           <div className="hidden lg:block rounded-lg border bg-background p-3">
@@ -269,14 +280,20 @@ export default function RegattaLineupBoard() {
             />
           </div>
           <div className="mt-3 space-y-1">
-            {filteredAthletes.length === 0 && <p className="text-sm text-muted-foreground py-4 text-center">No matches.</p>}
-            {filteredAthletes.map((a) => {
+            {(() => {
+              const crew = seatPicker ? crews.find((c) => c.id === seatPicker.crewId) : null;
+              const usedInCrew = new Set(crew ? Object.values(crew.seats).filter(Boolean) as string[] : []);
+              const available = filteredAthletes.filter((a) => !usedInCrew.has(a.id));
+              if (available.length === 0) {
+                return <p className="text-sm text-muted-foreground py-4 text-center">No available athletes.</p>;
+              }
+              return available.map((a) => {
               const count = assignmentCount.get(a.id) ?? 0;
               return (
                 <button
                   key={a.id}
                   type="button"
-                  className="w-full flex items-center justify-between rounded-md border bg-background px-3 py-2.5 text-left text-sm hover:border-primary"
+                  className="w-full flex items-center justify-between rounded-md border bg-background px-3 py-2 text-left text-sm hover:border-primary"
                   onClick={() => {
                     if (seatPicker) assignSeat(seatPicker.crewId, seatPicker.seat, a.id);
                     setSeatPicker(null);
@@ -286,7 +303,8 @@ export default function RegattaLineupBoard() {
                   <Badge variant={count > 0 ? "default" : "secondary"}>[{count}]</Badge>
                 </button>
               );
-            })}
+              });
+            })()}
           </div>
         </SheetContent>
       </Sheet>
@@ -361,7 +379,7 @@ function CrewCard({
           <Trash2 className="h-4 w-4" />
         </Button>
       </div>
-      <div className="space-y-1.5">
+      <div className="space-y-1">
         {Object.entries(crew.seats).map(([seat, aid]) => {
           const name = athleteName(aid);
           return (
@@ -369,11 +387,11 @@ function CrewCard({
               key={seat}
               type="button"
               onClick={() => onSeatClick(crew.id, seat)}
-              className={`w-full grid grid-cols-[70px_minmax(0,1fr)] items-center gap-2 rounded-md border px-2.5 py-2 text-left text-sm transition print:border-black ${
+              className={`w-full grid grid-cols-[56px_minmax(0,1fr)] items-center gap-2 rounded-md border px-2 py-1.5 text-left text-xs sm:text-sm sm:px-2.5 sm:py-2 transition print:border-black ${
                 aid ? "border-primary/50 bg-primary/5" : "border-dashed bg-muted/30 hover:border-primary"
               }`}
             >
-              <span className="font-mono text-xs font-semibold uppercase text-muted-foreground">{seat}</span>
+              <span className="font-mono text-[10px] sm:text-xs font-semibold uppercase text-muted-foreground">{seat}</span>
               <span className={`truncate ${aid ? "font-medium" : "text-muted-foreground"}`}>
                 {name ?? "— empty —"}
               </span>
