@@ -29,7 +29,14 @@ export const Route = createFileRoute("/coaches/admin")({
   component: AdminPage,
 });
 
-type Coach = { user_id: string; email: string | null; full_name: string | null; roles: string[] };
+type Coach = {
+  user_id: string;
+  email: string | null;
+  full_name: string | null;
+  roles: string[];
+  last_sign_in_at: string | null;
+  created_at: string | null;
+};
 type Group = { id: string; name: string; description: string | null };
 type Assignment = { group_id: string; coach_user_id: string };
 
@@ -258,6 +265,12 @@ function CoachesTab() {
               <div>
                 <div className="font-medium">{c.full_name || "—"}</div>
                 <div className="text-sm text-muted-foreground">{c.email}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  Last sign-in:{" "}
+                  {c.last_sign_in_at
+                    ? new Date(c.last_sign_in_at).toLocaleString()
+                    : "never"}
+                </div>
                 <div className="flex gap-1 mt-1 flex-wrap">
                   {c.roles.map((r) => <Badge key={r} variant="secondary">{r}</Badge>)}
                   {assignments
