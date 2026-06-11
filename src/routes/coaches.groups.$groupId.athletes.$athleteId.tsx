@@ -105,10 +105,11 @@ function AthleteProfile() {
       <div className="mx-auto max-w-4xl">
         <div className="mb-6 flex items-center justify-between gap-3 flex-wrap">
           <div>
-            <Link to="/coaches/groups/$groupId" params={{ groupId }} className="text-xs text-muted-foreground hover:text-primary">← Back to group</Link>
-            <h1 className="font-serif text-3xl mt-1">{athlete.first_name} {athlete.last_name}</h1>
+            <h1 className="font-serif text-3xl">{athlete.first_name} {athlete.last_name}</h1>
           </div>
-          <Button asChild size="sm" variant="outline"><Link to="/coaches">← Back to groups</Link></Button>
+          <Button asChild size="sm" variant="outline">
+            <Link to="/coaches/groups/$groupId" params={{ groupId }}>← Back to group</Link>
+          </Button>
         </div>
 
         {/* Stats */}

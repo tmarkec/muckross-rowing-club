@@ -176,7 +176,7 @@ function RiggingPage() {
               </Button>
             )}
             <Button asChild size="sm" variant="outline">
-              <Link to="/coaches">← Dashboard</Link>
+              <Link to="/coaches">← Coaches Corner</Link>
             </Button>
           </div>
         </div>
