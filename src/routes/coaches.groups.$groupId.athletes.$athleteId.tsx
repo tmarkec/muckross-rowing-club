@@ -140,7 +140,8 @@ function AthleteProfile() {
               return (
                 <div className="rounded-md border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100">
                   📊 Pacing zones are not applicable to U14 athletes. Focus should remain
-                  entirely on technical mastery, team boat dynamics, and active fun!
+                  entirely on technique, active fun, team boat dynamics, and getting moving
+                  together as a group!
                 </div>
               );
             }
