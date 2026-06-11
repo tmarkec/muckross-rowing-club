@@ -130,7 +130,7 @@ export function PacingZoneTable({ twoKSeconds }: { twoKSeconds: number }) {
               <TableHead>Purpose</TableHead>
               <TableHead className="text-right">% Watts</TableHead>
               <TableHead className="text-right">Slower → Faster /500m</TableHead>
-              <TableHead className="text-right">Watts range</TableHead>
+              <TableHead className="text-right hidden sm:table-cell">Watts range</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -142,7 +142,7 @@ export function PacingZoneTable({ twoKSeconds }: { twoKSeconds: number }) {
                 <TableCell className="text-right tabular-nums font-medium">
                   {formatSplit(r.slowSplit)} – {formatSplit(r.fastSplit)}
                 </TableCell>
-                <TableCell className="text-right tabular-nums text-muted-foreground">
+                <TableCell className="text-right tabular-nums text-muted-foreground hidden sm:table-cell">
                   {r.lowWatts.toFixed(0)}–{r.highWatts.toFixed(0)} W
                 </TableCell>
               </TableRow>
