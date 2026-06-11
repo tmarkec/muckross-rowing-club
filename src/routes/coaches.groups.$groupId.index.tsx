@@ -96,6 +96,7 @@ function AthletesTab({ groupId }: { groupId: string }) {
   const [editing, setEditing] = useState<Athlete | null>(null);
   const empty = { first_name: "", last_name: "", dob: "", erg_2k: "", notes: "" };
   const [form, setForm] = useState(empty);
+  const [nameError, setNameError] = useState(false);
 
   const load = useCallback(async () => {
     const { data } = await supabase.from("athletes").select("*").eq("group_id", groupId).order("last_name");
@@ -118,9 +119,10 @@ function AthletesTab({ groupId }: { groupId: string }) {
     return { pct: Math.round((present / rs.length) * 100), total: rs.length };
   };
 
-  const startCreate = () => { setEditing(null); setForm(empty); setOpen(true); };
+  const startCreate = () => { setEditing(null); setForm(empty); setNameError(false); setOpen(true); };
   const startEdit = (a: Athlete) => {
     setEditing(a);
+    setNameError(false);
     setForm({
       first_name: a.first_name, last_name: a.last_name,
       dob: a.dob ?? "", erg_2k: a.erg_2k_seconds != null ? fmt2k(a.erg_2k_seconds) : "",
@@ -133,25 +135,54 @@ function AthletesTab({ groupId }: { groupId: string }) {
     e.preventDefault();
     const erg = form.erg_2k.trim() ? parse2k(form.erg_2k) : null;
     if (form.erg_2k.trim() && erg == null) return toast.error("2k time must be like 7:25.4");
+    const firstName = form.first_name.trim();
+    const lastName = form.last_name.trim();
+    // Client-side duplicate-name check against the whole club directory.
+    const { data: existing, error: dupErr } = await supabase
+      .from("athletes")
+      .select("id")
+      .ilike("first_name", firstName)
+      .ilike("last_name", lastName);
+    if (dupErr) return toast.error(dupErr.message);
+    const clash = (existing ?? []).find((r) => !editing || r.id !== editing.id);
+    if (clash) {
+      setNameError(true);
+      return toast.warning(
+        "⚠️ An athlete with this name already exists in the club directory. Please add a middle initial or identifier to differentiate them."
+      );
+    }
+    setNameError(false);
     const payload = {
       group_id: groupId,
-      first_name: form.first_name.trim(),
-      last_name: form.last_name.trim(),
+      first_name: firstName,
+      last_name: lastName,
       dob: form.dob || null,
       erg_2k_seconds: erg,
       notes: form.notes.trim() || null,
     };
+    try {
     if (editing) {
       const { error } = await supabase.from("athletes").update(payload).eq("id", editing.id);
-      if (error) return toast.error(error.message);
+      if (error) throw error;
       toast.success("Updated");
     } else {
       const { error } = await supabase.from("athletes").insert(payload);
-      if (error) return toast.error(error.message);
+      if (error) throw error;
       toast.success("Added");
     }
     setOpen(false);
     void load();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      // Postgres unique_violation = 23505 — surfaced via PostgREST message.
+      if (/duplicate key|unique constraint|athletes_unique_full_name/i.test(msg)) {
+        setNameError(true);
+        return toast.warning(
+          "⚠️ An athlete with this name already exists in the club directory. Please add a middle initial or identifier to differentiate them."
+        );
+      }
+      toast.error(msg);
+    }
   };
 
   return (
@@ -213,8 +244,8 @@ function AthletesTab({ groupId }: { groupId: string }) {
           <DialogHeader><DialogTitle>{editing ? "Edit athlete" : "Add athlete"}</DialogTitle></DialogHeader>
           <form onSubmit={submit} className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
-              <div><Label>First name</Label><Input required value={form.first_name} onChange={(e) => setForm({ ...form, first_name: e.target.value })} /></div>
-              <div><Label>Last name</Label><Input required value={form.last_name} onChange={(e) => setForm({ ...form, last_name: e.target.value })} /></div>
+              <div><Label>First name</Label><Input required value={form.first_name} onChange={(e) => { setForm({ ...form, first_name: e.target.value }); if (nameError) setNameError(false); }} className={nameError ? "border-destructive focus-visible:ring-destructive" : undefined} /></div>
+              <div><Label>Last name</Label><Input required value={form.last_name} onChange={(e) => { setForm({ ...form, last_name: e.target.value }); if (nameError) setNameError(false); }} className={nameError ? "border-destructive focus-visible:ring-destructive" : undefined} /></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div><Label>Date of birth</Label><Input type="date" value={form.dob} onChange={(e) => setForm({ ...form, dob: e.target.value })} /></div>
