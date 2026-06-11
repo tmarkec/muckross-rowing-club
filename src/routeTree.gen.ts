@@ -25,6 +25,7 @@ import { Route as CoachesPostsRouteImport } from './routes/coaches.posts'
 import { Route as CoachesPaceRouteImport } from './routes/coaches.pace'
 import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
 import { Route as CoachesInventoryRouteImport } from './routes/coaches.inventory'
+import { Route as CoachesCrewsRouteImport } from './routes/coaches.crews'
 import { Route as CoachesAdminRouteImport } from './routes/coaches.admin'
 import { Route as CoachesGroupsGroupIdRouteImport } from './routes/coaches.groups.$groupId'
 import { Route as CoachesAdminRiggingRouteImport } from './routes/coaches.admin.rigging'
@@ -111,6 +112,11 @@ const CoachesInventoryRoute = CoachesInventoryRouteImport.update({
   path: '/coaches/inventory',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesCrewsRoute = CoachesCrewsRouteImport.update({
+  id: '/coaches/crews',
+  path: '/coaches/crews',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoachesAdminRoute = CoachesAdminRouteImport.update({
   id: '/coaches/admin',
   path: '/coaches/admin',
@@ -148,6 +154,7 @@ export interface FileRoutesByFullPath {
   '/news': typeof NewsRouteWithChildren
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
+  '/coaches/crews': typeof CoachesCrewsRoute
   '/coaches/inventory': typeof CoachesInventoryRoute
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/pace': typeof CoachesPaceRoute
@@ -170,6 +177,7 @@ export interface FileRoutesByTo {
   '/join': typeof JoinRoute
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
+  '/coaches/crews': typeof CoachesCrewsRoute
   '/coaches/inventory': typeof CoachesInventoryRoute
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/pace': typeof CoachesPaceRoute
@@ -193,6 +201,7 @@ export interface FileRoutesById {
   '/news': typeof NewsRouteWithChildren
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
+  '/coaches/crews': typeof CoachesCrewsRoute
   '/coaches/inventory': typeof CoachesInventoryRoute
   '/coaches/login': typeof CoachesLoginRoute
   '/coaches/pace': typeof CoachesPaceRoute
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/support'
     | '/coaches/admin'
+    | '/coaches/crews'
     | '/coaches/inventory'
     | '/coaches/login'
     | '/coaches/pace'
@@ -240,6 +250,7 @@ export interface FileRouteTypes {
     | '/join'
     | '/support'
     | '/coaches/admin'
+    | '/coaches/crews'
     | '/coaches/inventory'
     | '/coaches/login'
     | '/coaches/pace'
@@ -262,6 +273,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/support'
     | '/coaches/admin'
+    | '/coaches/crews'
     | '/coaches/inventory'
     | '/coaches/login'
     | '/coaches/pace'
@@ -286,6 +298,7 @@ export interface RootRouteChildren {
   NewsRoute: typeof NewsRouteWithChildren
   SupportRoute: typeof SupportRoute
   CoachesAdminRoute: typeof CoachesAdminRouteWithChildren
+  CoachesCrewsRoute: typeof CoachesCrewsRoute
   CoachesInventoryRoute: typeof CoachesInventoryRoute
   CoachesLoginRoute: typeof CoachesLoginRoute
   CoachesPaceRoute: typeof CoachesPaceRoute
@@ -410,6 +423,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesInventoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/crews': {
+      id: '/coaches/crews'
+      path: '/coaches/crews'
+      fullPath: '/coaches/crews'
+      preLoaderRoute: typeof CoachesCrewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/coaches/admin': {
       id: '/coaches/admin'
       path: '/coaches/admin'
@@ -495,6 +515,7 @@ const rootRouteChildren: RootRouteChildren = {
   NewsRoute: NewsRouteWithChildren,
   SupportRoute: SupportRoute,
   CoachesAdminRoute: CoachesAdminRouteWithChildren,
+  CoachesCrewsRoute: CoachesCrewsRoute,
   CoachesInventoryRoute: CoachesInventoryRoute,
   CoachesLoginRoute: CoachesLoginRoute,
   CoachesPaceRoute: CoachesPaceRoute,
