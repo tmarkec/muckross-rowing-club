@@ -497,8 +497,8 @@ function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: s
 /* ---------- Coach read-only ---------- */
 
 function CoachReadOnlyView({
-  boats, oars, coachGroupNames,
-}: { boats: Boat[]; oars: Oar[]; coachGroupNames: string[] }) {
+  boats, oars, coachGroupNames, allGroupNames,
+}: { boats: Boat[]; oars: Oar[]; coachGroupNames: string[]; allGroupNames: string[] }) {
   const [search, setSearch] = useState("");
 
   const groupSet = useMemo(
@@ -506,6 +506,12 @@ function CoachReadOnlyView({
     [coachGroupNames],
   );
   const matchesGroup = (g: string | null) => !!g && groupSet.has(g.toLowerCase());
+
+  const allGroupSet = useMemo(
+    () => new Set(allGroupNames.map((g) => g.toLowerCase())),
+    [allGroupNames],
+  );
+  const isUnmatched = (g: string | null) => !g || !g.trim() || !allGroupSet.has(g.trim().toLowerCase());
 
   const filter = <T extends { assigned_group: string | null; }>(rows: T[], extra: (r: T) => string) => {
     const q = search.trim().toLowerCase();
@@ -519,6 +525,8 @@ function CoachReadOnlyView({
   const privateBoats = boats.filter((b) => b.is_private);
   const publicOars = oars.filter((o) => !o.is_private);
   const privateOars = oars.filter((o) => o.is_private);
+  const unmatchedOars = publicOars.filter((o) => isUnmatched(o.assigned_group));
+  const matchedPublicOars = publicOars.filter((o) => !isUnmatched(o.assigned_group));
 
   const sortedPublicBoats = useMemo(() => {
     const arr = filter(publicBoats, (b) => `${b.name} ${b.type} ${b.notes ?? ""}`);
@@ -535,7 +543,7 @@ function CoachReadOnlyView({
   }, [publicBoats, search, coachGroupNames]);
 
   const sortedOars = useMemo(() => {
-    const arr = filter(publicOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
+    const arr = filter(matchedPublicOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
     return [...arr].sort((a, b) => {
       const aM = matchesGroup(a.assigned_group) ? 0 : 1;
       const bM = matchesGroup(b.assigned_group) ? 0 : 1;
@@ -543,7 +551,13 @@ function CoachReadOnlyView({
       return a.category.localeCompare(b.category);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [publicOars, search, coachGroupNames]);
+  }, [matchedPublicOars, search, coachGroupNames]);
+
+  const sortedUnmatchedOars = useMemo(() => {
+    const arr = filter(unmatchedOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
+    return [...arr].sort((a, b) => a.category.localeCompare(b.category));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unmatchedOars, search]);
 
   const sortedPrivateOars = useMemo(() => {
     const arr = filter(privateOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
