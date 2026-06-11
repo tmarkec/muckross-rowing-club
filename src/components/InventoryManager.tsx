@@ -61,18 +61,21 @@ export function InventoryManager({ coachGroupNames = [] }: { coachGroupNames?: s
   const { isAdmin } = useAuth();
   const [boats, setBoats] = useState<Boat[]>([]);
   const [oars, setOars] = useState<Oar[]>([]);
+  const [allGroupNames, setAllGroupNames] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [b, o] = await Promise.all([
+    const [b, o, g] = await Promise.all([
       supabase.from("club_boats" as never).select("*").order("type").order("name"),
       supabase.from("club_oars" as never).select("*").order("category"),
+      supabase.from("groups").select("name"),
     ]);
     if (b.error) toast.error(b.error.message);
     if (o.error) toast.error(o.error.message);
     setBoats(((b.data as unknown) as Boat[]) ?? []);
     setOars(((o.data as unknown) as Oar[]) ?? []);
+    setAllGroupNames((((g.data as unknown) as Array<{ name: string }>) ?? []).map((x) => x.name));
     setLoading(false);
   }, []);
 
@@ -86,7 +89,7 @@ export function InventoryManager({ coachGroupNames = [] }: { coachGroupNames?: s
       ) : isAdmin ? (
         <AdminBatchEntry boats={boats} oars={oars} onSaved={load} />
       ) : (
-        <CoachReadOnlyView boats={boats} oars={oars} coachGroupNames={coachGroupNames} />
+        <CoachReadOnlyView boats={boats} oars={oars} coachGroupNames={coachGroupNames} allGroupNames={allGroupNames} />
       )}
     </div>
   );
