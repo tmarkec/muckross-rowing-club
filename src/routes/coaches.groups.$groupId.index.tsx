@@ -96,6 +96,7 @@ function AthletesTab({ groupId }: { groupId: string }) {
   const [editing, setEditing] = useState<Athlete | null>(null);
   const empty = { first_name: "", last_name: "", dob: "", erg_2k: "", notes: "" };
   const [form, setForm] = useState(empty);
+  const [nameError, setNameError] = useState(false);
 
   const load = useCallback(async () => {
     const { data } = await supabase.from("athletes").select("*").eq("group_id", groupId).order("last_name");
