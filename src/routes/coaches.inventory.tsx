@@ -54,7 +54,7 @@ function InventoryPage() {
             </p>
           </div>
           <Button asChild size="sm" variant="outline">
-            <Link to="/coaches">← Dashboard</Link>
+            <Link to="/coaches">← Coaches Corner</Link>
           </Button>
         </div>
         <InventoryManager coachGroupNames={groupNames} />

@@ -55,7 +55,7 @@ function AdminPage() {
             <p className="text-sm text-muted-foreground">Manage coaches, groups and assignments.</p>
           </div>
           <Button asChild size="sm" variant="outline">
-            <Link to="/coaches">← Dashboard</Link>
+            <Link to="/coaches">← Coaches Corner</Link>
           </Button>
         </div>
 

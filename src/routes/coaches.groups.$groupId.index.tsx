@@ -69,7 +69,7 @@ function GroupDetail() {
             <h1 className="font-serif text-3xl">{group.name}</h1>
             {group.description && <p className="text-sm text-muted-foreground mt-1">{group.description}</p>}
           </div>
-          <Button asChild size="sm" variant="outline"><Link to="/coaches">← Dashboard</Link></Button>
+          <Button asChild size="sm" variant="outline"><Link to="/coaches">← Coaches Corner</Link></Button>
         </div>
 
         <Tabs defaultValue="athletes">

@@ -29,13 +29,12 @@ function PacePage() {
       <div className="mx-auto max-w-4xl">
         <div className="mb-6 flex items-center justify-between gap-3 flex-wrap">
           <div>
-            <Link to="/coaches" className="text-xs text-muted-foreground hover:text-primary">← Back to Coaches Corner</Link>
-            <h1 className="font-serif text-3xl mt-1">Pace calculator</h1>
+            <h1 className="font-serif text-3xl">Pace calculator</h1>
             <p className="text-sm text-muted-foreground mt-1">
               Concept2 power-based training zones from any 2 km erg target.
             </p>
           </div>
-          <Button asChild size="sm" variant="outline"><Link to="/coaches">← Back</Link></Button>
+          <Button asChild size="sm" variant="outline"><Link to="/coaches">← Coaches Corner</Link></Button>
         </div>
 
         <CoachesPaceCalculator />
