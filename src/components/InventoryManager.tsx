@@ -723,6 +723,40 @@ function CoachReadOnlyView({
             </AccordionContent>
           </AccordionItem>
         )}
+
+        {sortedUnmatchedOars.length > 0 && (
+          <AccordionItem value="unmatched-oars" className="border-0">
+            <AccordionTrigger className="rounded-lg border bg-muted/40 px-4">
+              Unmatched oars ({sortedUnmatchedOars.reduce((a, o) => a + (o.quantity || 0), 0)})
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-lg border border-t-0 bg-background px-4 pt-3">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="text-left text-xs text-muted-foreground uppercase border-b">
+                    <tr>
+                      <th className="py-2 pr-3">Category</th>
+                      <th className="py-2 pr-3">Qty</th>
+                      <th className="py-2 pr-3">Group</th>
+                      <th className="py-2 pr-3">Brand / notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortedUnmatchedOars.map((o) => (
+                      <tr key={o.id} className="border-b last:border-0">
+                        <td className="py-2 pr-3"><Badge variant="secondary">{o.category}</Badge></td>
+                        <td className="py-2 pr-3 font-medium">×{o.quantity}</td>
+                        <td className="py-2 pr-3">
+                          {o.assigned_group ? <Badge variant="outline">{o.assigned_group}</Badge> : <span className="text-muted-foreground">—</span>}
+                        </td>
+                        <td className="py-2 pr-3 text-muted-foreground">{o.brand_notes || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        )}
       </Accordion>
     </div>
   );
