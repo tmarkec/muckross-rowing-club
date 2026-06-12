@@ -21,11 +21,11 @@ const documents = [
 ];
 
 const people = [
-  { role: "Club President", name: "TBC" },
+  { role: "Club President", name: "Sharon Cooper" },
+  { role: "Club Secretary", name: "Trish McCarthy" },
+  { role: "Safeguarding Officer", name: "Marko Tot" },
   { role: "Club Captain", name: "TBC" },
-  { role: "Secretary", name: "TBC" },
   { role: "Treasurer", name: "TBC" },
-  { role: "Child Welfare Officer", name: "TBC" },
   { role: "Head Coach", name: "TBC" },
 ];
 
