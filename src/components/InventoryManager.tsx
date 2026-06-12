@@ -101,9 +101,12 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
   const oarBreakdown = useMemo(() => {
     const sweep = oars.filter((o) => o.category === "Sweep").reduce((a, o) => a + (o.quantity || 0), 0);
     const scull = oars.filter((o) => o.category === "Scull").reduce((a, o) => a + (o.quantity || 0), 0);
+    const offshore = oars.filter((o) => o.category === "Offshore").reduce((a, o) => a + (o.quantity || 0), 0);
     const priv = oars.filter((o) => o.is_private).reduce((a, o) => a + (o.quantity || 0), 0);
-    return { sweep, scull, priv, total: sweep + scull };
+    return { sweep, scull, offshore, priv, total: sweep + scull + offshore };
   }, [oars]);
+
+  const privateBoats = boats.filter((boat) => boat.is_private).length;
 
   const boatBreakdown = useMemo(() => {
     const map = new Map<BoatType, number>(BOAT_TYPES.map((t) => [t, 0]));
@@ -121,15 +124,20 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
         <div>
-          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Oars ({oarBreakdown.total} total)</div>
+          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+            Oars ({oarBreakdown.total} total · {oarBreakdown.priv} private)
+          </div>
           <div className="flex gap-2 flex-wrap">
             <Badge variant="secondary">{oarBreakdown.scull} Sculling</Badge>
             <Badge variant="secondary">{oarBreakdown.sweep} Sweep</Badge>
+            <Badge variant="secondary">{oarBreakdown.offshore} Offshore</Badge>
             <Badge variant="outline">{oarBreakdown.priv} Private</Badge>
           </div>
         </div>
         <div>
-          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Boats by class ({boats.length} total)</div>
+          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+            Boats by class ({boats.length} total · {privateBoats} private)
+          </div>
           <div className="flex gap-2 flex-wrap">
             <Badge>Total: {boats.length}</Badge>
             {BOAT_TYPES.map((t) => (
@@ -149,6 +157,8 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
   const [draftOars, setDraftOars] = useState<DraftOar[]>([]);
   const [bulkCount, setBulkCount] = useState(1);
   const [bulkType, setBulkType] = useState<BoatType>("1x");
+  const [bulkOarCount, setBulkOarCount] = useState(1);
+  const [bulkOarCategory, setBulkOarCategory] = useState<OarCategory>("Scull");
   const [saving, setSaving] = useState(false);
 
   const addBulkBoats = () => {
@@ -158,8 +168,12 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
     }));
     setDraftBoats((d) => [...d, ...rows]);
   };
-  const addOarRow = () => {
-    setDraftOars((d) => [...d, { key: uid(), category: "Scull", quantity: 1, assigned_group: "", brand_notes: "", is_private: false }]);
+  const addBulkOars = () => {
+    const n = Math.max(1, Math.min(50, Number(bulkOarCount) || 1));
+    const rows: DraftOar[] = Array.from({ length: n }, () => ({
+      key: uid(), category: bulkOarCategory, quantity: 1, assigned_group: "", brand_notes: "", is_private: false,
+    }));
+    setDraftOars((d) => [...d, ...rows]);
   };
 
   const updateBoat = (key: string, patch: Partial<DraftBoat>) =>
@@ -192,7 +206,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
       if (draftOars.length) {
         const payload = draftOars.map((o) => ({
           category: o.category,
-          quantity: Math.max(0, Number(o.quantity) || 0),
+          quantity: 1,
           assigned_group: o.assigned_group.trim() || null,
           brand_notes: o.brand_notes.trim() || null,
           is_private: o.is_private,
@@ -292,18 +306,36 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
       <section className="rounded-lg border bg-background p-5">
         <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
           <h3 className="font-serif text-lg">Bulk add oars</h3>
-          <Button size="sm" variant="secondary" onClick={addOarRow}><Plus className="h-4 w-4 mr-1" />Add row</Button>
+          <div className="flex items-end gap-2 flex-wrap">
+            <div>
+              <Label className="text-xs">Count</Label>
+              <Input type="number" min={1} max={50} className="w-20" value={bulkOarCount}
+                onChange={(e) => setBulkOarCount(Number(e.target.value))} />
+            </div>
+            <div>
+              <Label className="text-xs">Category</Label>
+              <Select value={bulkOarCategory} onValueChange={(value) => setBulkOarCategory(value as OarCategory)}>
+                <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Scull">Scull</SelectItem>
+                  <SelectItem value="Sweep">Sweep</SelectItem>
+                  <SelectItem value="Offshore">Offshore</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button size="sm" variant="secondary" onClick={addBulkOars}><Plus className="h-4 w-4 mr-1" />Add rows</Button>
+          </div>
         </div>
 
         {draftOars.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No draft rows.</p>
+          <p className="text-sm text-muted-foreground">No draft rows. Pick a count + category and click "Add rows".</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="text-left text-xs text-muted-foreground uppercase">
                 <tr>
                   <th className="py-2 pr-2">Category</th>
-                  <th className="py-2 pr-2">Qty</th>
+                  <th className="py-2 pr-2">Oar</th>
                   <th className="py-2 pr-2">Group</th>
                   <th className="py-2 pr-2">Private</th>
                   <th className="py-2 pr-2">Brand / notes</th>
@@ -323,7 +355,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
                         </SelectContent>
                       </Select>
                     </td>
-                    <td className="py-1 pr-2"><Input type="number" min={0} className="w-20" value={o.quantity} onChange={(e) => updateOar(o.key, { quantity: Number(e.target.value) })} /></td>
+                    <td className="py-1 pr-2 text-muted-foreground tabular-nums">#{draftOars.indexOf(o) + 1}</td>
                     <td className="py-1 pr-2"><Input className="w-24" value={o.assigned_group} onChange={(e) => updateOar(o.key, { assigned_group: e.target.value })} placeholder="J18" /></td>
                     <td className="py-1 pr-2"><Checkbox checked={o.is_private} onCheckedChange={(v) => updateOar(o.key, { is_private: !!v })} /></td>
                     <td className="py-1 pr-2"><Input value={o.brand_notes} onChange={(e) => updateOar(o.key, { brand_notes: e.target.value })} placeholder="e.g. Concept2 Skinny" /></td>
