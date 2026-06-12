@@ -101,9 +101,12 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
   const oarBreakdown = useMemo(() => {
     const sweep = oars.filter((o) => o.category === "Sweep").reduce((a, o) => a + (o.quantity || 0), 0);
     const scull = oars.filter((o) => o.category === "Scull").reduce((a, o) => a + (o.quantity || 0), 0);
+    const offshore = oars.filter((o) => o.category === "Offshore").reduce((a, o) => a + (o.quantity || 0), 0);
     const priv = oars.filter((o) => o.is_private).reduce((a, o) => a + (o.quantity || 0), 0);
-    return { sweep, scull, priv, total: sweep + scull };
+    return { sweep, scull, offshore, priv, total: sweep + scull + offshore };
   }, [oars]);
+
+  const privateBoats = boats.filter((boat) => boat.is_private).length;
 
   const boatBreakdown = useMemo(() => {
     const map = new Map<BoatType, number>(BOAT_TYPES.map((t) => [t, 0]));
@@ -121,15 +124,20 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
         <div>
-          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Oars ({oarBreakdown.total} total)</div>
+          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+            Oars ({oarBreakdown.total} total · {oarBreakdown.priv} private)
+          </div>
           <div className="flex gap-2 flex-wrap">
             <Badge variant="secondary">{oarBreakdown.scull} Sculling</Badge>
             <Badge variant="secondary">{oarBreakdown.sweep} Sweep</Badge>
+            <Badge variant="secondary">{oarBreakdown.offshore} Offshore</Badge>
             <Badge variant="outline">{oarBreakdown.priv} Private</Badge>
           </div>
         </div>
         <div>
-          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Boats by class ({boats.length} total)</div>
+          <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+            Boats by class ({boats.length} total · {privateBoats} private)
+          </div>
           <div className="flex gap-2 flex-wrap">
             <Badge>Total: {boats.length}</Badge>
             {BOAT_TYPES.map((t) => (
@@ -149,6 +157,8 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
   const [draftOars, setDraftOars] = useState<DraftOar[]>([]);
   const [bulkCount, setBulkCount] = useState(1);
   const [bulkType, setBulkType] = useState<BoatType>("1x");
+  const [bulkOarCount, setBulkOarCount] = useState(1);
+  const [bulkOarCategory, setBulkOarCategory] = useState<OarCategory>("Scull");
   const [saving, setSaving] = useState(false);
 
   const addBulkBoats = () => {
@@ -158,8 +168,12 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
     }));
     setDraftBoats((d) => [...d, ...rows]);
   };
-  const addOarRow = () => {
-    setDraftOars((d) => [...d, { key: uid(), category: "Scull", quantity: 1, assigned_group: "", brand_notes: "", is_private: false }]);
+  const addBulkOars = () => {
+    const n = Math.max(1, Math.min(50, Number(bulkOarCount) || 1));
+    const rows: DraftOar[] = Array.from({ length: n }, () => ({
+      key: uid(), category: bulkOarCategory, quantity: 1, assigned_group: "", brand_notes: "", is_private: false,
+    }));
+    setDraftOars((d) => [...d, ...rows]);
   };
 
   const updateBoat = (key: string, patch: Partial<DraftBoat>) =>
@@ -192,7 +206,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
       if (draftOars.length) {
         const payload = draftOars.map((o) => ({
           category: o.category,
-          quantity: Math.max(0, Number(o.quantity) || 0),
+          quantity: 1,
           assigned_group: o.assigned_group.trim() || null,
           brand_notes: o.brand_notes.trim() || null,
           is_private: o.is_private,
