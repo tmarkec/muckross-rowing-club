@@ -31,7 +31,7 @@ const people = [
   { role: "Safeguarding Officer", name: "Marko Tot" },
   { role: "Club Captain", name: "TBC" },
   { role: "Treasurer", name: "Trish Munday" },
-  { role: "PRO Officer", name: "Tim O'She" },
+  { role: "PRO Officer", name: "Tim O'Shea" },
 ];
 
 function ClubInfoPage() {
