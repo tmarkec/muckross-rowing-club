@@ -306,18 +306,36 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
       <section className="rounded-lg border bg-background p-5">
         <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
           <h3 className="font-serif text-lg">Bulk add oars</h3>
-          <Button size="sm" variant="secondary" onClick={addOarRow}><Plus className="h-4 w-4 mr-1" />Add row</Button>
+          <div className="flex items-end gap-2 flex-wrap">
+            <div>
+              <Label className="text-xs">Count</Label>
+              <Input type="number" min={1} max={50} className="w-20" value={bulkOarCount}
+                onChange={(e) => setBulkOarCount(Number(e.target.value))} />
+            </div>
+            <div>
+              <Label className="text-xs">Category</Label>
+              <Select value={bulkOarCategory} onValueChange={(value) => setBulkOarCategory(value as OarCategory)}>
+                <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Scull">Scull</SelectItem>
+                  <SelectItem value="Sweep">Sweep</SelectItem>
+                  <SelectItem value="Offshore">Offshore</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button size="sm" variant="secondary" onClick={addBulkOars}><Plus className="h-4 w-4 mr-1" />Add rows</Button>
+          </div>
         </div>
 
         {draftOars.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No draft rows.</p>
+          <p className="text-sm text-muted-foreground">No draft rows. Pick a count + category and click "Add rows".</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="text-left text-xs text-muted-foreground uppercase">
                 <tr>
                   <th className="py-2 pr-2">Category</th>
-                  <th className="py-2 pr-2">Qty</th>
+                  <th className="py-2 pr-2">Oar</th>
                   <th className="py-2 pr-2">Group</th>
                   <th className="py-2 pr-2">Private</th>
                   <th className="py-2 pr-2">Brand / notes</th>
@@ -337,7 +355,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
                         </SelectContent>
                       </Select>
                     </td>
-                    <td className="py-1 pr-2"><Input type="number" min={0} className="w-20" value={o.quantity} onChange={(e) => updateOar(o.key, { quantity: Number(e.target.value) })} /></td>
+                    <td className="py-1 pr-2 text-muted-foreground tabular-nums">#{draftOars.indexOf(o) + 1}</td>
                     <td className="py-1 pr-2"><Input className="w-24" value={o.assigned_group} onChange={(e) => updateOar(o.key, { assigned_group: e.target.value })} placeholder="J18" /></td>
                     <td className="py-1 pr-2"><Checkbox checked={o.is_private} onCheckedChange={(v) => updateOar(o.key, { is_private: !!v })} /></td>
                     <td className="py-1 pr-2"><Input value={o.brand_notes} onChange={(e) => updateOar(o.key, { brand_notes: e.target.value })} placeholder="e.g. Concept2 Skinny" /></td>
