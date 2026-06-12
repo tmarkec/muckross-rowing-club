@@ -22,15 +22,16 @@ const documents = [
   { title: "Anti-Bullying Policy", body: "Our commitment to a respectful, bullying-free environment for all members." },
   { title: "Membership Form & Fees Schedule", body: "Join the club and view current annual membership fees." },
   { title: "Incident / Accident Report Form", body: "Used to log any on-water or boathouse incidents for review." },
+  { title: "Traffic Rules on the Lake", body: "Navigation and traffic rules for safe rowing on the lake." },
 ];
 
 const people = [
   { role: "Club President", name: "Sharon Cooper" },
-  { role: "Club Secretary", name: "Trish McCarthy" },
+  { role: "Club Secretary", name: "Aine O'Sullivan" },
   { role: "Safeguarding Officer", name: "Marko Tot" },
   { role: "Club Captain", name: "TBC" },
-  { role: "Treasurer", name: "Trish McCarthy" },
-  { role: "PRO Officer", name: "Timmy" },
+  { role: "Treasurer", name: "Trish Munday" },
+  { role: "PRO Officer", name: "Tim O'She" },
 ];
 
 function ClubInfoPage() {
