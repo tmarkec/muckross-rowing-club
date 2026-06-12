@@ -18,6 +18,10 @@ const documents = [
   { title: "Code of Behaviour", body: "Standards of conduct expected of members, coaches and supporters." },
   { title: "Child Safeguarding Statement", body: "How we protect and support our junior rowers." },
   { title: "Health & Safety Policy", body: "On-water and boathouse safety procedures." },
+  { title: "Club Constitution", body: "The rules and governance framework that the club operates under." },
+  { title: "Anti-Bullying Policy", body: "Our commitment to a respectful, bullying-free environment for all members." },
+  { title: "Membership Form & Fees Schedule", body: "Join the club and view current annual membership fees." },
+  { title: "Incident / Accident Report Form", body: "Used to log any on-water or boathouse incidents for review." },
 ];
 
 const people = [
@@ -25,8 +29,8 @@ const people = [
   { role: "Club Secretary", name: "Trish McCarthy" },
   { role: "Safeguarding Officer", name: "Marko Tot" },
   { role: "Club Captain", name: "TBC" },
-  { role: "Treasurer", name: "TBC" },
-  { role: "Head Coach", name: "TBC" },
+  { role: "Treasurer", name: "Trish McCarthy" },
+  { role: "PRO Officer", name: "Timmy" },
 ];
 
 function ClubInfoPage() {
