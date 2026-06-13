@@ -1,12 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Anchor, Trophy, Globe2, Users, Sparkles, Heart } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
-import boathouseAsset from "@/assets/boathouse.asset.json";
-import heroFogAsset from "@/assets/hero-eight-fog.jpg.asset.json";
-import juniorSquadAsset from "@/assets/junior-squad.asset.json";
-const boathouse = boathouseAsset.url;
+const boathouse = "/boats-aerial.jpg";
 const community = "/club-community.jpg";
-const juniorSquad = juniorSquadAsset.url;
+const juniorSquad = "/junior-squad.jpg";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -25,7 +22,7 @@ function AboutPage() {
     <SiteLayout>
       <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
         <img
-          src={heroFogAsset.url}
+          src="/hero-eight-fog.jpg"
           alt=""
           aria-hidden="true"
           loading="lazy"

@@ -2,22 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Award, Heart, Users, Waves, Trophy } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL, SITE_URL, SOCIAL } from "@/lib/site";
-import heroLakeAsset from "@/assets/hero-lake.asset.json";
-import rowingActionAsset from "@/assets/rowing-action.asset.json";
-import boathouseAsset from "@/assets/boathouse.asset.json";
-import sunsetEightsAsset from "@/assets/sunset-eights.asset.json";
-import juniorSquadAsset from "@/assets/junior-squad.asset.json";
 // Hero uses the "pulling together" sunset eight — wider composition reads
 // better on desktop than the tighter rowing-action crop.
-const heroImage = sunsetEightsAsset.url;
+const heroImage = "/sunset-eights.jpg";
 const pullingTogether = "/club-community.jpg";
 const boathouse = "/old-boathouse.jpg";
-void juniorSquadAsset;
 const community = "/juniors-boat.jpg";
-// kept for backwards compatibility in JSON-LD references below
-void heroLakeAsset;
-void rowingActionAsset;
-void boathouseAsset;
 
 /** Structured data for the homepage — describes the club to search engines. */
 const homeJsonLd = {

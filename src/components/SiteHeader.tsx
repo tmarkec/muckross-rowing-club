@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import logo from "@/assets/muckross-logo.png";
 import { CLUBFORCE_URL, NAV_ITEMS } from "@/lib/site";
 
 /**
@@ -16,7 +15,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex shrink-0 items-center gap-3" onClick={() => setOpen(false)}>
           <img
-            src={logo}
+            src="/muckross-logo.png"
             alt="Muckross Rowing Club crest"
             className="h-10 w-auto sm:h-11"
           />
