@@ -6,7 +6,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { WeatherWidget } from "@/components/WeatherWidget";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase";
 import {
   Dialog,
   DialogContent,
