@@ -4,19 +4,16 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL, SITE_URL, SOCIAL } from "@/lib/site";
 import heroLakeAsset from "@/assets/hero-lake.asset.json";
 import rowingActionAsset from "@/assets/rowing-action.asset.json";
-import communityAsset from "@/assets/club-community.asset.json";
 import boathouseAsset from "@/assets/boathouse.asset.json";
 import sunsetEightsAsset from "@/assets/sunset-eights.asset.json";
-import juniorsBoatAsset from "@/assets/juniors-boat.asset.json";
 import juniorSquadAsset from "@/assets/junior-squad.asset.json";
-import oldBoathouseAsset from "@/assets/old-boathouse.asset.json";
 // Hero uses the "pulling together" sunset eight — wider composition reads
 // better on desktop than the tighter rowing-action crop.
 const heroImage = sunsetEightsAsset.url;
-const pullingTogether = communityAsset.url;
-const boathouse = oldBoathouseAsset.url;
+const pullingTogether = "/club-community.jpg";
+const boathouse = "/old-boathouse.jpg";
 void juniorSquadAsset;
-const community = juniorsBoatAsset.url;
+const community = "/juniors-boat.jpg";
 // kept for backwards compatibility in JSON-LD references below
 void heroLakeAsset;
 void rowingActionAsset;
