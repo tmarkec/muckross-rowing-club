@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/supabase";
 import { Ruler, Gauge, CalendarRange, Anchor, Users, ShieldCheck, LogOut } from "lucide-react";
 
 type Group = { id: string; name: string; description: string | null };
