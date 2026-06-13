@@ -3,7 +3,6 @@ import { useState, type MouseEvent } from "react";
 import { Mail, MapPin, Send, Navigation } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL } from "@/lib/site";
-import heroAsset from "@/assets/hero-quad.jpg.asset.json";
 
 const LAT = 52.02188586501607;
 const LNG = -9.508196213456204;
@@ -52,7 +51,7 @@ function ContactPage() {
     <SiteLayout>
       <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
         <img
-          src={heroAsset.url}
+          src="/hero-quad.jpg"
           alt=""
           aria-hidden="true"
           loading="lazy"

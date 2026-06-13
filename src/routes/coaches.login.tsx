@@ -6,7 +6,6 @@ import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import logo from "@/assets/muckross-logo.png";
 
 export const Route = createFileRoute("/coaches/login")({
   head: () => ({ meta: [{ title: "Coaches Login — Muckross RC" }, { name: "robots", content: "noindex" }] }),
@@ -37,7 +36,7 @@ function LoginPage() {
     <div className="min-h-screen bg-gradient-navy text-primary-foreground flex items-center justify-center px-4">
       <div className="w-full max-w-md rounded-lg bg-background text-foreground p-8 shadow-elegant">
         <div className="flex items-center gap-3 mb-6">
-          <img src={logo} alt="" className="h-10 w-auto" />
+          <img src="/muckross-logo.png" alt="" className="h-10 w-auto" />
           <div>
             <div className="font-serif text-lg font-bold">Coaches Corner</div>
             <div className="text-xs text-muted-foreground">Muckross Rowing Club</div>

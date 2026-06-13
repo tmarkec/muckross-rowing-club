@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import crossedOars from "@/assets/crossed-oars-black.png";
 
 /**
  * Subtle decorative divider — two crossed oar blades over a thin rule.
@@ -13,7 +12,7 @@ export function OarDivider({ className }: { className?: string }) {
     >
       <span className="h-px flex-1 max-w-[120px] bg-current" />
       <img
-        src={crossedOars}
+        src="/crossed-oars-black.png"
         alt=""
         width={120}
         height={48}

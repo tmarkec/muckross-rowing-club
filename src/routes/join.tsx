@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Sun, Sparkles, Users } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL } from "@/lib/site";
-import heroAsset from "@/assets/hero-ergs.jpg.asset.json";
 
 export const Route = createFileRoute("/join")({
   head: () => ({
@@ -39,7 +38,7 @@ function JoinPage() {
     <SiteLayout>
       <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
         <img
-          src={heroAsset.url}
+          src="/hero-ergs.jpg"
           alt=""
           aria-hidden="true"
           loading="lazy"

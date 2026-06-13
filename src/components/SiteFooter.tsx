@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Mail, MapPin } from "lucide-react";
-import logo from "@/assets/muckross-logo.png";
 import { CLUB_EMAIL, NAV_ITEMS, SOCIAL } from "@/lib/site";
 import { FooterLottoCountdown } from "./FooterLottoCountdown";
 import { WeatherWidget } from "./WeatherWidget";
@@ -19,7 +18,7 @@ export function SiteFooter() {
           <div className="md:col-span-1">
             <div className="flex items-center gap-3">
               <img
-                src={logo}
+                src="/muckross-logo.png"
                 alt="Muckross Rowing Club crest"
                 className="h-12 w-auto"
               />

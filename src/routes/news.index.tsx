@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Calendar as CalendarIcon, MapPin, ExternalLink } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
-import heroAsset from "@/assets/hero-juniors-group.jpg.asset.json";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { WeatherWidget } from "@/components/WeatherWidget";
@@ -97,7 +96,7 @@ function NewsPage() {
     <SiteLayout>
       <section className="relative overflow-hidden bg-gradient-navy py-12 text-primary-foreground sm:py-16">
         <img
-          src={heroAsset.url}
+          src="/hero-juniors-group.jpg"
           alt=""
           aria-hidden="true"
           loading="lazy"
