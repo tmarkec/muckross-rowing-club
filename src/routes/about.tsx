@@ -2,11 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Anchor, Trophy, Globe2, Users, Sparkles, Heart } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import boathouseAsset from "@/assets/boathouse.asset.json";
-import communityAsset from "@/assets/club-community.asset.json";
 import heroFogAsset from "@/assets/hero-eight-fog.jpg.asset.json";
 import juniorSquadAsset from "@/assets/junior-squad.asset.json";
 const boathouse = boathouseAsset.url;
-const community = communityAsset.url;
+const community = "/club-community.jpg";
 const juniorSquad = juniorSquadAsset.url;
 
 export const Route = createFileRoute("/about")({
