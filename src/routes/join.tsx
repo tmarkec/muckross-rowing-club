@@ -19,12 +19,12 @@ const tiers = [
   {
     name: "Junior",
     body: "For young rowers aged 11+ learning the sport. Coached sessions, club kit and a pathway into competitive crews.",
-    bullets: ["Ages 11+", "Water & gym sessions", "Qualified coaches"],
+    bullets: ["Ages 11+", "Coached water, erg & gym sessions"],
   },
   {
     name: "Senior",
     body: "For competitive rowers training year-round and racing for the club at regattas across Ireland.",
-    bullets: ["Year-round training", "Regatta racing", "Boat & equipment access"],
+    bullets: ["Year-round training", "Competitive regatta crews", "Boat & equipment access"],
   },
   {
     name: "Recreational & Masters",
@@ -91,7 +91,7 @@ function JoinPage() {
                 {[
                   "No experience needed",
                   "Coached intro sessions",
-                  "Train alongside your junior",
+                  "Row while your junior trains",
                   "Beginner-friendly boats",
                 ].map((b) => (
                   <li key={b} className="flex items-start gap-2 text-sm text-foreground/80">

@@ -22,9 +22,11 @@ export const Route = createFileRoute("/support")({
 
 const bank = {
   accountName: "Muckross Rowing Club",
-  iban: "IE00 BOFI 0000 0000 0000 00",
-  bic: "BOFIIE2DXXX",
-  bankName: "Bank of Ireland, Killarney",
+  accountType: "Business Current A/C",
+  accountNumber: "89128979",
+  sortCode: "990720",
+  iban: "IE42 IPBS 9907 2089 1289 79",
+  bic: "IPBSIE2D",
 };
 
 function SupportPage() {
@@ -283,9 +285,11 @@ function BankTransferDetails() {
 
   const rows: { label: string; value: string; copyable?: boolean }[] = [
     { label: "Account Name", value: bank.accountName },
+    { label: "Account Type", value: bank.accountType },
+    { label: "Account Number", value: bank.accountNumber, copyable: true },
+    { label: "Sort Code", value: bank.sortCode, copyable: true },
     { label: "IBAN", value: bank.iban, copyable: true },
     { label: "BIC", value: bank.bic, copyable: true },
-    { label: "Bank", value: bank.bankName },
   ];
 
   return (
