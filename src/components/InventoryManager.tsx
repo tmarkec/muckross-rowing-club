@@ -488,19 +488,20 @@ function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: s
   const [group, setGroup] = useState(oar.assigned_group ?? "");
   const [brandNotes, setBrandNotes] = useState(oar.brand_notes ?? "");
   const [isPrivate, setIsPrivate] = useState(oar.is_private);
+  const [needsRepair, setNeedsRepair] = useState(oar.needs_repair);
   const [saving, setSaving] = useState(false);
 
   const dirty =
     category !== oar.category || quantity !== oar.quantity ||
     group !== (oar.assigned_group ?? "") || brandNotes !== (oar.brand_notes ?? "") ||
-    isPrivate !== oar.is_private;
+    isPrivate !== oar.is_private || needsRepair !== oar.needs_repair;
 
   const save = async () => {
     setSaving(true);
     const { error } = await supabase.from("club_oars" as never).update({
       category, quantity: Math.max(0, Number(quantity) || 0),
       assigned_group: group.trim() || null, brand_notes: brandNotes.trim() || null,
-      is_private: isPrivate,
+      is_private: isPrivate, needs_repair: needsRepair,
     } as never).eq("id", oar.id);
     setSaving(false);
     if (error) return toast.error(error.message);
@@ -523,6 +524,7 @@ function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: s
       <td className="py-1 pr-2"><Input type="number" min={0} className="w-20" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} /></td>
       <td className="py-1 pr-2"><Input className="w-24" value={group} onChange={(e) => setGroup(e.target.value)} placeholder="—" /></td>
       <td className="py-1 pr-2"><Checkbox checked={isPrivate} onCheckedChange={(v) => setIsPrivate(!!v)} /></td>
+      <td className="py-1 pr-2"><Checkbox checked={needsRepair} onCheckedChange={(v) => setNeedsRepair(!!v)} /></td>
       <td className="py-1 pr-2"><Input value={brandNotes} onChange={(e) => setBrandNotes(e.target.value)} placeholder="optional" /></td>
       <td className="py-1">
         <div className="flex gap-1">
