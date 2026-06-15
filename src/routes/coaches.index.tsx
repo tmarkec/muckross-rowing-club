@@ -94,7 +94,7 @@ function CoachesHome() {
               className="inline-flex items-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90"
             >
               <Download className="h-4 w-4 shrink-0" />
-              <span>📥 Download Technical Drills Card</span>
+              <span>📥 Download drills card</span>
             </a>
           </div>
           </>
