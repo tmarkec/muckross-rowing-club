@@ -130,8 +130,6 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
           <div className="flex gap-2 flex-wrap">
             <Badge variant="secondary">{oarBreakdown.scull} Sculling</Badge>
             <Badge variant="secondary">{oarBreakdown.sweep} Sweep</Badge>
-            <Badge variant="secondary">{oarBreakdown.offshore} Offshore</Badge>
-            <Badge variant="outline">{oarBreakdown.priv} Private</Badge>
           </div>
         </div>
         <div>
