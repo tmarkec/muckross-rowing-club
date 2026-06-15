@@ -589,12 +589,6 @@ function CoachReadOnlyView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unmatchedOars, search]);
 
-  const sortedPrivateOars = useMemo(() => {
-    const arr = filter(privateOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
-    return [...arr].sort((a, b) => a.category.localeCompare(b.category));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [privateOars, search]);
-
   return (
     <div className="space-y-4">
       <Input placeholder="Search by group, name, brand…" value={search} onChange={(e) => setSearch(e.target.value)} />
