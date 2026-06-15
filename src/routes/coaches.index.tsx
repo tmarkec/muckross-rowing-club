@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
-import { Ruler, Gauge, CalendarRange, Anchor, Users, ShieldCheck, LogOut } from "lucide-react";
+import { Ruler, Gauge, CalendarRange, Anchor, Users, ShieldCheck, LogOut, Download } from "lucide-react";
 
 type Group = { id: string; name: string; description: string | null };
 
@@ -59,7 +59,8 @@ function CoachesHome() {
         </div>
 
         {(isCoach || isAdmin) && (
-          <nav aria-label="Coach tools" className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+          <>
+          <nav aria-label="Coach tools" className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
             {[
               { to: "/coaches/rigging", label: "Rigging", icon: Ruler },
               { to: "/coaches/pace", label: "Pace calculator", icon: Gauge },
@@ -86,6 +87,17 @@ function CoachesHome() {
               </Link>
             )}
           </nav>
+          <div className="mb-8">
+            <a
+              href="/MRC-rowing-drills.pdf"
+              download="MRC-rowing-drills.pdf"
+              className="inline-flex items-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90"
+            >
+              <Download className="h-4 w-4 shrink-0" />
+              <span>📥 Download Technical Drills Card</span>
+            </a>
+          </div>
+          </>
         )}
 
         {!isCoach && !isAdmin ? (
