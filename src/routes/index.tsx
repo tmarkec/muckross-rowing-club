@@ -1,21 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Award, Heart, Users, Waves, Trophy } from "lucide-react";
-import { useRef } from "react";
-import Autoplay from "embla-carousel-autoplay";
+import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { CLUBFORCE_URL, SITE_URL, SOCIAL } from "@/lib/site";
 import rowingMistyDawn from "@/assets/rowing-misty-dawn.jpg.asset.json";
 import rowingSunsetDouble from "@/assets/rowing-sunset-double.jpg.asset.json";
 import rowingEightMist from "@/assets/rowing-eight-mist.jpg.asset.json";
-// Hero uses the "pulling together" sunset eight — wider composition reads
-// better on desktop than the tighter rowing-action crop.
-const heroImage = "/sunset-eights.jpg";
 const pullingTogether = "/club-community.jpg";
 const boathouse = "/old-boathouse.jpg";
 const community = "/juniors-boat.jpg";
 
-const carouselSlides = [
+const heroSlides = [
   { src: rowingMistyDawn.url, alt: "Single sculler at dawn with mist over the lake and mountains" },
   { src: rowingSunsetDouble.url, alt: "Double scull rowing at sunset on Lough Leane" },
   { src: rowingEightMist.url, alt: "Junior eight training in misty conditions on the lake" },
@@ -77,18 +72,28 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const autoplay = useRef(Autoplay({ delay: 4500, stopOnInteraction: false, stopOnMouseEnter: true }));
+  const [activeSlide, setActiveSlide] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setActiveSlide((i) => (i + 1) % heroSlides.length);
+    }, 4500);
+    return () => clearInterval(id);
+  }, []);
   return (
     <SiteLayout>
       {/* Hero */}
       <section className="relative h-[88vh] min-h-[560px] w-full overflow-hidden">
-        <img
-          src={heroImage}
-          alt="Rowing eight gliding across Lough Leane at sunrise with the MacGillycuddy's Reeks in the background"
-          width={1920}
-          height={1280}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        {heroSlides.map((s, i) => (
+          <img
+            key={s.src}
+            src={s.src}
+            alt={s.alt}
+            width={1920}
+            height={1280}
+            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[3000ms] ease-in-out"
+            style={{ opacity: i === activeSlide ? 1 : 0 }}
+          />
+        ))}
         <div className="absolute inset-0 bg-gradient-hero" />
         <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col px-4 pb-16 pt-20 sm:px-6 lg:px-8 lg:pb-20 lg:pt-24">
           <div className="max-w-2xl">
@@ -115,30 +120,6 @@ function HomePage() {
               </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Image carousel */}
-      <section className="bg-background pt-16 sm:pt-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Carousel
-            opts={{ loop: true }}
-            plugins={[autoplay.current]}
-            className="overflow-hidden rounded-2xl shadow-elegant"
-          >
-            <CarouselContent>
-              {carouselSlides.map((s) => (
-                <CarouselItem key={s.src}>
-                  <img
-                    src={s.src}
-                    alt={s.alt}
-                    loading="lazy"
-                    className="aspect-[16/9] w-full object-cover"
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
         </div>
       </section>
 
