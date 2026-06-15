@@ -176,7 +176,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
   const addBulkOars = () => {
     const n = Math.max(1, Math.min(50, Number(bulkOarCount) || 1));
     const rows: DraftOar[] = Array.from({ length: n }, () => ({
-      key: uid(), category: bulkOarCategory, quantity: 1, assigned_group: "", brand_notes: "", is_private: false,
+      key: uid(), category: bulkOarCategory, quantity: 1, assigned_group: "", brand_notes: "", is_private: false, needs_repair: false,
     }));
     setDraftOars((d) => [...d, ...rows]);
   };
@@ -215,6 +215,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
           assigned_group: o.assigned_group.trim() || null,
           brand_notes: o.brand_notes.trim() || null,
           is_private: o.is_private,
+          needs_repair: o.needs_repair,
         }));
         const { error } = await supabase.from("club_oars" as never).insert(payload as never);
         if (error) throw error;
