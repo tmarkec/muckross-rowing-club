@@ -565,10 +565,11 @@ function CoachReadOnlyView({
 
   const publicBoats = boats.filter((b) => !b.is_private);
   const privateBoats = boats.filter((b) => b.is_private);
-  // Exclude private and Offshore oars from the displayed lists (still counted in summary).
-  const visibleOars = oars.filter((o) => !o.is_private && o.category !== "Offshore");
+  // Exclude private, Offshore, and odd/to-be-fixed oars from the main displayed lists.
+  const visibleOars = oars.filter((o) => !o.is_private && o.category !== "Offshore" && !o.needs_repair);
   const unmatchedOars = visibleOars.filter((o) => isUnmatched(o.assigned_group));
   const matchedPublicOars = visibleOars.filter((o) => !isUnmatched(o.assigned_group));
+  const oddOars = oars.filter((o) => o.needs_repair);
 
   const sortedPublicBoats = useMemo(() => {
     const arr = filter(publicBoats, (b) => `${b.name} ${b.type} ${b.notes ?? ""}`);
@@ -600,6 +601,12 @@ function CoachReadOnlyView({
     return [...arr].sort((a, b) => a.category.localeCompare(b.category));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unmatchedOars, search]);
+
+  const sortedOddOars = useMemo(() => {
+    const arr = filter(oddOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
+    return [...arr].sort((a, b) => a.category.localeCompare(b.category));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [oddOars, search]);
 
   return (
     <div className="space-y-4">
