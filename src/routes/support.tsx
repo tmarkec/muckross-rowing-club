@@ -1,12 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, CreditCard, Users, HandHeart, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake, Building2 } from "lucide-react";
+import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Users, HandHeart, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake, Building2 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 import { CLUBFORCE_URL as LOTTO_URL } from "@/lib/site";
-
-// TODO: Replace with real Stripe / iDonate.ie / GoFundMe link when payments are set up.
-const DONATE_URL = "#donate-bank";
 
 export const Route = createFileRoute("/support")({
   head: () => ({
@@ -22,8 +19,6 @@ export const Route = createFileRoute("/support")({
 
 const bank = {
   accountName: "Muckross Rowing Club",
-  accountType: "Business Current A/C",
-  accountNumber: "89128979",
   sortCode: "990720",
   iban: "IE42 IPBS 9907 2089 1289 79",
   bic: "IPBSIE2D",
@@ -117,21 +112,6 @@ function SupportPage() {
               <p className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base">
                 Donations of any size go directly toward boats, equipment and keeping
                 the club running for the next generation.
-              </p>
-            </div>
-
-            {/* Primary CTA — card / online donation */}
-            <div className="mt-6 flex flex-col items-center">
-              <a
-                href={DONATE_URL}
-                className="group inline-flex w-full max-w-sm items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-elegant transition-all hover:scale-[1.02] hover:bg-primary/90"
-              >
-                <CreditCard className="h-4 w-4" />
-                Donate by Card
-                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-              </a>
-              <p className="mt-2 text-xs text-muted-foreground">
-                Secure online payment · Apple Pay · Google Pay
               </p>
             </div>
 
