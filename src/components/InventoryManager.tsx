@@ -344,6 +344,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
                   <th className="py-2 pr-2">Oar</th>
                   <th className="py-2 pr-2">Group</th>
                   <th className="py-2 pr-2">Private</th>
+                  <th className="py-2 pr-2">Odd</th>
                   <th className="py-2 pr-2">Brand / notes</th>
                   <th></th>
                 </tr>
@@ -364,6 +365,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
                     <td className="py-1 pr-2 text-muted-foreground tabular-nums">#{draftOars.indexOf(o) + 1}</td>
                     <td className="py-1 pr-2"><Input className="w-24" value={o.assigned_group} onChange={(e) => updateOar(o.key, { assigned_group: e.target.value })} placeholder="J18" /></td>
                     <td className="py-1 pr-2"><Checkbox checked={o.is_private} onCheckedChange={(v) => updateOar(o.key, { is_private: !!v })} /></td>
+                    <td className="py-1 pr-2"><Checkbox checked={o.needs_repair} onCheckedChange={(v) => updateOar(o.key, { needs_repair: !!v })} /></td>
                     <td className="py-1 pr-2"><Input value={o.brand_notes} onChange={(e) => updateOar(o.key, { brand_notes: e.target.value })} placeholder="e.g. Concept2 Skinny" /></td>
                     <td className="py-1"><Button size="icon" variant="ghost" onClick={() => removeOar(o.key)}><Trash2 className="h-4 w-4" /></Button></td>
                   </tr>
