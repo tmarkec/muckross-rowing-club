@@ -36,6 +36,7 @@ type Oar = {
   assigned_group: string | null;
   brand_notes: string | null;
   is_private: boolean;
+  needs_repair: boolean;
 };
 
 type DraftBoat = {
@@ -53,6 +54,7 @@ type DraftOar = {
   assigned_group: string;
   brand_notes: string;
   is_private: boolean;
+  needs_repair: boolean;
 };
 
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -99,11 +101,13 @@ export function InventoryManager({ coachGroupNames = [] }: { coachGroupNames?: s
 
 function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
   const oarBreakdown = useMemo(() => {
-    const sweep = oars.filter((o) => o.category === "Sweep").reduce((a, o) => a + (o.quantity || 0), 0);
-    const scull = oars.filter((o) => o.category === "Scull").reduce((a, o) => a + (o.quantity || 0), 0);
-    const offshore = oars.filter((o) => o.category === "Offshore").reduce((a, o) => a + (o.quantity || 0), 0);
-    const priv = oars.filter((o) => o.is_private).reduce((a, o) => a + (o.quantity || 0), 0);
-    return { sweep, scull, offshore, priv, total: sweep + scull + offshore };
+    const usable = oars.filter((o) => !o.needs_repair);
+    const sweep = usable.filter((o) => o.category === "Sweep").reduce((a, o) => a + (o.quantity || 0), 0);
+    const scull = usable.filter((o) => o.category === "Scull").reduce((a, o) => a + (o.quantity || 0), 0);
+    const offshore = usable.filter((o) => o.category === "Offshore").reduce((a, o) => a + (o.quantity || 0), 0);
+    const priv = usable.filter((o) => o.is_private).reduce((a, o) => a + (o.quantity || 0), 0);
+    const odd = oars.filter((o) => o.needs_repair).reduce((a, o) => a + (o.quantity || 0), 0);
+    return { sweep, scull, offshore, priv, odd, total: sweep + scull + offshore };
   }, [oars]);
 
   const privateBoats = boats.filter((boat) => boat.is_private).length;
@@ -130,6 +134,9 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
           <div className="flex gap-2 flex-wrap">
             <Badge variant="secondary">{oarBreakdown.scull} Sculling</Badge>
             <Badge variant="secondary">{oarBreakdown.sweep} Sweep</Badge>
+            {oarBreakdown.odd > 0 && (
+              <Badge variant="destructive">{oarBreakdown.odd} Odd / to fix</Badge>
+            )}
           </div>
         </div>
         <div>
