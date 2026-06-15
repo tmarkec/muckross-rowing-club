@@ -160,10 +160,13 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
 function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[]; onSaved: () => void | Promise<void> }) {
   const [draftBoats, setDraftBoats] = useState<DraftBoat[]>([]);
   const [draftOars, setDraftOars] = useState<DraftOar[]>([]);
+  const [draftOddOars, setDraftOddOars] = useState<DraftOar[]>([]);
   const [bulkCount, setBulkCount] = useState(1);
   const [bulkType, setBulkType] = useState<BoatType>("1x");
   const [bulkOarCount, setBulkOarCount] = useState(1);
   const [bulkOarCategory, setBulkOarCategory] = useState<OarCategory>("Scull");
+  const [bulkOddOarCount, setBulkOddOarCount] = useState(1);
+  const [bulkOddOarCategory, setBulkOddOarCategory] = useState<OarCategory>("Scull");
   const [saving, setSaving] = useState(false);
 
   const addBulkBoats = () => {
@@ -180,16 +183,26 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
     }));
     setDraftOars((d) => [...d, ...rows]);
   };
+  const addBulkOddOars = () => {
+    const n = Math.max(1, Math.min(50, Number(bulkOddOarCount) || 1));
+    const rows: DraftOar[] = Array.from({ length: n }, () => ({
+      key: uid(), category: bulkOddOarCategory, quantity: 1, assigned_group: "", brand_notes: "", is_private: false, needs_repair: true,
+    }));
+    setDraftOddOars((d) => [...d, ...rows]);
+  };
 
   const updateBoat = (key: string, patch: Partial<DraftBoat>) =>
     setDraftBoats((d) => d.map((r) => (r.key === key ? { ...r, ...patch } : r)));
   const updateOar = (key: string, patch: Partial<DraftOar>) =>
     setDraftOars((d) => d.map((r) => (r.key === key ? { ...r, ...patch } : r)));
+  const updateOddOar = (key: string, patch: Partial<DraftOar>) =>
+    setDraftOddOars((d) => d.map((r) => (r.key === key ? { ...r, ...patch } : r)));
 
   const removeBoat = (key: string) => setDraftBoats((d) => d.filter((r) => r.key !== key));
   const removeOar = (key: string) => setDraftOars((d) => d.filter((r) => r.key !== key));
+  const removeOddOar = (key: string) => setDraftOddOars((d) => d.filter((r) => r.key !== key));
 
-  const isDirty = draftBoats.length > 0 || draftOars.length > 0;
+  const isDirty = draftBoats.length > 0 || draftOars.length > 0 || draftOddOars.length > 0;
 
   const saveAll = async () => {
     if (!isDirty) return;
@@ -215,7 +228,19 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
           assigned_group: o.assigned_group.trim() || null,
           brand_notes: o.brand_notes.trim() || null,
           is_private: o.is_private,
-          needs_repair: o.needs_repair,
+          needs_repair: false,
+        }));
+        const { error } = await supabase.from("club_oars" as never).insert(payload as never);
+        if (error) throw error;
+      }
+      if (draftOddOars.length) {
+        const payload = draftOddOars.map((o) => ({
+          category: o.category,
+          quantity: Math.max(1, Number(o.quantity) || 1),
+          assigned_group: o.assigned_group.trim() || null,
+          brand_notes: o.brand_notes.trim() || null,
+          is_private: o.is_private,
+          needs_repair: true,
         }));
         const { error } = await supabase.from("club_oars" as never).insert(payload as never);
         if (error) throw error;
@@ -223,6 +248,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
       toast.success("Boats & oars saved");
       setDraftBoats([]);
       setDraftOars([]);
+      setDraftOddOars([]);
       await onSaved();
     } catch (e) {
       toast.error((e as Error).message);
