@@ -1,13 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Award, Heart, Users, Waves, Trophy } from "lucide-react";
+import { useRef } from "react";
+import Autoplay from "embla-carousel-autoplay";
 import { SiteLayout } from "@/components/SiteLayout";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { CLUBFORCE_URL, SITE_URL, SOCIAL } from "@/lib/site";
+import rowingMistyDawn from "@/assets/rowing-misty-dawn.jpg.asset.json";
+import rowingSunsetDouble from "@/assets/rowing-sunset-double.jpg.asset.json";
+import rowingEightMist from "@/assets/rowing-eight-mist.jpg.asset.json";
 // Hero uses the "pulling together" sunset eight — wider composition reads
 // better on desktop than the tighter rowing-action crop.
 const heroImage = "/sunset-eights.jpg";
 const pullingTogether = "/club-community.jpg";
 const boathouse = "/old-boathouse.jpg";
 const community = "/juniors-boat.jpg";
+
+const carouselSlides = [
+  { src: rowingMistyDawn.url, alt: "Single sculler at dawn with mist over the lake and mountains" },
+  { src: rowingSunsetDouble.url, alt: "Double scull rowing at sunset on Lough Leane" },
+  { src: rowingEightMist.url, alt: "Junior eight training in misty conditions on the lake" },
+];
 
 /** Structured data for the homepage — describes the club to search engines. */
 const homeJsonLd = {
