@@ -36,6 +36,7 @@ type Oar = {
   assigned_group: string | null;
   brand_notes: string | null;
   is_private: boolean;
+  needs_repair: boolean;
 };
 
 type DraftBoat = {
@@ -53,6 +54,7 @@ type DraftOar = {
   assigned_group: string;
   brand_notes: string;
   is_private: boolean;
+  needs_repair: boolean;
 };
 
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -99,11 +101,13 @@ export function InventoryManager({ coachGroupNames = [] }: { coachGroupNames?: s
 
 function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
   const oarBreakdown = useMemo(() => {
-    const sweep = oars.filter((o) => o.category === "Sweep").reduce((a, o) => a + (o.quantity || 0), 0);
-    const scull = oars.filter((o) => o.category === "Scull").reduce((a, o) => a + (o.quantity || 0), 0);
-    const offshore = oars.filter((o) => o.category === "Offshore").reduce((a, o) => a + (o.quantity || 0), 0);
-    const priv = oars.filter((o) => o.is_private).reduce((a, o) => a + (o.quantity || 0), 0);
-    return { sweep, scull, offshore, priv, total: sweep + scull + offshore };
+    const usable = oars.filter((o) => !o.needs_repair);
+    const sweep = usable.filter((o) => o.category === "Sweep").reduce((a, o) => a + (o.quantity || 0), 0);
+    const scull = usable.filter((o) => o.category === "Scull").reduce((a, o) => a + (o.quantity || 0), 0);
+    const offshore = usable.filter((o) => o.category === "Offshore").reduce((a, o) => a + (o.quantity || 0), 0);
+    const priv = usable.filter((o) => o.is_private).reduce((a, o) => a + (o.quantity || 0), 0);
+    const odd = oars.filter((o) => o.needs_repair).reduce((a, o) => a + (o.quantity || 0), 0);
+    return { sweep, scull, offshore, priv, odd, total: sweep + scull + offshore };
   }, [oars]);
 
   const privateBoats = boats.filter((boat) => boat.is_private).length;
@@ -130,6 +134,9 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
           <div className="flex gap-2 flex-wrap">
             <Badge variant="secondary">{oarBreakdown.scull} Sculling</Badge>
             <Badge variant="secondary">{oarBreakdown.sweep} Sweep</Badge>
+            {oarBreakdown.odd > 0 && (
+              <Badge variant="destructive">{oarBreakdown.odd} Odd / to fix</Badge>
+            )}
           </div>
         </div>
         <div>
@@ -169,7 +176,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
   const addBulkOars = () => {
     const n = Math.max(1, Math.min(50, Number(bulkOarCount) || 1));
     const rows: DraftOar[] = Array.from({ length: n }, () => ({
-      key: uid(), category: bulkOarCategory, quantity: 1, assigned_group: "", brand_notes: "", is_private: false,
+      key: uid(), category: bulkOarCategory, quantity: 1, assigned_group: "", brand_notes: "", is_private: false, needs_repair: false,
     }));
     setDraftOars((d) => [...d, ...rows]);
   };
@@ -208,6 +215,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
           assigned_group: o.assigned_group.trim() || null,
           brand_notes: o.brand_notes.trim() || null,
           is_private: o.is_private,
+          needs_repair: o.needs_repair,
         }));
         const { error } = await supabase.from("club_oars" as never).insert(payload as never);
         if (error) throw error;
@@ -336,6 +344,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
                   <th className="py-2 pr-2">Oar</th>
                   <th className="py-2 pr-2">Group</th>
                   <th className="py-2 pr-2">Private</th>
+                  <th className="py-2 pr-2">Odd</th>
                   <th className="py-2 pr-2">Brand / notes</th>
                   <th></th>
                 </tr>
@@ -356,6 +365,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
                     <td className="py-1 pr-2 text-muted-foreground tabular-nums">#{draftOars.indexOf(o) + 1}</td>
                     <td className="py-1 pr-2"><Input className="w-24" value={o.assigned_group} onChange={(e) => updateOar(o.key, { assigned_group: e.target.value })} placeholder="J18" /></td>
                     <td className="py-1 pr-2"><Checkbox checked={o.is_private} onCheckedChange={(v) => updateOar(o.key, { is_private: !!v })} /></td>
+                    <td className="py-1 pr-2"><Checkbox checked={o.needs_repair} onCheckedChange={(v) => updateOar(o.key, { needs_repair: !!v })} /></td>
                     <td className="py-1 pr-2"><Input value={o.brand_notes} onChange={(e) => updateOar(o.key, { brand_notes: e.target.value })} placeholder="e.g. Concept2 Skinny" /></td>
                     <td className="py-1"><Button size="icon" variant="ghost" onClick={() => removeOar(o.key)}><Trash2 className="h-4 w-4" /></Button></td>
                   </tr>
@@ -462,7 +472,7 @@ function ExistingOarsTable({ oars, onDelete, onSaved }: { oars: Oar[]; onDelete:
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead className="text-left text-xs text-muted-foreground uppercase">
-          <tr><th className="py-2 pr-2">Category</th><th className="py-2 pr-2">Qty</th><th className="py-2 pr-2">Group</th><th className="py-2 pr-2">Private</th><th className="py-2 pr-2">Brand / notes</th><th></th></tr>
+          <tr><th className="py-2 pr-2">Category</th><th className="py-2 pr-2">Qty</th><th className="py-2 pr-2">Group</th><th className="py-2 pr-2">Private</th><th className="py-2 pr-2">Odd</th><th className="py-2 pr-2">Brand / notes</th><th></th></tr>
         </thead>
         <tbody>
           {oars.map((o) => <EditableOarRow key={o.id} oar={o} onDelete={onDelete} onSaved={onSaved} />)}
@@ -478,19 +488,20 @@ function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: s
   const [group, setGroup] = useState(oar.assigned_group ?? "");
   const [brandNotes, setBrandNotes] = useState(oar.brand_notes ?? "");
   const [isPrivate, setIsPrivate] = useState(oar.is_private);
+  const [needsRepair, setNeedsRepair] = useState(oar.needs_repair);
   const [saving, setSaving] = useState(false);
 
   const dirty =
     category !== oar.category || quantity !== oar.quantity ||
     group !== (oar.assigned_group ?? "") || brandNotes !== (oar.brand_notes ?? "") ||
-    isPrivate !== oar.is_private;
+    isPrivate !== oar.is_private || needsRepair !== oar.needs_repair;
 
   const save = async () => {
     setSaving(true);
     const { error } = await supabase.from("club_oars" as never).update({
       category, quantity: Math.max(0, Number(quantity) || 0),
       assigned_group: group.trim() || null, brand_notes: brandNotes.trim() || null,
-      is_private: isPrivate,
+      is_private: isPrivate, needs_repair: needsRepair,
     } as never).eq("id", oar.id);
     setSaving(false);
     if (error) return toast.error(error.message);
@@ -513,6 +524,7 @@ function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: s
       <td className="py-1 pr-2"><Input type="number" min={0} className="w-20" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} /></td>
       <td className="py-1 pr-2"><Input className="w-24" value={group} onChange={(e) => setGroup(e.target.value)} placeholder="—" /></td>
       <td className="py-1 pr-2"><Checkbox checked={isPrivate} onCheckedChange={(v) => setIsPrivate(!!v)} /></td>
+      <td className="py-1 pr-2"><Checkbox checked={needsRepair} onCheckedChange={(v) => setNeedsRepair(!!v)} /></td>
       <td className="py-1 pr-2"><Input value={brandNotes} onChange={(e) => setBrandNotes(e.target.value)} placeholder="optional" /></td>
       <td className="py-1">
         <div className="flex gap-1">
@@ -553,10 +565,11 @@ function CoachReadOnlyView({
 
   const publicBoats = boats.filter((b) => !b.is_private);
   const privateBoats = boats.filter((b) => b.is_private);
-  // Exclude private and Offshore oars from the displayed lists (still counted in summary).
-  const visibleOars = oars.filter((o) => !o.is_private && o.category !== "Offshore");
+  // Exclude private, Offshore, and odd/to-be-fixed oars from the main displayed lists.
+  const visibleOars = oars.filter((o) => !o.is_private && o.category !== "Offshore" && !o.needs_repair);
   const unmatchedOars = visibleOars.filter((o) => isUnmatched(o.assigned_group));
   const matchedPublicOars = visibleOars.filter((o) => !isUnmatched(o.assigned_group));
+  const oddOars = oars.filter((o) => o.needs_repair);
 
   const sortedPublicBoats = useMemo(() => {
     const arr = filter(publicBoats, (b) => `${b.name} ${b.type} ${b.notes ?? ""}`);
@@ -588,6 +601,12 @@ function CoachReadOnlyView({
     return [...arr].sort((a, b) => a.category.localeCompare(b.category));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unmatchedOars, search]);
+
+  const sortedOddOars = useMemo(() => {
+    const arr = filter(oddOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
+    return [...arr].sort((a, b) => a.category.localeCompare(b.category));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [oddOars, search]);
 
   return (
     <div className="space-y-4">
@@ -733,6 +752,46 @@ function CoachReadOnlyView({
                   <tbody>
                     {sortedUnmatchedOars.map((o) => (
                       <tr key={o.id} className="border-b last:border-0">
+                        <td className="py-2 pr-3"><Badge variant="secondary">{o.category}</Badge></td>
+                        <td className="py-2 pr-3 font-medium">×{o.quantity}</td>
+                        <td className="py-2 pr-3">
+                          {o.assigned_group ? <Badge variant="outline">{o.assigned_group}</Badge> : <span className="text-muted-foreground">—</span>}
+                        </td>
+                        <td className="py-2 pr-3 text-muted-foreground">{o.brand_notes || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        )}
+
+        {sortedOddOars.length > 0 && (
+          <AccordionItem value="odd-oars" className="border-0">
+            <AccordionTrigger className="rounded-lg border bg-destructive/10 px-4">
+              <span className="flex items-center gap-2">
+                <Badge variant="destructive">Odd</Badge>
+                Odd oars / To be fixed ({sortedOddOars.reduce((a, o) => a + (o.quantity || 0), 0)})
+                <span className="text-xs text-muted-foreground font-normal">— not counted in totals</span>
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="rounded-b-lg border border-t-0 bg-background px-4 pt-3">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="text-left text-xs text-muted-foreground uppercase border-b">
+                    <tr>
+                      <th className="py-2 pr-3"></th>
+                      <th className="py-2 pr-3">Category</th>
+                      <th className="py-2 pr-3">Qty</th>
+                      <th className="py-2 pr-3">Group</th>
+                      <th className="py-2 pr-3">Brand / notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sortedOddOars.map((o) => (
+                      <tr key={o.id} className="border-b last:border-0">
+                        <td className="py-2 pr-3"><Badge variant="destructive">Odd</Badge></td>
                         <td className="py-2 pr-3"><Badge variant="secondary">{o.category}</Badge></td>
                         <td className="py-2 pr-3 font-medium">×{o.quantity}</td>
                         <td className="py-2 pr-3">

@@ -1,0 +1,1 @@
+ALTER TABLE public.club_oars ADD COLUMN IF NOT EXISTS needs_repair boolean NOT NULL DEFAULT false;

@@ -146,6 +146,7 @@ export type Database = {
           created_at: string
           id: string
           is_private: boolean
+          needs_repair: boolean
           quantity: number
           updated_at: string
         }
@@ -156,6 +157,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_private?: boolean
+          needs_repair?: boolean
           quantity?: number
           updated_at?: string
         }
@@ -166,6 +168,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_private?: boolean
+          needs_repair?: boolean
           quantity?: number
           updated_at?: string
         }
