@@ -553,10 +553,10 @@ function CoachReadOnlyView({
 
   const publicBoats = boats.filter((b) => !b.is_private);
   const privateBoats = boats.filter((b) => b.is_private);
-  const publicOars = oars.filter((o) => !o.is_private);
-  const privateOars = oars.filter((o) => o.is_private);
-  const unmatchedOars = publicOars.filter((o) => isUnmatched(o.assigned_group));
-  const matchedPublicOars = publicOars.filter((o) => !isUnmatched(o.assigned_group));
+  // Exclude private and Offshore oars from the displayed lists (still counted in summary).
+  const visibleOars = oars.filter((o) => !o.is_private && o.category !== "Offshore");
+  const unmatchedOars = visibleOars.filter((o) => isUnmatched(o.assigned_group));
+  const matchedPublicOars = visibleOars.filter((o) => !isUnmatched(o.assigned_group));
 
   const sortedPublicBoats = useMemo(() => {
     const arr = filter(publicBoats, (b) => `${b.name} ${b.type} ${b.notes ?? ""}`);
