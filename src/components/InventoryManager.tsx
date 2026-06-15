@@ -553,10 +553,10 @@ function CoachReadOnlyView({
 
   const publicBoats = boats.filter((b) => !b.is_private);
   const privateBoats = boats.filter((b) => b.is_private);
-  const publicOars = oars.filter((o) => !o.is_private);
-  const privateOars = oars.filter((o) => o.is_private);
-  const unmatchedOars = publicOars.filter((o) => isUnmatched(o.assigned_group));
-  const matchedPublicOars = publicOars.filter((o) => !isUnmatched(o.assigned_group));
+  // Exclude private and Offshore oars from the displayed lists (still counted in summary).
+  const visibleOars = oars.filter((o) => !o.is_private && o.category !== "Offshore");
+  const unmatchedOars = visibleOars.filter((o) => isUnmatched(o.assigned_group));
+  const matchedPublicOars = visibleOars.filter((o) => !isUnmatched(o.assigned_group));
 
   const sortedPublicBoats = useMemo(() => {
     const arr = filter(publicBoats, (b) => `${b.name} ${b.type} ${b.notes ?? ""}`);
@@ -588,12 +588,6 @@ function CoachReadOnlyView({
     return [...arr].sort((a, b) => a.category.localeCompare(b.category));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unmatchedOars, search]);
-
-  const sortedPrivateOars = useMemo(() => {
-    const arr = filter(privateOars, (o) => `${o.category} ${o.brand_notes ?? ""}`);
-    return [...arr].sort((a, b) => a.category.localeCompare(b.category));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [privateOars, search]);
 
   return (
     <div className="space-y-4">
@@ -719,40 +713,6 @@ function CoachReadOnlyView({
             )}
           </AccordionContent>
         </AccordionItem>
-
-        {sortedPrivateOars.length > 0 && (
-          <AccordionItem value="private-oars" className="border-0">
-            <AccordionTrigger className="rounded-lg border bg-muted/40 px-4">
-              Privately owned oars ({sortedPrivateOars.reduce((a, o) => a + (o.quantity || 0), 0)})
-            </AccordionTrigger>
-            <AccordionContent className="rounded-b-lg border border-t-0 bg-background px-4 pt-3">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="text-left text-xs text-muted-foreground uppercase border-b">
-                    <tr>
-                      <th className="py-2 pr-3">Category</th>
-                      <th className="py-2 pr-3">Qty</th>
-                      <th className="py-2 pr-3">Group</th>
-                      <th className="py-2 pr-3">Brand / notes</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sortedPrivateOars.map((o) => (
-                      <tr key={o.id} className="border-b last:border-0">
-                        <td className="py-2 pr-3"><Badge variant="secondary">{o.category}</Badge></td>
-                        <td className="py-2 pr-3 font-medium">×{o.quantity}</td>
-                        <td className="py-2 pr-3">
-                          {o.assigned_group ? <Badge variant="outline">{o.assigned_group}</Badge> : <span className="text-muted-foreground">—</span>}
-                        </td>
-                        <td className="py-2 pr-3 text-muted-foreground">{o.brand_notes || "—"}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        )}
 
         {sortedUnmatchedOars.length > 0 && (
           <AccordionItem value="unmatched-oars" className="border-0">
