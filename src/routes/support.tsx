@@ -285,9 +285,11 @@ function BankTransferDetails() {
 
   const rows: { label: string; value: string; copyable?: boolean }[] = [
     { label: "Account Name", value: bank.accountName },
+    { label: "Account Type", value: bank.accountType },
+    { label: "Account Number", value: bank.accountNumber, copyable: true },
+    { label: "Sort Code", value: bank.sortCode, copyable: true },
     { label: "IBAN", value: bank.iban, copyable: true },
     { label: "BIC", value: bank.bic, copyable: true },
-    { label: "Bank", value: bank.bankName },
   ];
 
   return (
