@@ -865,7 +865,7 @@ function CoachReadOnlyView({
                   <thead className="text-left text-xs text-muted-foreground uppercase border-b">
                     <tr>
                       <th className="py-2 pr-3">Category</th>
-                      <th className="py-2 pr-3">Qty</th>
+                      <th className="py-2 pr-3">Sets</th>
                       <th className="py-2 pr-3">Group</th>
                       <th className="py-2 pr-3">Brand / notes</th>
                     </tr>
