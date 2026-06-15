@@ -160,10 +160,13 @@ function SummaryPanel({ boats, oars }: { boats: Boat[]; oars: Oar[] }) {
 function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[]; onSaved: () => void | Promise<void> }) {
   const [draftBoats, setDraftBoats] = useState<DraftBoat[]>([]);
   const [draftOars, setDraftOars] = useState<DraftOar[]>([]);
+  const [draftOddOars, setDraftOddOars] = useState<DraftOar[]>([]);
   const [bulkCount, setBulkCount] = useState(1);
   const [bulkType, setBulkType] = useState<BoatType>("1x");
   const [bulkOarCount, setBulkOarCount] = useState(1);
   const [bulkOarCategory, setBulkOarCategory] = useState<OarCategory>("Scull");
+  const [bulkOddOarCount, setBulkOddOarCount] = useState(1);
+  const [bulkOddOarCategory, setBulkOddOarCategory] = useState<OarCategory>("Scull");
   const [saving, setSaving] = useState(false);
 
   const addBulkBoats = () => {
@@ -180,16 +183,26 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
     }));
     setDraftOars((d) => [...d, ...rows]);
   };
+  const addBulkOddOars = () => {
+    const n = Math.max(1, Math.min(50, Number(bulkOddOarCount) || 1));
+    const rows: DraftOar[] = Array.from({ length: n }, () => ({
+      key: uid(), category: bulkOddOarCategory, quantity: 1, assigned_group: "", brand_notes: "", is_private: false, needs_repair: true,
+    }));
+    setDraftOddOars((d) => [...d, ...rows]);
+  };
 
   const updateBoat = (key: string, patch: Partial<DraftBoat>) =>
     setDraftBoats((d) => d.map((r) => (r.key === key ? { ...r, ...patch } : r)));
   const updateOar = (key: string, patch: Partial<DraftOar>) =>
     setDraftOars((d) => d.map((r) => (r.key === key ? { ...r, ...patch } : r)));
+  const updateOddOar = (key: string, patch: Partial<DraftOar>) =>
+    setDraftOddOars((d) => d.map((r) => (r.key === key ? { ...r, ...patch } : r)));
 
   const removeBoat = (key: string) => setDraftBoats((d) => d.filter((r) => r.key !== key));
   const removeOar = (key: string) => setDraftOars((d) => d.filter((r) => r.key !== key));
+  const removeOddOar = (key: string) => setDraftOddOars((d) => d.filter((r) => r.key !== key));
 
-  const isDirty = draftBoats.length > 0 || draftOars.length > 0;
+  const isDirty = draftBoats.length > 0 || draftOars.length > 0 || draftOddOars.length > 0;
 
   const saveAll = async () => {
     if (!isDirty) return;
@@ -215,7 +228,19 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
           assigned_group: o.assigned_group.trim() || null,
           brand_notes: o.brand_notes.trim() || null,
           is_private: o.is_private,
-          needs_repair: o.needs_repair,
+          needs_repair: false,
+        }));
+        const { error } = await supabase.from("club_oars" as never).insert(payload as never);
+        if (error) throw error;
+      }
+      if (draftOddOars.length) {
+        const payload = draftOddOars.map((o) => ({
+          category: o.category,
+          quantity: Math.max(1, Number(o.quantity) || 1),
+          assigned_group: o.assigned_group.trim() || null,
+          brand_notes: o.brand_notes.trim() || null,
+          is_private: o.is_private,
+          needs_repair: true,
         }));
         const { error } = await supabase.from("club_oars" as never).insert(payload as never);
         if (error) throw error;
@@ -223,6 +248,7 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
       toast.success("Boats & oars saved");
       setDraftBoats([]);
       setDraftOars([]);
+      setDraftOddOars([]);
       await onSaved();
     } catch (e) {
       toast.error((e as Error).message);
@@ -344,7 +370,6 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
                   <th className="py-2 pr-2">Oar</th>
                   <th className="py-2 pr-2">Group</th>
                   <th className="py-2 pr-2">Private</th>
-                  <th className="py-2 pr-2">Odd</th>
                   <th className="py-2 pr-2">Brand / notes</th>
                   <th></th>
                 </tr>
@@ -365,9 +390,76 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
                     <td className="py-1 pr-2 text-muted-foreground tabular-nums">#{draftOars.indexOf(o) + 1}</td>
                     <td className="py-1 pr-2"><Input className="w-24" value={o.assigned_group} onChange={(e) => updateOar(o.key, { assigned_group: e.target.value })} placeholder="J18" /></td>
                     <td className="py-1 pr-2"><Checkbox checked={o.is_private} onCheckedChange={(v) => updateOar(o.key, { is_private: !!v })} /></td>
-                    <td className="py-1 pr-2"><Checkbox checked={o.needs_repair} onCheckedChange={(v) => updateOar(o.key, { needs_repair: !!v })} /></td>
                     <td className="py-1 pr-2"><Input value={o.brand_notes} onChange={(e) => updateOar(o.key, { brand_notes: e.target.value })} placeholder="e.g. Concept2 Skinny" /></td>
                     <td className="py-1"><Button size="icon" variant="ghost" onClick={() => removeOar(o.key)}><Trash2 className="h-4 w-4" /></Button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      {/* Bulk add ODD oars */}
+      <section className="rounded-lg border border-destructive/40 bg-destructive/5 p-5">
+        <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
+          <h3 className="font-serif text-lg flex items-center gap-2">
+            <Badge variant="destructive">Odd</Badge>
+            Bulk add odd oars / to be fixed
+          </h3>
+          <div className="flex items-end gap-2 flex-wrap">
+            <div>
+              <Label className="text-xs">Rows</Label>
+              <Input type="number" min={1} max={50} className="w-20" value={bulkOddOarCount}
+                onChange={(e) => setBulkOddOarCount(Number(e.target.value))} />
+            </div>
+            <div>
+              <Label className="text-xs">Category</Label>
+              <Select value={bulkOddOarCategory} onValueChange={(value) => setBulkOddOarCategory(value as OarCategory)}>
+                <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Scull">Scull</SelectItem>
+                  <SelectItem value="Sweep">Sweep</SelectItem>
+                  <SelectItem value="Offshore">Offshore</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button size="sm" variant="secondary" onClick={addBulkOddOars}><Plus className="h-4 w-4 mr-1" />Add rows</Button>
+          </div>
+        </div>
+        <p className="text-xs text-muted-foreground mb-2">Odd oars are tracked by individual count (Qty) and excluded from total sets.</p>
+
+        {draftOddOars.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No draft rows.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="text-left text-xs text-muted-foreground uppercase">
+                <tr>
+                  <th className="py-2 pr-2">Category</th>
+                  <th className="py-2 pr-2">Qty</th>
+                  <th className="py-2 pr-2">Group</th>
+                  <th className="py-2 pr-2">Brand / notes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {draftOddOars.map((o) => (
+                  <tr key={o.key} className="border-t">
+                    <td className="py-1 pr-2">
+                      <Select value={o.category} onValueChange={(v) => updateOddOar(o.key, { category: v as OarCategory })}>
+                        <SelectTrigger className="w-24"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Scull">Scull</SelectItem>
+                          <SelectItem value="Sweep">Sweep</SelectItem>
+                          <SelectItem value="Offshore">Offshore</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </td>
+                    <td className="py-1 pr-2"><Input type="number" min={1} className="w-20" value={o.quantity} onChange={(e) => updateOddOar(o.key, { quantity: Math.max(1, Number(e.target.value) || 1) })} /></td>
+                    <td className="py-1 pr-2"><Input className="w-24" value={o.assigned_group} onChange={(e) => updateOddOar(o.key, { assigned_group: e.target.value })} placeholder="—" /></td>
+                    <td className="py-1 pr-2"><Input value={o.brand_notes} onChange={(e) => updateOddOar(o.key, { brand_notes: e.target.value })} placeholder="e.g. cracked shaft" /></td>
+                    <td className="py-1"><Button size="icon" variant="ghost" onClick={() => removeOddOar(o.key)}><Trash2 className="h-4 w-4" /></Button></td>
                   </tr>
                 ))}
               </tbody>
@@ -379,11 +471,11 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
       <div className="sticky bottom-2 z-10 flex items-center justify-between gap-2 rounded-lg border bg-background/95 backdrop-blur p-3">
         <div className="text-sm text-muted-foreground">
           {isDirty
-            ? `${draftBoats.length} boat row(s), ${draftOars.length} oar row(s) pending`
+            ? `${draftBoats.length} boat row(s), ${draftOars.length} oar row(s), ${draftOddOars.length} odd oar row(s) pending`
             : "No pending changes"}
         </div>
         <div className="flex gap-2">
-          {isDirty && <Button variant="outline" size="sm" onClick={() => { setDraftBoats([]); setDraftOars([]); }}>Discard</Button>}
+          {isDirty && <Button variant="outline" size="sm" onClick={() => { setDraftBoats([]); setDraftOars([]); setDraftOddOars([]); }}>Discard</Button>}
           <Button size="sm" disabled={!isDirty || saving} onClick={saveAll}>
             {saving ? "Saving…" : "Save entire boats & oars configuration"}
           </Button>
@@ -396,8 +488,15 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
         <ExistingBoatsTable boats={boats} onDelete={deleteBoat} onSaved={onSaved} />
       </section>
       <section className="rounded-lg border bg-background p-5">
-        <h3 className="font-serif text-lg mb-3">Current oars ({oars.length} sets)</h3>
-        <ExistingOarsTable oars={oars} onDelete={deleteOar} onSaved={onSaved} />
+        <h3 className="font-serif text-lg mb-3">Current oars ({oars.filter((o) => !o.needs_repair).length} sets)</h3>
+        <ExistingOarsTable oars={oars.filter((o) => !o.needs_repair)} onDelete={deleteOar} onSaved={onSaved} />
+      </section>
+      <section className="rounded-lg border border-destructive/40 bg-destructive/5 p-5">
+        <h3 className="font-serif text-lg mb-3 flex items-center gap-2">
+          <Badge variant="destructive">Odd</Badge>
+          Current odd oars ({oars.filter((o) => o.needs_repair).reduce((a, o) => a + (o.quantity || 0), 0)} oars)
+        </h3>
+        <ExistingOddOarsTable oars={oars.filter((o) => o.needs_repair)} onDelete={deleteOar} onSaved={onSaved} />
       </section>
     </div>
   );
@@ -472,10 +571,26 @@ function ExistingOarsTable({ oars, onDelete, onSaved }: { oars: Oar[]; onDelete:
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead className="text-left text-xs text-muted-foreground uppercase">
-          <tr><th className="py-2 pr-2">Category</th><th className="py-2 pr-2">Qty</th><th className="py-2 pr-2">Group</th><th className="py-2 pr-2">Private</th><th className="py-2 pr-2">Odd</th><th className="py-2 pr-2">Brand / notes</th><th></th></tr>
+          <tr><th className="py-2 pr-2">Category</th><th className="py-2 pr-2">Sets</th><th className="py-2 pr-2">Group</th><th className="py-2 pr-2">Private</th><th className="py-2 pr-2">Brand / notes</th><th></th></tr>
         </thead>
         <tbody>
           {oars.map((o) => <EditableOarRow key={o.id} oar={o} onDelete={onDelete} onSaved={onSaved} />)}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function ExistingOddOarsTable({ oars, onDelete, onSaved }: { oars: Oar[]; onDelete: (id: string) => void; onSaved: () => void | Promise<void> }) {
+  if (oars.length === 0) return <p className="text-sm text-muted-foreground">No odd oars.</p>;
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead className="text-left text-xs text-muted-foreground uppercase">
+          <tr><th className="py-2 pr-2">Category</th><th className="py-2 pr-2">Qty</th><th className="py-2 pr-2">Group</th><th className="py-2 pr-2">Brand / notes</th><th></th></tr>
+        </thead>
+        <tbody>
+          {oars.map((o) => <EditableOddOarRow key={o.id} oar={o} onDelete={onDelete} onSaved={onSaved} />)}
         </tbody>
       </table>
     </div>
@@ -488,20 +603,19 @@ function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: s
   const [group, setGroup] = useState(oar.assigned_group ?? "");
   const [brandNotes, setBrandNotes] = useState(oar.brand_notes ?? "");
   const [isPrivate, setIsPrivate] = useState(oar.is_private);
-  const [needsRepair, setNeedsRepair] = useState(oar.needs_repair);
   const [saving, setSaving] = useState(false);
 
   const dirty =
     category !== oar.category || quantity !== oar.quantity ||
     group !== (oar.assigned_group ?? "") || brandNotes !== (oar.brand_notes ?? "") ||
-    isPrivate !== oar.is_private || needsRepair !== oar.needs_repair;
+    isPrivate !== oar.is_private;
 
   const save = async () => {
     setSaving(true);
     const { error } = await supabase.from("club_oars" as never).update({
       category, quantity: Math.max(0, Number(quantity) || 0),
       assigned_group: group.trim() || null, brand_notes: brandNotes.trim() || null,
-      is_private: isPrivate, needs_repair: needsRepair,
+      is_private: isPrivate,
     } as never).eq("id", oar.id);
     setSaving(false);
     if (error) return toast.error(error.message);
@@ -524,8 +638,56 @@ function EditableOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: s
       <td className="py-1 pr-2"><Input type="number" min={0} className="w-20" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} /></td>
       <td className="py-1 pr-2"><Input className="w-24" value={group} onChange={(e) => setGroup(e.target.value)} placeholder="—" /></td>
       <td className="py-1 pr-2"><Checkbox checked={isPrivate} onCheckedChange={(v) => setIsPrivate(!!v)} /></td>
-      <td className="py-1 pr-2"><Checkbox checked={needsRepair} onCheckedChange={(v) => setNeedsRepair(!!v)} /></td>
       <td className="py-1 pr-2"><Input value={brandNotes} onChange={(e) => setBrandNotes(e.target.value)} placeholder="optional" /></td>
+      <td className="py-1">
+        <div className="flex gap-1">
+          <Button size="sm" variant="outline" disabled={!dirty || saving} onClick={save}>{saving ? "…" : "Save"}</Button>
+          <Button size="icon" variant="ghost" onClick={() => onDelete(oar.id)}><Trash2 className="h-4 w-4" /></Button>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+function EditableOddOarRow({ oar, onDelete, onSaved }: { oar: Oar; onDelete: (id: string) => void; onSaved: () => void | Promise<void> }) {
+  const [category, setCategory] = useState<OarCategory>(oar.category);
+  const [quantity, setQuantity] = useState(oar.quantity);
+  const [group, setGroup] = useState(oar.assigned_group ?? "");
+  const [brandNotes, setBrandNotes] = useState(oar.brand_notes ?? "");
+  const [saving, setSaving] = useState(false);
+
+  const dirty =
+    category !== oar.category || quantity !== oar.quantity ||
+    group !== (oar.assigned_group ?? "") || brandNotes !== (oar.brand_notes ?? "");
+
+  const save = async () => {
+    setSaving(true);
+    const { error } = await supabase.from("club_oars" as never).update({
+      category, quantity: Math.max(1, Number(quantity) || 1),
+      assigned_group: group.trim() || null, brand_notes: brandNotes.trim() || null,
+      needs_repair: true,
+    } as never).eq("id", oar.id);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success("Odd oar updated");
+    void onSaved();
+  };
+
+  return (
+    <tr className="border-t">
+      <td className="py-1 pr-2">
+        <Select value={category} onValueChange={(v) => setCategory(v as OarCategory)}>
+          <SelectTrigger className="w-24"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Scull">Scull</SelectItem>
+            <SelectItem value="Sweep">Sweep</SelectItem>
+            <SelectItem value="Offshore">Offshore</SelectItem>
+          </SelectContent>
+        </Select>
+      </td>
+      <td className="py-1 pr-2"><Input type="number" min={1} className="w-20" value={quantity} onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))} /></td>
+      <td className="py-1 pr-2"><Input className="w-24" value={group} onChange={(e) => setGroup(e.target.value)} placeholder="—" /></td>
+      <td className="py-1 pr-2"><Input value={brandNotes} onChange={(e) => setBrandNotes(e.target.value)} placeholder="e.g. cracked shaft" /></td>
       <td className="py-1">
         <div className="flex gap-1">
           <Button size="sm" variant="outline" disabled={!dirty || saving} onClick={save}>{saving ? "…" : "Save"}</Button>
@@ -703,7 +865,7 @@ function CoachReadOnlyView({
                   <thead className="text-left text-xs text-muted-foreground uppercase border-b">
                     <tr>
                       <th className="py-2 pr-3">Category</th>
-                      <th className="py-2 pr-3">Qty</th>
+                      <th className="py-2 pr-3">Sets</th>
                       <th className="py-2 pr-3">Group</th>
                       <th className="py-2 pr-3">Brand / notes</th>
                     </tr>
