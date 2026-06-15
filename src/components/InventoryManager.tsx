@@ -400,14 +400,82 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
         )}
       </section>
 
+      {/* Bulk add ODD oars */}
+      <section className="rounded-lg border border-destructive/40 bg-destructive/5 p-5">
+        <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
+          <h3 className="font-serif text-lg flex items-center gap-2">
+            <Badge variant="destructive">Odd</Badge>
+            Bulk add odd oars / to be fixed
+          </h3>
+          <div className="flex items-end gap-2 flex-wrap">
+            <div>
+              <Label className="text-xs">Rows</Label>
+              <Input type="number" min={1} max={50} className="w-20" value={bulkOddOarCount}
+                onChange={(e) => setBulkOddOarCount(Number(e.target.value))} />
+            </div>
+            <div>
+              <Label className="text-xs">Category</Label>
+              <Select value={bulkOddOarCategory} onValueChange={(value) => setBulkOddOarCategory(value as OarCategory)}>
+                <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Scull">Scull</SelectItem>
+                  <SelectItem value="Sweep">Sweep</SelectItem>
+                  <SelectItem value="Offshore">Offshore</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button size="sm" variant="secondary" onClick={addBulkOddOars}><Plus className="h-4 w-4 mr-1" />Add rows</Button>
+          </div>
+        </div>
+        <p className="text-xs text-muted-foreground mb-2">Odd oars are tracked by individual count (Qty) and excluded from total sets.</p>
+
+        {draftOddOars.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No draft rows.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="text-left text-xs text-muted-foreground uppercase">
+                <tr>
+                  <th className="py-2 pr-2">Category</th>
+                  <th className="py-2 pr-2">Qty</th>
+                  <th className="py-2 pr-2">Group</th>
+                  <th className="py-2 pr-2">Brand / notes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {draftOddOars.map((o) => (
+                  <tr key={o.key} className="border-t">
+                    <td className="py-1 pr-2">
+                      <Select value={o.category} onValueChange={(v) => updateOddOar(o.key, { category: v as OarCategory })}>
+                        <SelectTrigger className="w-24"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Scull">Scull</SelectItem>
+                          <SelectItem value="Sweep">Sweep</SelectItem>
+                          <SelectItem value="Offshore">Offshore</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </td>
+                    <td className="py-1 pr-2"><Input type="number" min={1} className="w-20" value={o.quantity} onChange={(e) => updateOddOar(o.key, { quantity: Math.max(1, Number(e.target.value) || 1) })} /></td>
+                    <td className="py-1 pr-2"><Input className="w-24" value={o.assigned_group} onChange={(e) => updateOddOar(o.key, { assigned_group: e.target.value })} placeholder="—" /></td>
+                    <td className="py-1 pr-2"><Input value={o.brand_notes} onChange={(e) => updateOddOar(o.key, { brand_notes: e.target.value })} placeholder="e.g. cracked shaft" /></td>
+                    <td className="py-1"><Button size="icon" variant="ghost" onClick={() => removeOddOar(o.key)}><Trash2 className="h-4 w-4" /></Button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
       <div className="sticky bottom-2 z-10 flex items-center justify-between gap-2 rounded-lg border bg-background/95 backdrop-blur p-3">
         <div className="text-sm text-muted-foreground">
           {isDirty
-            ? `${draftBoats.length} boat row(s), ${draftOars.length} oar row(s) pending`
+            ? `${draftBoats.length} boat row(s), ${draftOars.length} oar row(s), ${draftOddOars.length} odd oar row(s) pending`
             : "No pending changes"}
         </div>
         <div className="flex gap-2">
-          {isDirty && <Button variant="outline" size="sm" onClick={() => { setDraftBoats([]); setDraftOars([]); }}>Discard</Button>}
+          {isDirty && <Button variant="outline" size="sm" onClick={() => { setDraftBoats([]); setDraftOars([]); setDraftOddOars([]); }}>Discard</Button>}
           <Button size="sm" disabled={!isDirty || saving} onClick={saveAll}>
             {saving ? "Saving…" : "Save entire boats & oars configuration"}
           </Button>
@@ -420,8 +488,15 @@ function AdminBatchEntry({ boats, oars, onSaved }: { boats: Boat[]; oars: Oar[];
         <ExistingBoatsTable boats={boats} onDelete={deleteBoat} onSaved={onSaved} />
       </section>
       <section className="rounded-lg border bg-background p-5">
-        <h3 className="font-serif text-lg mb-3">Current oars ({oars.length} sets)</h3>
-        <ExistingOarsTable oars={oars} onDelete={deleteOar} onSaved={onSaved} />
+        <h3 className="font-serif text-lg mb-3">Current oars ({oars.filter((o) => !o.needs_repair).length} sets)</h3>
+        <ExistingOarsTable oars={oars.filter((o) => !o.needs_repair)} onDelete={deleteOar} onSaved={onSaved} />
+      </section>
+      <section className="rounded-lg border border-destructive/40 bg-destructive/5 p-5">
+        <h3 className="font-serif text-lg mb-3 flex items-center gap-2">
+          <Badge variant="destructive">Odd</Badge>
+          Current odd oars ({oars.filter((o) => o.needs_repair).reduce((a, o) => a + (o.quantity || 0), 0)} oars)
+        </h3>
+        <ExistingOddOarsTable oars={oars.filter((o) => o.needs_repair)} onDelete={deleteOar} onSaved={onSaved} />
       </section>
     </div>
   );
