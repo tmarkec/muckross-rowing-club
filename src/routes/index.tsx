@@ -77,6 +77,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
+  const autoplay = useRef(Autoplay({ delay: 4500, stopOnInteraction: false, stopOnMouseEnter: true }));
   return (
     <SiteLayout>
       {/* Hero */}
@@ -114,6 +115,30 @@ function HomePage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Image carousel */}
+      <section className="bg-background pt-16 sm:pt-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Carousel
+            opts={{ loop: true }}
+            plugins={[autoplay.current]}
+            className="overflow-hidden rounded-2xl shadow-elegant"
+          >
+            <CarouselContent>
+              {carouselSlides.map((s) => (
+                <CarouselItem key={s.src}>
+                  <img
+                    src={s.src}
+                    alt={s.alt}
+                    loading="lazy"
+                    className="aspect-[16/9] w-full object-cover"
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         </div>
       </section>
 
