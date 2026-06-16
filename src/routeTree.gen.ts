@@ -19,6 +19,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as CoachesIndexRouteImport } from './routes/coaches.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
+import { Route as CoachesScheduleRouteImport } from './routes/coaches.schedule'
 import { Route as CoachesRiggingRouteImport } from './routes/coaches.rigging'
 import { Route as CoachesProgramRouteImport } from './routes/coaches.program'
 import { Route as CoachesPostsRouteImport } from './routes/coaches.posts'
@@ -81,6 +82,11 @@ const NewsSlugRoute = NewsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => NewsRoute,
+} as any)
+const CoachesScheduleRoute = CoachesScheduleRouteImport.update({
+  id: '/coaches/schedule',
+  path: '/coaches/schedule',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CoachesRiggingRoute = CoachesRiggingRouteImport.update({
   id: '/coaches/rigging',
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/program': typeof CoachesProgramRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
+  '/coaches/schedule': typeof CoachesScheduleRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches/': typeof CoachesIndexRoute
   '/news/': typeof NewsIndexRoute
@@ -184,6 +191,7 @@ export interface FileRoutesByTo {
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/program': typeof CoachesProgramRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
+  '/coaches/schedule': typeof CoachesScheduleRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches': typeof CoachesIndexRoute
   '/news': typeof NewsIndexRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/coaches/posts': typeof CoachesPostsRoute
   '/coaches/program': typeof CoachesProgramRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
+  '/coaches/schedule': typeof CoachesScheduleRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches/': typeof CoachesIndexRoute
   '/news/': typeof NewsIndexRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/coaches/posts'
     | '/coaches/program'
     | '/coaches/rigging'
+    | '/coaches/schedule'
     | '/news/$slug'
     | '/coaches/'
     | '/news/'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/coaches/posts'
     | '/coaches/program'
     | '/coaches/rigging'
+    | '/coaches/schedule'
     | '/news/$slug'
     | '/coaches'
     | '/news'
@@ -280,6 +291,7 @@ export interface FileRouteTypes {
     | '/coaches/posts'
     | '/coaches/program'
     | '/coaches/rigging'
+    | '/coaches/schedule'
     | '/news/$slug'
     | '/coaches/'
     | '/news/'
@@ -305,6 +317,7 @@ export interface RootRouteChildren {
   CoachesPostsRoute: typeof CoachesPostsRoute
   CoachesProgramRoute: typeof CoachesProgramRoute
   CoachesRiggingRoute: typeof CoachesRiggingRoute
+  CoachesScheduleRoute: typeof CoachesScheduleRoute
   CoachesIndexRoute: typeof CoachesIndexRoute
   CoachesGroupsGroupIdRoute: typeof CoachesGroupsGroupIdRouteWithChildren
 }
@@ -380,6 +393,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/news/$slug'
       preLoaderRoute: typeof NewsSlugRouteImport
       parentRoute: typeof NewsRoute
+    }
+    '/coaches/schedule': {
+      id: '/coaches/schedule'
+      path: '/coaches/schedule'
+      fullPath: '/coaches/schedule'
+      preLoaderRoute: typeof CoachesScheduleRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/coaches/rigging': {
       id: '/coaches/rigging'
@@ -522,6 +542,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachesPostsRoute: CoachesPostsRoute,
   CoachesProgramRoute: CoachesProgramRoute,
   CoachesRiggingRoute: CoachesRiggingRoute,
+  CoachesScheduleRoute: CoachesScheduleRoute,
   CoachesIndexRoute: CoachesIndexRoute,
   CoachesGroupsGroupIdRoute: CoachesGroupsGroupIdRouteWithChildren,
 }
