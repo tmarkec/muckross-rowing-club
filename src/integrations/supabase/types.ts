@@ -400,6 +400,39 @@ export type Database = {
         }
         Relationships: []
       }
+      training_schedules: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          group_name: string
+          id: string
+          location: string
+          sort_order: number
+          time_text: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          group_name: string
+          id?: string
+          location: string
+          sort_order?: number
+          time_text: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          group_name?: string
+          id?: string
+          location?: string
+          sort_order?: number
+          time_text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
