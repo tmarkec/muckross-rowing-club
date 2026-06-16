@@ -3,17 +3,14 @@ import { ArrowRight, Award, Heart, Users, Waves, Trophy } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL, SITE_URL, SOCIAL } from "@/lib/site";
-import rowingMistyDawn from "@/assets/rowing-misty-dawn.jpg.asset.json";
-import rowingSunsetDouble from "@/assets/rowing-sunset-double.jpg.asset.json";
-import rowingEightMist from "@/assets/rowing-eight-mist.jpg.asset.json";
 const pullingTogether = "/club-community.jpg";
 const boathouse = "/old-boathouse.jpg";
 const community = "/juniors-boat.jpg";
 
 const heroSlides = [
-  { src: rowingMistyDawn.url, alt: "Single sculler at dawn with mist over the lake and mountains" },
-  { src: rowingSunsetDouble.url, alt: "Double scull rowing at sunset on Lough Leane" },
-  { src: rowingEightMist.url, alt: "Junior eight training in misty conditions on the lake" },
+  { src: "/rowing-misty-dawn.jpg", alt: "Single sculler at dawn with mist over the lake and mountains" },
+  { src: "/rowing-sunset-double.jpg", alt: "Double scull rowing at sunset on Lough Leane" },
+  { src: "/rowing-eight-mist.jpg", alt: "Junior eight training in misty conditions on the lake" },
 ];
 
 /** Structured data for the homepage — describes the club to search engines. */
