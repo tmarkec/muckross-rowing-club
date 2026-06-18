@@ -17,7 +17,11 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Muckross Rowing Club, Killarney" },
-      { name: "description", content: "Get in touch with Muckross Rowing Club. Find us on the shores of Lough Leane in Killarney, Co. Kerry." },
+      {
+        name: "description",
+        content:
+          "Get in touch with Muckross Rowing Club. Find us on the shores of Lough Leane in Killarney, Co. Kerry.",
+      },
       { property: "og:title", content: "Contact Muckross Rowing Club" },
       { property: "og:description", content: "Get in touch with the club in Killarney." },
     ],
@@ -77,7 +81,11 @@ function ContactPage() {
                   </div>
                   <div>
                     <div className="font-semibold text-foreground">Boathouse</div>
-                    <p className="mt-1 text-muted-foreground">Muckross Rd, Muckross<br />Killarney, Co. Kerry, Ireland</p>
+                    <p className="mt-1 text-muted-foreground">
+                      Muckross Rd, Muckross
+                      <br />
+                      Killarney, Co. Kerry, Ireland
+                    </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -86,7 +94,10 @@ function ContactPage() {
                   </div>
                   <div>
                     <div className="font-semibold text-foreground">Email</div>
-                    <a href="mailto:info@muckrossrowingclub.ie" className="mt-1 block text-muted-foreground transition-colors hover:text-primary">
+                    <a
+                      href="mailto:info@muckrossrowingclub.ie"
+                      className="mt-1 block text-muted-foreground transition-colors hover:text-primary"
+                    >
                       info@muckrossrowingclub.ie
                     </a>
                   </div>
@@ -124,26 +135,52 @@ function ContactPage() {
 
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="text-sm font-medium text-foreground" htmlFor="name">Name</label>
-                    <input id="name" required className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2" />
+                    <label className="text-sm font-medium text-foreground" htmlFor="name">
+                      Name
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      required
+                      className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2"
+                    />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-foreground" htmlFor="email">Email</label>
-                    <input id="email" type="email" required className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2" />
+                    <label className="text-sm font-medium text-foreground" htmlFor="email">
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2"
+                    />
                   </div>
                 </div>
                 <div className="mt-4">
-                  <label className="text-sm font-medium text-foreground" htmlFor="subject">Subject</label>
+                  <label className="text-sm font-medium text-foreground" htmlFor="subject">
+                    Subject
+                  </label>
                   <input
                     id="subject"
+                    name="subject"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2"
                   />
                 </div>
                 <div className="mt-4">
-                  <label className="text-sm font-medium text-foreground" htmlFor="message">Message</label>
-                  <textarea id="message" rows={5} required className="mt-1.5 w-full resize-none rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2" />
+                  <label className="text-sm font-medium text-foreground" htmlFor="message">
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    required
+                    className="mt-1.5 w-full resize-none rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2"
+                  />
                 </div>
 
                 <button
@@ -155,7 +192,8 @@ function ContactPage() {
 
                 {submitted && (
                   <p className="mt-4 rounded-md bg-secondary/40 px-4 py-3 text-sm text-foreground">
-                    Thanks — your message has been recorded. (Email delivery will be wired up later via Lovable Cloud.)
+                    Thanks — your message has been recorded. (Email delivery will be wired up later
+                    via Lovable Cloud.)
                   </p>
                 )}
               </form>

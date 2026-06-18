@@ -9,9 +9,16 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — Muckross Rowing Club, Killarney" },
-      { name: "description", content: "Over 150 years of rowing heritage on the Lakes of Killarney — from the Killarney Six to the Olympic Games. Discover the story of Muckross Rowing Club." },
+      {
+        name: "description",
+        content:
+          "Over 150 years of rowing heritage on the Lakes of Killarney — from the Killarney Six to the Olympic Games. Discover the story of Muckross Rowing Club.",
+      },
       { property: "og:title", content: "About Muckross Rowing Club" },
-      { property: "og:description", content: "150 years of heritage, from the Elizabeth Rose to the Olympic Games." },
+      {
+        property: "og:description",
+        content: "150 years of heritage, from the Elizabeth Rose to the Olympic Games.",
+      },
     ],
   }),
   component: AboutPage,
@@ -24,14 +31,18 @@ function AboutPage() {
         <img
           src="/hero-eight-fog.jpg"
           alt=""
+          role="presentation"
           aria-hidden="true"
           loading="lazy"
           className="absolute inset-0 h-full w-full object-cover opacity-15"
         />
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <h1 className="font-serif text-3xl font-bold sm:text-4xl">150 Years on the Lakes of Killarney</h1>
+          <h1 className="font-serif text-3xl font-bold sm:text-4xl">
+            150 Years on the Lakes of Killarney
+          </h1>
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
-            From the Killarney Six to the Olympic Games, the heritage and ambition of Muckross Rowing Club.
+            From the Killarney Six to the Olympic Games, the heritage and ambition of Muckross
+            Rowing Club.
           </p>
         </div>
       </section>
@@ -40,21 +51,29 @@ function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="overflow-hidden rounded-2xl shadow-elegant">
-              <img src={boathouse} alt="Wooden boathouse on the shore of Lough Leane" width={1600} height={1024} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+              <img
+                src={boathouse}
+                alt="Wooden boathouse on the shore of Lough Leane"
+                width={1600}
+                height={1024}
+                loading="lazy"
+                className="aspect-[4/3] w-full object-cover"
+              />
             </div>
             <div>
-              <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">Our home on Lough Leane</h2>
+              <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
+                Our home on Lough Leane
+              </h2>
               <p className="mt-5 leading-relaxed text-muted-foreground">
-                Muckross Rowing Club is based in Killarney, Co. Kerry, on the shores of
-                Lough Leane, the largest of Killarney's three lakes. Surrounded by
-                ancient oak woodland and the MacGillycuddy's Reeks, our rowing waters are
-                among the most scenic in Europe.
+                Muckross Rowing Club is based in Killarney, Co. Kerry, on the shores of Lough Leane,
+                the largest of Killarney's three lakes. Surrounded by ancient oak woodland and the
+                MacGillycuddy's Reeks, our rowing waters are among the most scenic in Europe.
               </p>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                Widely considered the oldest rowing club in Killarney, Muckross has been
-                the heartbeat of the local community for over 150 years, deeply
-                intertwined with the families who lived and worked on the Muckross Estate.
-                Our distinctive yellow kit is known across the national regatta circuit.
+                Widely considered the oldest rowing club in Killarney, Muckross has been the
+                heartbeat of the local community for over 150 years, deeply intertwined with the
+                families who lived and worked on the Muckross Estate. Our distinctive yellow kit is
+                known across the national regatta circuit.
               </p>
             </div>
           </div>
@@ -64,10 +83,15 @@ function AboutPage() {
       <section className="bg-primary py-20 text-primary-foreground sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Heritage</span>
-            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl">A century and a half of rowing</h2>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
+              Heritage
+            </span>
+            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl">
+              A century and a half of rowing
+            </h2>
             <p className="mt-4 text-primary-foreground/80">
-              Few clubs in the world can trace a story like ours. Here are the moments that shaped Muckross.
+              Few clubs in the world can trace a story like ours. Here are the moments that shaped
+              Muckross.
             </p>
           </div>
 
@@ -89,10 +113,17 @@ function AboutPage() {
                 body: "A legendary win at the Killarney Regatta ends a 20-year wait for the Senior Men's Bourn Vincent Trophy and sparks decades of dominance in traditional racing.",
               },
             ].map((item) => (
-              <div key={item.title} className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-7">
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">{item.year}</span>
+              <div
+                key={item.title}
+                className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-7"
+              >
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
+                  {item.year}
+                </span>
                 <h3 className="mt-2 font-serif text-xl font-semibold">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-primary-foreground/80">{item.body}</p>
+                <p className="mt-3 text-sm leading-relaxed text-primary-foreground/80">
+                  {item.body}
+                </p>
               </div>
             ))}
           </div>
@@ -103,40 +134,59 @@ function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">1990s to Present</span>
-              <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">From Lough Leane to the world stage</h2>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                1990s to Present
+              </span>
+              <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+                From Lough Leane to the world stage
+              </h2>
               <p className="mt-5 leading-relaxed text-muted-foreground">
-                In the 1990s Muckross expanded beyond traditional lake rowing into
-                Olympic-style sliding-seat rowing, opening the door to national and
-                international competition. Our athletes have since worn the Green Jersey
-                of Ireland at every level of the sport.
+                In the 1990s Muckross expanded beyond traditional lake rowing into Olympic-style
+                sliding-seat rowing, opening the door to national and international competition. Our
+                athletes have since worn the Green Jersey of Ireland at every level of the sport.
               </p>
               <ul className="mt-6 space-y-4">
                 <li className="flex gap-4">
                   <Trophy className="mt-0.5 h-5 w-5 flex-none text-secondary" />
                   <div>
                     <p className="font-semibold text-foreground">Olympic Games</p>
-                    <p className="text-sm text-muted-foreground">Multiple club Olympians at Athens 2004 and Beijing 2008.</p>
+                    <p className="text-sm text-muted-foreground">
+                      Multiple club Olympians at Athens 2004 and Beijing 2008.
+                    </p>
                   </div>
                 </li>
                 <li className="flex gap-4">
                   <Globe2 className="mt-0.5 h-5 w-5 flex-none text-secondary" />
                   <div>
                     <p className="font-semibold text-foreground">World Championships</p>
-                    <p className="text-sm text-muted-foreground">World Championship Gold and multiple podium finishes for Muckross athletes.</p>
+                    <p className="text-sm text-muted-foreground">
+                      World Championship Gold and multiple podium finishes for Muckross athletes.
+                    </p>
                   </div>
                 </li>
                 <li className="flex gap-4">
-                <Anchor className="mt-0.5 h-5 w-5 flex-none text-secondary" />
+                  <Anchor className="mt-0.5 h-5 w-5 flex-none text-secondary" />
                   <div>
-                    <p className="font-semibold text-foreground">Coupe de la Jeunesse & Home Internationals</p>
-                    <p className="text-sm text-muted-foreground">Muckross athletes have regularly represented Ireland on the junior and senior squads, winning medals on the international stage.</p>
+                    <p className="font-semibold text-foreground">
+                      Coupe de la Jeunesse & Home Internationals
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Muckross athletes have regularly represented Ireland on the junior and senior
+                      squads, winning medals on the international stage.
+                    </p>
                   </div>
                 </li>
               </ul>
             </div>
             <div className="overflow-hidden rounded-2xl shadow-elegant">
-              <img src={juniorSquad} alt="Muckross junior squad on the dock" width={1600} height={1024} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+              <img
+                src={juniorSquad}
+                alt="Muckross junior squad on the dock"
+                width={1600}
+                height={1024}
+                loading="lazy"
+                className="aspect-[4/3] w-full object-cover"
+              />
             </div>
           </div>
         </div>
@@ -145,19 +195,33 @@ function AboutPage() {
       <section className="bg-muted/40 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">A club of two traditions</h2>
+            <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
+              A club of two traditions
+            </h2>
             <p className="mt-4 text-muted-foreground">
-              On any evening at Muckross you might see a wood-built Killarney six
-              training alongside a carbon-fibre Olympic scull, past and future side by side.
+              On any evening at Muckross you might see a wood-built Killarney six training alongside
+              a carbon-fibre Olympic scull, past and future side by side.
             </p>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {[
-              { title: "Heritage", body: "Honouring the Killarney Six and the world's oldest traditional regatta, a 150-year-old spirit carried by every new generation." },
-              { title: "Community", body: "A welcoming home for rowers of every background and ability, rooted in the families and traditions of the Muckross Estate." },
-              { title: "Excellence", body: "From the Bourn Vincent Trophy to the Olympic Games, supporting our crews to compete with pride at the highest level." },
+              {
+                title: "Heritage",
+                body: "Honouring the Killarney Six and the world's oldest traditional regatta, a 150-year-old spirit carried by every new generation.",
+              },
+              {
+                title: "Community",
+                body: "A welcoming home for rowers of every background and ability, rooted in the families and traditions of the Muckross Estate.",
+              },
+              {
+                title: "Excellence",
+                body: "From the Bourn Vincent Trophy to the Olympic Games, supporting our crews to compete with pride at the highest level.",
+              },
             ].map((v) => (
-              <div key={v.title} className="rounded-2xl border border-border/60 bg-card p-8 shadow-soft">
+              <div
+                key={v.title}
+                className="rounded-2xl border border-border/60 bg-card p-8 shadow-soft"
+              >
                 <h3 className="font-serif text-xl font-semibold text-foreground">{v.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{v.body}</p>
               </div>
@@ -169,23 +233,40 @@ function AboutPage() {
       <section className="bg-background py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">A club for every rower</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
+              A club for every rower
+            </span>
             <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
               From first strokes to lifelong rowers
             </h2>
             <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-muted-foreground">
-              From juniors taking their first strokes to masters rowers chasing personal
-              bests, Muckross has a place for you. Coaching, kit and a friendly crew, all
-              here on the water.
+              From juniors taking their first strokes to masters rowers chasing personal bests,
+              Muckross has a place for you. Coaching, kit and a friendly crew, all here on the
+              water.
             </p>
           </div>
           <div className="mx-auto mt-10 grid max-w-4xl gap-4 sm:grid-cols-3">
             {[
-              { icon: Sparkles, title: "Juniors", body: "First strokes, learn-to-row and a pathway into competitive crews." },
-              { icon: Users, title: "Seniors", body: "Year-round training and racing at regattas across Ireland." },
-              { icon: Heart, title: "Masters & Recreational", body: "Row for fitness, fun and friendship, at your own pace." },
+              {
+                icon: Sparkles,
+                title: "Juniors",
+                body: "First strokes, learn-to-row and a pathway into competitive crews.",
+              },
+              {
+                icon: Users,
+                title: "Seniors",
+                body: "Year-round training and racing at regattas across Ireland.",
+              },
+              {
+                icon: Heart,
+                title: "Masters & Recreational",
+                body: "Row for fitness, fun and friendship, at your own pace.",
+              },
             ].map(({ icon: Icon, title, body }) => (
-              <div key={title} className="rounded-2xl border border-border/60 bg-card p-6 shadow-soft">
+              <div
+                key={title}
+                className="rounded-2xl border border-border/60 bg-card p-6 shadow-soft"
+              >
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
                   <Icon className="h-5 w-5 text-primary" />
                 </div>
@@ -195,7 +276,10 @@ function AboutPage() {
             ))}
           </div>
           <div className="mt-10 text-center">
-            <Link to="/join" className="inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-6 py-3 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105">
+            <Link
+              to="/join"
+              className="inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-6 py-3 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
+            >
               Become a member <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

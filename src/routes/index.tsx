@@ -8,7 +8,10 @@ const boathouse = "/old-boathouse.jpg";
 const community = "/juniors-boat.jpg";
 
 const heroSlides = [
-  { src: "/rowing-misty-dawn.jpg", alt: "Single sculler at dawn with mist over the lake and mountains" },
+  {
+    src: "/rowing-misty-dawn.jpg",
+    alt: "Single sculler at dawn with mist over the lake and mountains",
+  },
   { src: "/rowing-sunset-double.jpg", alt: "Double scull rowing at sunset on Lough Leane" },
   { src: "/rowing-eight-mist.jpg", alt: "Junior eight training in misty conditions on the lake" },
 ];
@@ -46,12 +49,23 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Muckross Rowing Club | Killarney, Co. Kerry — Rowing on the Lakes of Killarney" },
-      { name: "description", content: "Muckross Rowing Club — a welcoming rowing club on the historic lakes of Killarney, Co. Kerry. Junior, senior, masters & learn-to-row programmes for all ages and abilities." },
-      { name: "keywords", content: "Muckross Rowing Club, Muckross RC, rowing Killarney, Killarney rowing club, Lough Leane rowing, rowing Kerry, learn to row Killarney" },
+      {
+        name: "description",
+        content:
+          "Muckross Rowing Club — a welcoming rowing club on the historic lakes of Killarney, Co. Kerry. Junior, senior, masters & learn-to-row programmes for all ages and abilities.",
+      },
+      {
+        name: "keywords",
+        content:
+          "Muckross Rowing Club, Muckross RC, rowing Killarney, Killarney rowing club, Lough Leane rowing, rowing Kerry, learn to row Killarney",
+      },
       { name: "robots", content: "index, follow, max-image-preview:large" },
       { name: "theme-color", content: "#0a2540" },
       { property: "og:title", content: "Muckross Rowing Club — Killarney, Co. Kerry" },
-      { property: "og:description", content: "Rowing on the historic lakes of Killarney, beneath the MacGillycuddy's Reeks." },
+      {
+        property: "og:description",
+        content: "Rowing on the historic lakes of Killarney, beneath the MacGillycuddy's Reeks.",
+      },
       { property: "og:url", content: SITE_URL },
       { property: "og:image", content: `${SITE_URL}/hero-lake.jpg` },
       { property: "og:locale", content: "en_IE" },
@@ -124,23 +138,40 @@ function HomePage() {
       <section className="bg-background py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">A club for everyone</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
+              A club for everyone
+            </span>
             <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
               More than a sport, a community
             </h2>
             <p className="mt-4 text-base text-muted-foreground">
-              From learn-to-row beginners to seasoned competitors, Muckross brings
-              together people who share a love of rowing on the lakes of Killarney.
+              From learn-to-row beginners to seasoned competitors, Muckross brings together people
+              who share a love of rowing on the lakes of Killarney.
             </p>
           </div>
 
           <div className="mt-14 grid gap-8 md:grid-cols-3">
             {[
-              { icon: Waves, title: "Scenic Waters", body: "Train on Lough Leane, one of Ireland's most beautiful lakes, shaped by mountains and ancient woodland." },
-              { icon: Users, title: "All Abilities", body: "Junior, senior, masters and recreational rowing. Whether you've never rowed before or have raced competitively, you're welcome." },
-              { icon: Award, title: "Proud Heritage", body: "A long-standing fixture of Irish rowing, with a presence at regattas across the country including the famous Killarney Regatta." },
+              {
+                icon: Waves,
+                title: "Scenic Waters",
+                body: "Train on Lough Leane, one of Ireland's most beautiful lakes, shaped by mountains and ancient woodland.",
+              },
+              {
+                icon: Users,
+                title: "All Abilities",
+                body: "Junior, senior, masters and recreational rowing. Whether you've never rowed before or have raced competitively, you're welcome.",
+              },
+              {
+                icon: Award,
+                title: "Proud Heritage",
+                body: "A long-standing fixture of Irish rowing, with a presence at regattas across the country including the famous Killarney Regatta.",
+              },
             ].map(({ icon: Icon, title, body }) => (
-              <div key={title} className="group rounded-2xl border border-border/60 bg-card p-8 shadow-soft transition-all hover:-translate-y-1 hover:shadow-elegant">
+              <div
+                key={title}
+                className="group rounded-2xl border border-border/60 bg-card p-8 shadow-soft transition-all hover:-translate-y-1 hover:shadow-elegant"
+              >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
                   <Icon className="h-6 w-6 text-primary" />
                 </div>
@@ -167,18 +198,20 @@ function HomePage() {
               />
             </div>
             <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">Train · Race · Belong</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
+                Train · Race · Belong
+              </span>
               <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
                 Pulling together, since the beginning
               </h2>
               <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Our rowers train year-round, taking to the water at dawn and competing at
-                regattas across Ireland. The yellow of Muckross is a familiar sight on the
-                start line, and on the podium.
+                Our rowers train year-round, taking to the water at dawn and competing at regattas
+                across Ireland. The yellow of Muckross is a familiar sight on the start line, and on
+                the podium.
               </p>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                We welcome new members every season. No experience is needed, just
-                enthusiasm and a willingness to be part of a crew.
+                We welcome new members every season. No experience is needed, just enthusiasm and a
+                willingness to be part of a crew.
               </p>
               <Link
                 to="/join"
@@ -206,19 +239,21 @@ function HomePage() {
               />
             </div>
             <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">About the club</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
+                About the club
+              </span>
               <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
                 150 years on the Lakes of Killarney
               </h2>
               <p className="mt-5 leading-relaxed text-muted-foreground">
-                Widely considered the oldest rowing club in Killarney, Muckross has been
-                the heartbeat of the local community for over 150 years, from the
-                Traditional Killarney Six and the iconic <em>Elizabeth Rose</em> to
-                athletes who have worn the Green Jersey of Ireland at the Olympic Games.
+                Widely considered the oldest rowing club in Killarney, Muckross has been the
+                heartbeat of the local community for over 150 years, from the Traditional Killarney
+                Six and the iconic <em>Elizabeth Rose</em> to athletes who have worn the Green
+                Jersey of Ireland at the Olympic Games.
               </p>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                On any evening at Muckross you might see a wood-built Killarney six
-                training alongside a carbon-fibre Olympic scull, past and future side by side.
+                On any evening at Muckross you might see a wood-built Killarney six training
+                alongside a carbon-fibre Olympic scull, past and future side by side.
               </p>
               <ul className="mt-6 grid gap-3 sm:grid-cols-3">
                 {[
@@ -226,7 +261,10 @@ function HomePage() {
                   { icon: Award, label: "World medals" },
                   { icon: Users, label: "All ages welcome" },
                 ].map(({ icon: Icon, label }) => (
-                  <li key={label} className="flex items-center gap-2 text-sm font-medium text-foreground/80">
+                  <li
+                    key={label}
+                    className="flex items-center gap-2 text-sm font-medium text-foreground/80"
+                  >
                     <Icon className="h-4 w-4 text-secondary" /> {label}
                   </li>
                 ))}
@@ -247,6 +285,7 @@ function HomePage() {
         <img
           src={community}
           alt=""
+          role="presentation"
           aria-hidden="true"
           width={1600}
           height={1024}
