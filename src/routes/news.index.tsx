@@ -36,6 +36,7 @@ type NewsPost = {
   cover_image_url: string | null;
   author_name: string | null;
   published_at: string;
+  thumbnail_url: string | null;
 };
 
 const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
@@ -65,8 +66,28 @@ function NewsPage() {
       .eq("published", true)
       .order("published_at", { ascending: false })
       .limit(60)
-      .then(({ data }) => {
-        setPosts((data ?? []) as NewsPost[]);
+      .then(async ({ data: postsData }) => {
+        const posts = (postsData ?? []) as Omit<NewsPost, "thumbnail_url">[];
+        const postIds = posts.map((p) => p.id);
+        let firstImageByPost = new Map<string, string>();
+        if (postIds.length > 0) {
+          const { data: images } = await supabase
+            .from("post_images")
+            .select("post_id, url")
+            .in("post_id", postIds)
+            .order("sort_order", { ascending: true });
+          for (const img of (images ?? []) as { post_id: string; url: string }[]) {
+            if (!firstImageByPost.has(img.post_id)) {
+              firstImageByPost.set(img.post_id, img.url);
+            }
+          }
+        }
+        setPosts(
+          posts.map((p) => ({
+            ...p,
+            thumbnail_url: p.cover_image_url ?? firstImageByPost.get(p.id) ?? null,
+          })),
+        );
         setPostsLoading(false);
       });
   }, []);
@@ -220,7 +241,7 @@ function NewsPage() {
         </div>
       </section>
 
-      <section className="bg-background py-20">
+      <section className="bg-background py-12 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           {postsLoading ? (
             <p className="text-center text-sm text-muted-foreground">Loading posts…</p>
@@ -240,16 +261,22 @@ function NewsPage() {
                   preload="intent"
                   className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elegant"
                 >
-                  {post.cover_image_url ? (
-                    <div className="aspect-[16/10] w-full overflow-hidden bg-muted">
+                  <div className="aspect-[16/10] w-full overflow-hidden bg-muted">
+                    {post.thumbnail_url ? (
                       <img
-                        src={post.cover_image_url}
+                        src={post.thumbnail_url}
                         alt=""
                         loading="lazy"
                         className="h-full w-full object-cover transition-transform group-hover:scale-[1.03]"
                       />
-                    </div>
-                  ) : null}
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-gradient-navy/10">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                          Muckross RC
+                        </span>
+                      </div>
+                    )}
+                  </div>
                   <div className="flex flex-1 flex-col p-6">
                     <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
                       <span className="inline-flex items-center gap-1.5">
