@@ -146,7 +146,7 @@ function NewsPage() {
       .then(async ({ data: postsData }) => {
         const posts = (postsData ?? []) as Omit<NewsPost, "thumbnail_url">[];
         const postIds = posts.map((p) => p.id);
-        let firstImageByPost = new Map<string, string>();
+        const firstImageByPost = new Map<string, string>();
         if (postIds.length > 0) {
           const { data: images } = await supabase
             .from("post_images")
