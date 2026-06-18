@@ -14,6 +14,7 @@ export function OarDivider({ className }: { className?: string }) {
       <img
         src="/crossed-oars-black.png"
         alt=""
+        role="presentation"
         width={120}
         height={48}
         className="h-10 w-auto select-none"

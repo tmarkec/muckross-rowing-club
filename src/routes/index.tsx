@@ -247,6 +247,7 @@ function HomePage() {
         <img
           src={community}
           alt=""
+          role="presentation"
           aria-hidden="true"
           width={1600}
           height={1024}

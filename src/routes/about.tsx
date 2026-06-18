@@ -24,6 +24,7 @@ function AboutPage() {
         <img
           src="/hero-eight-fog.jpg"
           alt=""
+          role="presentation"
           aria-hidden="true"
           loading="lazy"
           className="absolute inset-0 h-full w-full object-cover opacity-15"

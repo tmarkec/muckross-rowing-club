@@ -125,17 +125,18 @@ function ContactPage() {
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   <div>
                     <label className="text-sm font-medium text-foreground" htmlFor="name">Name</label>
-                    <input id="name" required className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2" />
+                    <input id="name" name="name" required className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2" />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-foreground" htmlFor="email">Email</label>
-                    <input id="email" type="email" required className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2" />
+                    <input id="email" name="email" type="email" required className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2" />
                   </div>
                 </div>
                 <div className="mt-4">
                   <label className="text-sm font-medium text-foreground" htmlFor="subject">Subject</label>
                   <input
                     id="subject"
+                    name="subject"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2"
@@ -143,7 +144,7 @@ function ContactPage() {
                 </div>
                 <div className="mt-4">
                   <label className="text-sm font-medium text-foreground" htmlFor="message">Message</label>
-                  <textarea id="message" rows={5} required className="mt-1.5 w-full resize-none rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2" />
+                  <textarea id="message" name="message" rows={5} required className="mt-1.5 w-full resize-none rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2" />
                 </div>
 
                 <button
