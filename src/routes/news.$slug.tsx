@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Calendar as CalendarIcon, User, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { supabase } from "@/lib/supabase";
@@ -71,6 +71,7 @@ export const Route = createFileRoute("/news/$slug")({
 function PostPage() {
   const { post, images } = Route.useLoaderData();
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
     if (lightbox === null) return;
@@ -82,6 +83,13 @@ function PostPage() {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [lightbox, images.length]);
+
+  useEffect(() => {
+    if (lightbox === null) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [lightbox]);
 
   const date = new Date(post.published_at).toLocaleDateString("en-IE", {
     day: "numeric", month: "long", year: "numeric",
@@ -126,13 +134,13 @@ function PostPage() {
                     key={img.id}
                     type="button"
                     onClick={() => setLightbox(i)}
-                    className="group block overflow-hidden rounded-md border bg-muted"
+                    className="group block aspect-square overflow-hidden rounded-md border bg-muted"
                   >
                     <img
                       src={img.url}
                       alt={img.caption ?? ""}
                       loading="lazy"
-                      className="h-32 w-full object-cover transition-transform group-hover:scale-105 sm:h-40"
+                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
                     />
                   </button>
                 ))}
@@ -146,6 +154,14 @@ function PostPage() {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
           onClick={() => setLightbox(null)}
+          onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+          onTouchEnd={(e) => {
+            if (touchStartX.current === null) return;
+            const dx = e.changedTouches[0].clientX - touchStartX.current;
+            touchStartX.current = null;
+            if (Math.abs(dx) < 40 || images.length < 2) return;
+            setLightbox(dx < 0 ? (lightbox + 1) % images.length : (lightbox - 1 + images.length) % images.length);
+          }}
         >
           <button
             type="button"
