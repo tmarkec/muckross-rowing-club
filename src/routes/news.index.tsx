@@ -339,7 +339,7 @@ function NewsPage() {
                   preload="intent"
                   className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-elegant"
                 >
-                  <div className="aspect-[16/10] w-full overflow-hidden bg-muted">
+                  <div className="aspect-video w-full overflow-hidden bg-muted">
                     {post.thumbnail_url ? (
                       <img
                         src={post.thumbnail_url}
