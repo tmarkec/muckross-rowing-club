@@ -189,10 +189,7 @@ function SupportPage() {
       <section id="volunteering" className="bg-muted/40 py-20 scroll-mt-24">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-elegant">
-              <HandHeart className="h-6 w-6 text-secondary" />
-            </div>
-            <span className="mt-5 block text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
+            <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
               Get involved
             </span>
             <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">
