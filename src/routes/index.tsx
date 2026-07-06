@@ -139,46 +139,16 @@ function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
-              A club for everyone
+              A CLUB FOR EVERYONE
             </span>
             <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
-              More than a sport, a community
+              Rowing in Killarney National Park
             </h2>
-            <p className="mt-4 text-base text-muted-foreground">
-              From learn-to-row beginners to seasoned competitors, Muckross brings together people
-              who share a love of rowing on the lakes of Killarney.
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              From complete beginners stepping into a boat for the first time to elite competitors,
+              Muckross brings together athletes of every age and fitness level. We are one
+              community, proudly sharing our passion for rowing.
             </p>
-          </div>
-
-          <div className="mt-14 grid gap-8 md:grid-cols-3">
-            {[
-              {
-                icon: Waves,
-                title: "Scenic Waters",
-                body: "Train on Lough Leane, one of Ireland's most beautiful lakes, shaped by mountains and ancient woodland.",
-              },
-              {
-                icon: Users,
-                title: "All Abilities",
-                body: "Junior, senior, masters and recreational rowing. Whether you've never rowed before or have raced competitively, you're welcome.",
-              },
-              {
-                icon: Award,
-                title: "Proud Heritage",
-                body: "A long-standing fixture of Irish rowing, with a presence at regattas across the country including the famous Killarney Regatta.",
-              },
-            ].map(({ icon: Icon, title, body }) => (
-              <div
-                key={title}
-                className="group rounded-2xl border border-border/60 bg-card p-8 shadow-soft transition-all hover:-translate-y-1 hover:shadow-elegant"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
-                  <Icon className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="mt-5 font-serif text-xl font-semibold text-foreground">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
