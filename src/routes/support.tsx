@@ -103,8 +103,8 @@ function SupportPage() {
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-elegant sm:p-8">
             <div className="flex flex-col items-center text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-yellow shadow-yellow">
-                <Heart className="h-5 w-5 text-primary" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-yellow shadow-yellow">
+                <Heart className="h-4 w-4 text-primary" />
               </div>
               <h2 className="mt-4 font-serif text-2xl font-bold text-foreground sm:text-3xl">
                 Make a donation
