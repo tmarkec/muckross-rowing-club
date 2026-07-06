@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Heart, Copy, Check, ArrowRight, ExternalLink, Ticket, Users, HandHeart, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake, Building2 } from "lucide-react";
+import { Copy, Check, ArrowRight, ExternalLink, Ticket, Users, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake, Building2 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
 import { CLUBFORCE_URL as LOTTO_URL } from "@/lib/site";
@@ -102,13 +102,10 @@ function SupportPage() {
       <section className="bg-muted/40 py-12 sm:py-14">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl border border-border/60 bg-card p-6 shadow-elegant sm:p-8">
-            <div className="flex flex-col items-center text-center">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-yellow shadow-yellow">
-                <Heart className="h-4 w-4 text-primary" />
-              </div>
-              <h2 className="mt-4 font-serif text-2xl font-bold text-foreground sm:text-3xl">
-                Make a donation
-              </h2>
+          <div className="flex flex-col items-center text-center">
+            <h2 className="font-serif text-2xl font-bold text-foreground sm:text-3xl">
+              Make a donation
+            </h2>
               <p className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base">
                 Donations of any size go directly toward boats, equipment and keeping
                 the club running for the next generation.
@@ -192,10 +189,7 @@ function SupportPage() {
       <section id="volunteering" className="bg-muted/40 py-20 scroll-mt-24">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-elegant">
-              <HandHeart className="h-6 w-6 text-secondary" />
-            </div>
-            <span className="mt-5 block text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
+            <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground/70">
               Get involved
             </span>
             <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">
