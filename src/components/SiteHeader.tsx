@@ -20,8 +20,8 @@ export function SiteHeader() {
             className="h-10 w-auto sm:h-11"
           />
           <div className="leading-tight whitespace-nowrap">
-            <div className="font-serif text-base font-bold text-primary sm:text-lg">
-              <span className="sm:hidden">Muckross RC</span>
+            <div className="font-serif text-sm font-bold leading-tight text-primary sm:text-base sm:leading-none">
+              <span className="sm:hidden">Muckross Rowing Club</span>
               <span className="hidden sm:inline">Muckross</span>
             </div>
             <div className="hidden text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground sm:block">
