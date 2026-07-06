@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Award, Heart, Users, Waves, Trophy } from "lucide-react";
+import { ArrowRight, Award, Heart, Users, Trophy } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL, SITE_URL, SOCIAL } from "@/lib/site";
