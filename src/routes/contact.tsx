@@ -3,6 +3,7 @@ import { useState, type MouseEvent } from "react";
 import { Mail, MapPin, Send, Navigation } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL } from "@/lib/site";
+import { toast } from "sonner";
 
 const LAT = 52.02188586501607;
 const LNG = -9.508196213456204;
@@ -30,10 +31,13 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
   const [directionsCopied, setDirectionsCopied] = useState(false);
   const { subject: initialSubject } = Route.useSearch();
   const [subject, setSubject] = useState(initialSubject ?? "");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const handleDirectionsClick = async (event: MouseEvent<HTMLAnchorElement>) => {
     if (window.self === window.top) {
@@ -122,9 +126,44 @@ function ContactPage() {
 
             <div className="lg:col-span-3">
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  setSubmitted(true);
+                  const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+                  if (!accessKey) {
+                    toast.error("Contact form is not configured. Please email us directly.");
+                    return;
+                  }
+                  setSubmitting(true);
+                  try {
+                    const res = await fetch("https://api.web3forms.com/submit", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                      },
+                      body: JSON.stringify({
+                        access_key: accessKey,
+                        name,
+                        email,
+                        subject,
+                        message,
+                      }),
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                      toast.success("Thank you! Your message has been sent to the club.");
+                      setName("");
+                      setEmail("");
+                      setSubject("");
+                      setMessage("");
+                    } else {
+                      toast.error("Sorry, something went wrong. Please try again or email us directly.");
+                    }
+                  } catch {
+                    toast.error("Network error. Please check your connection and try again.");
+                  } finally {
+                    setSubmitting(false);
+                  }
                 }}
                 className="rounded-2xl border border-border/60 bg-card p-8 shadow-soft"
               >
@@ -142,6 +181,8 @@ function ContactPage() {
                       id="name"
                       name="name"
                       required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2"
                     />
                   </div>
@@ -154,6 +195,8 @@ function ContactPage() {
                       name="email"
                       type="email"
                       required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2"
                     />
                   </div>
@@ -179,23 +222,19 @@ function ContactPage() {
                     name="message"
                     rows={5}
                     required
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     className="mt-1.5 w-full resize-none rounded-md border border-input bg-background px-3 py-2.5 text-sm outline-none ring-ring/30 transition focus:ring-2"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="mt-6 inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-6 py-3 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
+                  disabled={submitting}
+                  className="mt-6 inline-flex items-center gap-2 rounded-md bg-gradient-yellow px-6 py-3 text-sm font-semibold text-primary shadow-yellow transition-transform hover:scale-105 disabled:opacity-60 disabled:hover:scale-100"
                 >
-                  <Send className="h-4 w-4" /> Send message
+                  <Send className="h-4 w-4" /> {submitting ? "Sending..." : "Send message"}
                 </button>
-
-                {submitted && (
-                  <p className="mt-4 rounded-md bg-secondary/40 px-4 py-3 text-sm text-foreground">
-                    Thanks — your message has been recorded. (Email delivery will be wired up later
-                    via Lovable Cloud.)
-                  </p>
-                )}
               </form>
             </div>
           </div>
