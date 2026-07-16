@@ -256,7 +256,7 @@ function ContactPage() {
                   <p
                     className={`mt-4 rounded-md border px-4 py-3 text-sm font-medium ${
                       formStatus.type === "success"
-                        ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                        ? "border-primary/25 bg-primary/10 text-primary"
                         : "border-destructive/25 bg-destructive/10 text-destructive"
                     }`}
                     role="status"
