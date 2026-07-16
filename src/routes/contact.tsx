@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, type MouseEvent } from "react";
+import { useState, type FormEvent, type MouseEvent } from "react";
 import { Mail, MapPin, Send, Navigation } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { CLUBFORCE_URL } from "@/lib/site";
@@ -38,6 +38,9 @@ function ContactPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<
+    { type: "success" | "error"; message: string } | null
+  >(null);
 
   const handleDirectionsClick = async (event: MouseEvent<HTMLAnchorElement>) => {
     if (window.self === window.top) {
@@ -52,6 +55,58 @@ function ContactPage() {
       window.setTimeout(() => setDirectionsCopied(false), 2200);
     } catch {
       setDirectionsCopied(false);
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+
+    if (!accessKey) {
+      const warning = "Contact form is not configured. Please email us directly.";
+      setFormStatus({ type: "error", message: warning });
+      toast.error(warning);
+      return;
+    }
+
+    setSubmitting(true);
+    setFormStatus(null);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: accessKey,
+          name,
+          email,
+          subject,
+          message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error("Web3Forms submission failed");
+      }
+
+      const successMessage = "Thank you! Your message has been sent to the club.";
+      setFormStatus({ type: "success", message: successMessage });
+      toast.success(successMessage);
+      setName("");
+      setEmail("");
+      setSubject("");
+      setMessage("");
+    } catch {
+      const warning = "Sorry, something went wrong. Please try again or email us directly.";
+      setFormStatus({ type: "error", message: warning });
+      toast.error(warning);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -126,45 +181,7 @@ function ContactPage() {
 
             <div className="lg:col-span-3">
               <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
-                  if (!accessKey) {
-                    toast.error("Contact form is not configured. Please email us directly.");
-                    return;
-                  }
-                  setSubmitting(true);
-                  try {
-                    const res = await fetch("https://api.web3forms.com/submit", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                      },
-                      body: JSON.stringify({
-                        access_key: accessKey,
-                        name,
-                        email,
-                        subject,
-                        message,
-                      }),
-                    });
-                    const data = await res.json();
-                    if (res.ok && data.success) {
-                      toast.success("Thank you! Your message has been sent to the club.");
-                      setName("");
-                      setEmail("");
-                      setSubject("");
-                      setMessage("");
-                    } else {
-                      toast.error("Sorry, something went wrong. Please try again or email us directly.");
-                    }
-                  } catch {
-                    toast.error("Network error. Please check your connection and try again.");
-                  } finally {
-                    setSubmitting(false);
-                  }
-                }}
+                onSubmit={handleSubmit}
                 className="rounded-2xl border border-border/60 bg-card p-8 shadow-soft"
               >
                 <h2 className="font-serif text-2xl font-bold text-foreground">Send us a message</h2>
@@ -235,6 +252,18 @@ function ContactPage() {
                 >
                   <Send className="h-4 w-4" /> {submitting ? "Sending..." : "Send message"}
                 </button>
+                {formStatus && (
+                  <p
+                    className={`mt-4 rounded-md border px-4 py-3 text-sm font-medium ${
+                      formStatus.type === "success"
+                        ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                        : "border-destructive/25 bg-destructive/10 text-destructive"
+                    }`}
+                    role="status"
+                  >
+                    {formStatus.message}
+                  </p>
+                )}
               </form>
             </div>
           </div>
