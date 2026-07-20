@@ -38,9 +38,6 @@ function ContactPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [formStatus, setFormStatus] = useState<
-    { type: "success" | "error"; message: string } | null
-  >(null);
 
   const handleDirectionsClick = async (event: MouseEvent<HTMLAnchorElement>) => {
     if (window.self === window.top) {
