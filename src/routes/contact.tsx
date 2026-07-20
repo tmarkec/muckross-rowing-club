@@ -244,18 +244,6 @@ function ContactPage() {
                 >
                   <Send className="h-4 w-4" /> {submitting ? "Sending..." : "Send message"}
                 </button>
-                {formStatus && (
-                  <p
-                    className={`mt-4 rounded-md border px-4 py-3 text-sm font-medium ${
-                      formStatus.type === "success"
-                        ? "border-primary/25 bg-primary/10 text-primary"
-                        : "border-destructive/25 bg-destructive/10 text-destructive"
-                    }`}
-                    role="status"
-                  >
-                    {formStatus.message}
-                  </p>
-                )}
               </form>
             </div>
           </div>
