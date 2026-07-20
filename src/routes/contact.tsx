@@ -61,13 +61,11 @@ function ContactPage() {
 
     if (!accessKey) {
       const warning = "Contact form is not configured. Please email us directly.";
-      setFormStatus({ type: "error", message: warning });
       toast.error(warning);
       return;
     }
 
     setSubmitting(true);
-    setFormStatus(null);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
