@@ -38,9 +38,6 @@ function ContactPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [formStatus, setFormStatus] = useState<
-    { type: "success" | "error"; message: string } | null
-  >(null);
 
   const handleDirectionsClick = async (event: MouseEvent<HTMLAnchorElement>) => {
     if (window.self === window.top) {
@@ -64,13 +61,11 @@ function ContactPage() {
 
     if (!accessKey) {
       const warning = "Contact form is not configured. Please email us directly.";
-      setFormStatus({ type: "error", message: warning });
       toast.error(warning);
       return;
     }
 
     setSubmitting(true);
-    setFormStatus(null);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -79,36 +74,33 @@ function ContactPage() {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({
-          access_key: accessKey,
-          name,
-          email,
-          subject,
-          message,
-        }),
-      });
+      body: JSON.stringify({
+        access_key: accessKey,
+        name,
+        email,
+        subject,
+        message,
+        from_name: name || "Muckross Rowing Club Contact Form",
+      }),
+    });
 
-      const result = await response.json();
+    const result = await response.json();
 
-      if (!response.ok || !result.success) {
-        throw new Error("Web3Forms submission failed");
-      }
-
-      const successMessage = "Thank you! Your message has been sent to the club.";
-      setFormStatus({ type: "success", message: successMessage });
-      toast.success(successMessage);
-      setName("");
-      setEmail("");
-      setSubject("");
-      setMessage("");
-    } catch {
-      const warning = "Sorry, something went wrong. Please try again or email us directly.";
-      setFormStatus({ type: "error", message: warning });
-      toast.error(warning);
-    } finally {
-      setSubmitting(false);
+    if (!response.ok || !result.success) {
+      throw new Error("Web3Forms submission failed");
     }
-  };
+
+    toast.success("Thank you! Your message has been sent to the club.");
+    setName("");
+    setEmail("");
+    setSubject("");
+    setMessage("");
+  } catch {
+    toast.error("Sorry, something went wrong. Please try again or email us directly.");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <SiteLayout>
@@ -252,18 +244,6 @@ function ContactPage() {
                 >
                   <Send className="h-4 w-4" /> {submitting ? "Sending..." : "Send message"}
                 </button>
-                {formStatus && (
-                  <p
-                    className={`mt-4 rounded-md border px-4 py-3 text-sm font-medium ${
-                      formStatus.type === "success"
-                        ? "border-primary/25 bg-primary/10 text-primary"
-                        : "border-destructive/25 bg-destructive/10 text-destructive"
-                    }`}
-                    role="status"
-                  >
-                    {formStatus.message}
-                  </p>
-                )}
               </form>
             </div>
           </div>
