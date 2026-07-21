@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { FileText, Download, Users } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import codeOfBehaviourPdf from "@/assets/MRC_code_of_behaviour.pdf.asset.json";
 
 export const Route = createFileRoute("/club-info")({
   head: () => ({
@@ -15,20 +16,22 @@ export const Route = createFileRoute("/club-info")({
 });
 
 const documents = [
-  { title: "Code of Behaviour", body: "Standards of conduct expected of members, coaches and supporters." },
+  {
+    title: "Code of Behaviour",
+    body: "Standards of conduct expected of members, coaches and supporters.",
+    href: codeOfBehaviourPdf.url,
+    file: "MRC_code_of_behaviour.pdf",
+  },
   { title: "Child Safeguarding Statement", body: "How we protect and support our junior rowers." },
   { title: "Health & Safety Policy", body: "On-water and boathouse safety procedures." },
-  { title: "Club Constitution", body: "The rules and governance framework that the club operates under." },
-  { title: "Anti-Bullying Policy", body: "Our commitment to a respectful, bullying-free environment for all members." },
-  { title: "Membership Form & Fees Schedule", body: "Join the club and view current annual membership fees." },
   { title: "Incident / Accident Report Form", body: "Used to log any on-water or boathouse incidents for review." },
-  { title: "Traffic Rules on the Lake", body: "Navigation and traffic rules for safe rowing on the lake." },
-];
+] satisfies Array<{ title: string; body: string; href?: string; file?: string }>;
 
 const people = [
   { role: "Club President", name: "Sharon Cooper" },
   { role: "Club Secretary", name: "Aine O'Sullivan" },
   { role: "Safeguarding Officer", name: "Marko Tot" },
+  { role: "Child Protection Officer", name: "Carrie Spillane" },
   { role: "Treasurer", name: "Trish Munday" },
   { role: "PRO Officer", name: "Tim O'Shea" },
 ];
@@ -68,7 +71,10 @@ function ClubInfoPage() {
             {documents.map((doc) => (
               <li key={doc.title}>
                 <a
-                  href="#"
+                  href={doc.href ?? "#"}
+                  {...(doc.href
+                    ? { download: doc.file, target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
                   className="flex items-start gap-4 rounded-2xl border border-border/60 bg-card p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:border-secondary hover:shadow-elegant"
                 >
                   <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-yellow shadow-yellow">
@@ -78,7 +84,7 @@ function ClubInfoPage() {
                     <h3 className="font-serif text-base font-semibold text-foreground">{doc.title}</h3>
                     <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{doc.body}</p>
                     <span className="mt-2 inline-block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                      PDF · Coming soon
+                      {doc.href ? "PDF · Download" : "PDF · Coming soon"}
                     </span>
                   </div>
                 </a>
