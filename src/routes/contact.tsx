@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent, type MouseEvent } from "react";
 import { Mail, MapPin, Send, Navigation } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
-import { CLUBFORCE_URL } from "@/lib/site";
+import { CLUB_EMAIL, CLUBFORCE_URL } from "@/lib/site";
 import { toast } from "sonner";
 
 const LAT = 52.02188586501607;
@@ -146,10 +146,10 @@ function ContactPage() {
                   <div>
                     <div className="font-semibold text-foreground">Email</div>
                     <a
-                      href="mailto:info@muckrossrowingclub.ie"
+                      href={`mailto:${CLUB_EMAIL}`}
                       className="mt-1 block text-muted-foreground transition-colors hover:text-primary"
                     >
-                      info@muckrossrowingclub.ie
+                      {CLUB_EMAIL}
                     </a>
                   </div>
                 </li>

@@ -9,10 +9,10 @@ export const SITE_URL = "https://muckrossrowingclub.ie";
 
 /** ClubForce membership / payments portal — opened in a new tab. */
 export const CLUBFORCE_URL =
-  "https://clubs.clubforce.com/clubs/rowing-muckross-rowing-club-kerry/";
+  "https://muckrossrowingclub.clubforce.com/products/shop";
 
 /** Primary club contact email. */
-export const CLUB_EMAIL = "info@muckrossrowingclub.ie";
+export const CLUB_EMAIL = "muckrossrowingclub@gmail.com";
 
 /** Social profiles. */
 export const SOCIAL = {
