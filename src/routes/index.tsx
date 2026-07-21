@@ -12,7 +12,6 @@ const heroSlides = [
     src: "/rowing-misty-dawn.jpg",
     alt: "Single sculler at dawn with mist over the lake and mountains",
   },
-  { src: "/rowing-sunset-double.jpg", alt: "Double scull rowing at sunset on Lough Leane" },
   { src: "/rowing-eight-mist.jpg", alt: "Junior eight training in misty conditions on the lake" },
 ];
 
