@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { FileText, Download, Users } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
-import codeOfBehaviourPdf from "@/assets/MRC_code_of_behaviour.pdf.asset.json";
 
 export const Route = createFileRoute("/club-info")({
   head: () => ({
@@ -19,7 +18,7 @@ const documents = [
   {
     title: "Code of Behaviour",
     body: "Standards of conduct expected of members, coaches and supporters.",
-    href: codeOfBehaviourPdf.url,
+    href: "/documents/MRC_code_of_behaviour.pdf",
     file: "MRC_code_of_behaviour.pdf",
   },
   { title: "Child Safeguarding Statement", body: "How we protect and support our junior rowers." },
