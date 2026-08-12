@@ -317,7 +317,14 @@ function PostEditor({
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {images.map((img) => (
                 <div key={img.id} className="relative group">
-                  <img src={img.url} alt={img.caption ?? ""} className="w-full h-32 object-cover rounded-md border" />
+                  <img
+                    src={img.url}
+                    alt={img.caption ?? ""}
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
+                    className="w-full aspect-video object-cover rounded-lg border bg-muted"
+                  />
                   <button
                     type="button"
                     onClick={() => removeImage(img.id)}
