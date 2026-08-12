@@ -128,47 +128,32 @@ function PostPage() {
           {images.length > 0 && (
             <div className="mt-12">
               <h2 className="font-serif text-2xl font-bold">Gallery</h2>
-              {/* Mobile: swipeable carousel */}
-              <div className="mt-4 -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 md:hidden">
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {images.map((img: PostImage, i: number) => (
                   <button
                     key={img.id}
                     type="button"
                     onClick={() => setLightbox(i)}
-                    className="w-[78%] shrink-0 snap-center overflow-hidden rounded-lg border bg-muted"
+                    className="group block w-full aspect-square overflow-hidden rounded-lg border bg-muted"
                   >
                     <img
                       src={img.url}
                       alt={img.caption ?? ""}
                       loading="lazy"
-                      className="aspect-square h-full w-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-              {images.length > 1 && (
-                <p className="mt-1 text-center text-xs text-muted-foreground md:hidden">
-                  Swipe to browse · tap to enlarge
-                </p>
-              )}
-              {/* Desktop: grid */}
-              <div className="mt-4 hidden grid-cols-3 gap-3 md:grid">
-                {images.map((img: PostImage, i: number) => (
-                  <button
-                    key={img.id}
-                    type="button"
-                    onClick={() => setLightbox(i)}
-                    className="group block aspect-square overflow-hidden rounded-md border bg-muted"
-                  >
-                    <img
-                      src={img.url}
-                      alt={img.caption ?? ""}
-                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        const el = e.currentTarget;
+                        el.style.visibility = "hidden";
+                        el.parentElement?.classList.add("opacity-50");
+                      }}
                       className="h-full w-full object-cover transition-transform group-hover:scale-105"
                     />
                   </button>
                 ))}
               </div>
+              {images.length > 1 && (
+                <p className="mt-2 text-xs text-muted-foreground sm:hidden">Tap an image to enlarge</p>
+              )}
             </div>
           )}
         </div>
