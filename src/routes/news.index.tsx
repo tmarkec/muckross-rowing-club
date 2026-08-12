@@ -47,8 +47,29 @@ type NewsPost = {
 };
 
 const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
+const LOUGHUITTANE_DOC_URL =
+  "https://docs.google.com/document/d/1Pn9WN71Uy3xYIQ1sO4FJzbL_95N-YKNkicJEAKes6EU/edit?tab=t.0";
 
-const fixtures = [
+type Fixture = {
+  date: Date;
+  endDate: Date;
+  dateLabel: string;
+  name: string;
+  location: string;
+  tag: string;
+  url?: string;
+};
+
+const fixtures: Fixture[] = [
+  {
+    date: new Date(2026, 7, 30),
+    endDate: new Date(2026, 7, 30),
+    dateLabel: "Sun 30 Aug 2026",
+    name: "Loughuittane Heritage Regatta",
+    location: "Loughuittane Lake",
+    tag: "Regatta",
+    url: LOUGHUITTANE_DOC_URL,
+  },
   {
     date: new Date(2026, 4, 9),
     endDate: new Date(2026, 4, 9),
@@ -188,7 +209,8 @@ function NewsPage() {
     }
     return days;
   }, [upcomingFixtures]);
-  const firstFixtureMonth = upcomingFixtures[0]?.date ?? new Date();
+  const [month, setMonth] = useState<Date>(() => new Date());
+  const highlightDay = new Date(2026, 7, 30);
 
   return (
     <SiteLayout>
@@ -257,7 +279,7 @@ function NewsPage() {
                             <div className="flex flex-wrap items-center gap-2">
                               <h3 className="font-serif text-base font-bold sm:text-lg">
                                 <a
-                                  href={ROWING_IRELAND_EVENTS_URL}
+                                  href={f.url ?? ROWING_IRELAND_EVENTS_URL}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1.5 text-foreground hover:text-primary hover:underline"
@@ -295,11 +317,15 @@ function NewsPage() {
               <Calendar
                 mode="single"
                 weekStartsOn={1}
-                defaultMonth={firstFixtureMonth}
-                modifiers={{ event: eventDays }}
+                month={month}
+                onMonthChange={setMonth}
+                today={new Date()}
+                modifiers={{ event: eventDays, highlight: [highlightDay] }}
                 modifiersClassNames={{
                   event:
                     "bg-gradient-navy text-primary-foreground rounded-md font-bold cursor-pointer",
+                  highlight:
+                    "bg-secondary text-secondary-foreground rounded-md font-bold ring-2 ring-secondary cursor-pointer",
                 }}
                 className="pointer-events-auto"
                 onDayClick={(day) => {
@@ -311,6 +337,10 @@ function NewsPage() {
                 <span className="inline-flex items-center gap-1.5">
                   <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy" /> Muckross RC competing
                   — click a highlighted day for details
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-sm bg-secondary" /> 30 Aug — Loughuittane
+                  Heritage Regatta
                 </span>
               </div>
             </div>
