@@ -128,7 +128,31 @@ function PostPage() {
           {images.length > 0 && (
             <div className="mt-12">
               <h2 className="font-serif text-2xl font-bold">Gallery</h2>
-              <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+              {/* Mobile: swipeable carousel */}
+              <div className="mt-4 -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 md:hidden">
+                {images.map((img: PostImage, i: number) => (
+                  <button
+                    key={img.id}
+                    type="button"
+                    onClick={() => setLightbox(i)}
+                    className="w-[78%] shrink-0 snap-center overflow-hidden rounded-lg border bg-muted"
+                  >
+                    <img
+                      src={img.url}
+                      alt={img.caption ?? ""}
+                      loading="lazy"
+                      className="aspect-square h-full w-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+              {images.length > 1 && (
+                <p className="mt-1 text-center text-xs text-muted-foreground md:hidden">
+                  Swipe to browse · tap to enlarge
+                </p>
+              )}
+              {/* Desktop: grid */}
+              <div className="mt-4 hidden grid-cols-3 gap-3 md:grid">
                 {images.map((img: PostImage, i: number) => (
                   <button
                     key={img.id}
