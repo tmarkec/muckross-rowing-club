@@ -29,7 +29,6 @@ const documents = [
 const people = [
   { role: "Club President", name: "Sharon Cooper" },
   { role: "Club Secretary", name: "Aine O'Sullivan" },
-  { role: "Safeguarding Officer", name: "Marko Tot" },
   { role: "Child Protection Officer", name: "Carrie Spillane" },
   { role: "Treasurer", name: "Trish Munday" },
   { role: "PRO Officer", name: "Tim O'Shea" },
