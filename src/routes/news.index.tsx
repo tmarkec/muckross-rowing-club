@@ -47,8 +47,29 @@ type NewsPost = {
 };
 
 const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
+const LOUGHUITTANE_DOC_URL =
+  "https://docs.google.com/document/d/1Pn9WN71Uy3xYIQ1sO4FJzbL_95N-YKNkicJEAKes6EU/edit?tab=t.0";
 
-const fixtures = [
+type Fixture = {
+  date: Date;
+  endDate: Date;
+  dateLabel: string;
+  name: string;
+  location: string;
+  tag: string;
+  url?: string;
+};
+
+const fixtures: Fixture[] = [
+  {
+    date: new Date(2026, 7, 30),
+    endDate: new Date(2026, 7, 30),
+    dateLabel: "Sun 30 Aug 2026",
+    name: "Loughuittane Heritage Regatta",
+    location: "Loughuittane Lake",
+    tag: "Regatta",
+    url: LOUGHUITTANE_DOC_URL,
+  },
   {
     date: new Date(2026, 4, 9),
     endDate: new Date(2026, 4, 9),
