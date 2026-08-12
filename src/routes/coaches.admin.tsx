@@ -121,7 +121,7 @@ function PostsTab() {
           <p className="text-xs text-muted-foreground mt-1">Write, edit and publish posts shown on the club website.</p>
         </div>
         <Button asChild size="sm">
-          <Link to="/coaches/posts">New post / open editor →</Link>
+          <Link to="/coaches/posts" search={{}}>New post / open editor →</Link>
         </Button>
       </div>
 
