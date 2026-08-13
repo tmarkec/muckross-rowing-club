@@ -108,6 +108,7 @@ function PostEditor({
   const originalPublishedAt = (post?.published_at ?? "").slice(0, 10);
   const [coverUrl, setCoverUrl] = useState<string | null>(post?.cover_image_url ?? null);
   const [images, setImages] = useState<PostImage[]>([]);
+  const [failedImageUrls, setFailedImageUrls] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -311,28 +312,39 @@ function PostEditor({
               }} />
             </label>
           </div>
+          <div className="rounded-md border border-secondary bg-secondary/10 p-3 text-xs text-foreground">
+            <p className="font-semibold">Gallery count: {images?.length ?? 0}</p>
+            <p className="mt-1 break-all">First image URL: {images?.[0]?.url ?? "No URL available"}</p>
+          </div>
           {images.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No gallery images. Add up to 15 per post.</p>
+            <p className="rounded-md border border-destructive bg-destructive/10 p-3 text-sm font-medium text-destructive">
+              Debug: No images found in post gallery array.
+            </p>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {images.map((img) => (
-                <div key={img.id} className="relative group">
-                  <img
-                    src={img.url}
-                    alt={img.caption ?? ""}
-                    loading="lazy"
-                    decoding="async"
-                    onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
-                    className="w-full aspect-video object-cover rounded-lg border bg-muted"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(img.id)}
-                    className="absolute top-1 right-1 rounded-full bg-destructive text-destructive-foreground p-1 opacity-80 hover:opacity-100"
-                    aria-label="Remove image"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
+                <div key={img.id} className="min-w-0">
+                  <div className="relative group">
+                    <img
+                      src={img.url}
+                      alt={img.caption ?? ""}
+                      loading="lazy"
+                      decoding="async"
+                      onError={() => setFailedImageUrls((urls) => urls.includes(img.url) ? urls : [...urls, img.url])}
+                      className="w-full aspect-video object-cover rounded-lg border bg-muted"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(img.id)}
+                      className="absolute top-1 right-1 rounded-full bg-destructive text-destructive-foreground p-1 opacity-80 hover:opacity-100"
+                      aria-label="Remove image"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  {failedImageUrls.includes(img.url) && (
+                    <p className="mt-1 break-all text-xs font-medium text-destructive">Failed to load image: {img.url}</p>
+                  )}
                 </div>
               ))}
             </div>

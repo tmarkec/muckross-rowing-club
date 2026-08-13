@@ -71,6 +71,7 @@ export const Route = createFileRoute("/news/$slug")({
 function PostPage() {
   const { post, images } = Route.useLoaderData();
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [failedImageUrls, setFailedImageUrls] = useState<string[]>([]);
   const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
@@ -125,37 +126,48 @@ function PostPage() {
             dangerouslySetInnerHTML={{ __html: post.content_html }}
           />
 
-          {images.length > 0 && (
-            <div className="mt-12">
+          <div className="mt-12">
+            <div className="mb-4 rounded-md border border-secondary bg-secondary/10 p-3 text-xs text-foreground">
+              <p className="font-semibold">Gallery count: {images?.length ?? 0}</p>
+              <p className="mt-1 break-all">First image URL: {images?.[0]?.url ?? "No URL available"}</p>
+            </div>
+
+            {!images || images.length === 0 ? (
+              <p className="rounded-md border border-destructive bg-destructive/10 p-3 text-sm font-medium text-destructive">
+                Debug: No images found in post gallery array.
+              </p>
+            ) : (
+              <>
               <h2 className="font-serif text-2xl font-bold">Gallery</h2>
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {images.map((img: PostImage, i: number) => (
-                  <button
-                    key={img.id}
-                    type="button"
-                    onClick={() => setLightbox(i)}
-                    className="group block w-full aspect-square overflow-hidden rounded-lg border bg-muted"
-                  >
-                    <img
-                      src={img.url}
-                      alt={img.caption ?? ""}
-                      loading="lazy"
-                      decoding="async"
-                      onError={(e) => {
-                        const el = e.currentTarget;
-                        el.style.visibility = "hidden";
-                        el.parentElement?.classList.add("opacity-50");
-                      }}
-                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
-                    />
-                  </button>
+                  <div key={img.id} className="min-w-0">
+                    <button
+                      type="button"
+                      onClick={() => setLightbox(i)}
+                      className="group block aspect-square w-full overflow-hidden rounded-lg border bg-muted"
+                    >
+                      <img
+                        src={img.url}
+                        alt={img.caption ?? ""}
+                        loading="lazy"
+                        decoding="async"
+                        onError={() => setFailedImageUrls((urls) => urls.includes(img.url) ? urls : [...urls, img.url])}
+                        className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                      />
+                    </button>
+                    {failedImageUrls.includes(img.url) && (
+                      <p className="mt-1 break-all text-xs font-medium text-destructive">Failed to load image: {img.url}</p>
+                    )}
+                  </div>
                 ))}
               </div>
               {images.length > 1 && (
                 <p className="mt-2 text-xs text-muted-foreground sm:hidden">Tap an image to enlarge</p>
               )}
-            </div>
-          )}
+              </>
+            )}
+          </div>
         </div>
       </article>
 
