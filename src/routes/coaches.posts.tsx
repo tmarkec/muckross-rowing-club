@@ -57,11 +57,16 @@ function PostsAdminPage() {
 
   useEffect(() => {
     if (!isAdmin) return;
-    if (!id) { setEditing(null); return; }
+    if (!id) {
+      setEditing(null);
+      return;
+    }
     setFetching(true);
     void supabase
       .from("posts")
-      .select("id, slug, title, excerpt, content_html, cover_image_url, author_name, published, published_at")
+      .select(
+        "id, slug, title, excerpt, content_html, cover_image_url, author_name, published, published_at",
+      )
       .eq("id", id)
       .single()
       .then(({ data, error }) => {
@@ -72,7 +77,11 @@ function PostsAdminPage() {
   }, [isAdmin, id]);
 
   if (loading || !session || !isAdmin || fetching) {
-    return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center text-muted-foreground">
+        Loading…
+      </div>
+    );
   }
 
   return (
@@ -108,6 +117,7 @@ function PostEditor({
   const originalPublishedAt = (post?.published_at ?? "").slice(0, 10);
   const [coverUrl, setCoverUrl] = useState<string | null>(post?.cover_image_url ?? null);
   const [images, setImages] = useState<PostImage[]>([]);
+  const [failedImageUrls, setFailedImageUrls] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -134,7 +144,10 @@ function PostEditor({
       cacheControl: "31536000",
       upsert: false,
     });
-    if (error) { toast.error(error.message); return null; }
+    if (error) {
+      toast.error(error.message);
+      return null;
+    }
     const { data: pub } = supabase.storage.from("post-images").getPublicUrl(path);
     return pub.publicUrl;
   };
@@ -152,7 +165,13 @@ function PostEditor({
     let order = images.length;
     for (const f of Array.from(files)) {
       const url = await uploadFile(f);
-      if (url) uploaded.push({ id: `tmp-${crypto.randomUUID()}`, url, caption: null, sort_order: order++ });
+      if (url)
+        uploaded.push({
+          id: `tmp-${crypto.randomUUID()}`,
+          url,
+          caption: null,
+          sort_order: order++,
+        });
     }
     setImages([...images, ...uploaded]);
     setUploading(false);
@@ -228,7 +247,9 @@ function PostEditor({
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <h1 className="font-serif text-3xl">{post ? "Edit post" : "New post"}</h1>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={onClose}>Cancel</Button>
+            <Button variant="outline" size="sm" onClick={onClose}>
+              Cancel
+            </Button>
             <Button size="sm" onClick={save} disabled={saving}>
               {saving && <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />}
               {post ? "Save changes" : "Create post"}
@@ -239,34 +260,62 @@ function PostEditor({
         <div className="rounded-lg border bg-background p-6 space-y-4">
           <div>
             <Label>Title</Label>
-            <Input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={200} placeholder="Crew wins at Cork Regatta" />
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              maxLength={200}
+              placeholder="Crew wins at Cork Regatta"
+            />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <Label>URL slug</Label>
-              <Input value={slug} onChange={(e) => setSlug(e.target.value)} maxLength={80} placeholder="crew-wins-cork-regatta" />
+              <Input
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                maxLength={80}
+                placeholder="crew-wins-cork-regatta"
+              />
               <p className="text-xs text-muted-foreground mt-1">/news/{slug || "your-slug"}</p>
             </div>
             <div>
               <Label>Date</Label>
-              <Input type="date" value={publishedAt} onChange={(e) => setPublishedAt(e.target.value)} />
+              <Input
+                type="date"
+                value={publishedAt}
+                onChange={(e) => setPublishedAt(e.target.value)}
+              />
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <Label>Author</Label>
-              <Input value={authorName} onChange={(e) => setAuthorName(e.target.value)} maxLength={120} />
+              <Input
+                value={authorName}
+                onChange={(e) => setAuthorName(e.target.value)}
+                maxLength={120}
+              />
             </div>
             <div className="flex items-end gap-2">
               <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" checked={published} onChange={(e) => setPublished(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={published}
+                  onChange={(e) => setPublished(e.target.checked)}
+                />
                 Published (visible on /news)
               </label>
             </div>
           </div>
           <div>
             <Label>Short excerpt (optional)</Label>
-            <Textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} maxLength={300} rows={2} placeholder="One-sentence summary shown on the news listing." />
+            <Textarea
+              value={excerpt}
+              onChange={(e) => setExcerpt(e.target.value)}
+              maxLength={300}
+              rows={2}
+              placeholder="One-sentence summary shown on the news listing."
+            />
           </div>
         </div>
 
@@ -288,9 +337,17 @@ function PostEditor({
             <label className="inline-flex items-center gap-2 cursor-pointer rounded-md border border-dashed border-input px-4 py-3 text-sm text-muted-foreground hover:bg-muted">
               <Upload className="h-4 w-4" />
               {uploading ? "Uploading…" : "Choose cover image"}
-              <input type="file" accept="image/*" className="hidden" disabled={uploading} onChange={(e) => {
-                const f = e.target.files?.[0]; if (f) void handleCoverUpload(f); e.target.value = "";
-              }} />
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                disabled={uploading}
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) void handleCoverUpload(f);
+                  e.target.value = "";
+                }}
+              />
             </label>
           )}
         </div>
@@ -306,33 +363,60 @@ function PostEditor({
             <label className="inline-flex items-center gap-2 cursor-pointer rounded-md border border-input px-3 py-1.5 text-sm hover:bg-muted">
               <Upload className="h-4 w-4" />
               {uploading ? "Uploading…" : "Add images"}
-              <input type="file" accept="image/*" multiple className="hidden" disabled={uploading} onChange={(e) => {
-                if (e.target.files) void handleGalleryUpload(e.target.files); e.target.value = "";
-              }} />
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                disabled={uploading}
+                onChange={(e) => {
+                  if (e.target.files) void handleGalleryUpload(e.target.files);
+                  e.target.value = "";
+                }}
+              />
             </label>
           </div>
+          <div className="rounded-md border border-secondary bg-secondary/10 p-3 text-xs text-foreground">
+            <p className="font-semibold">Gallery count: {images?.length ?? 0}</p>
+            <p className="mt-1 break-all">
+              First image URL: {images?.[0]?.url ?? "No URL available"}
+            </p>
+          </div>
           {images.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No gallery images. Add up to 15 per post.</p>
+            <p className="rounded-md border border-destructive bg-destructive/10 p-3 text-sm font-medium text-destructive">
+              Debug: No images found in post gallery array.
+            </p>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {images.map((img) => (
-                <div key={img.id} className="relative group">
-                  <img
-                    src={img.url}
-                    alt={img.caption ?? ""}
-                    loading="lazy"
-                    decoding="async"
-                    onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
-                    className="w-full aspect-video object-cover rounded-lg border bg-muted"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(img.id)}
-                    className="absolute top-1 right-1 rounded-full bg-destructive text-destructive-foreground p-1 opacity-80 hover:opacity-100"
-                    aria-label="Remove image"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
+                <div key={img.id} className="min-w-0">
+                  <div className="relative group">
+                    <img
+                      src={img.url}
+                      alt={img.caption ?? ""}
+                      loading="lazy"
+                      decoding="async"
+                      onError={() =>
+                        setFailedImageUrls((urls) =>
+                          urls.includes(img.url) ? urls : [...urls, img.url],
+                        )
+                      }
+                      className="w-full aspect-video object-cover rounded-lg border bg-muted"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(img.id)}
+                      className="absolute top-1 right-1 rounded-full bg-destructive text-destructive-foreground p-1 opacity-80 hover:opacity-100"
+                      aria-label="Remove image"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  {failedImageUrls.includes(img.url) && (
+                    <p className="mt-1 break-all text-xs font-medium text-destructive">
+                      Failed to load image: {img.url}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

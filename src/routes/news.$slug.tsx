@@ -1,6 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Calendar as CalendarIcon, User, X, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar as CalendarIcon,
+  User,
+  X,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { supabase } from "@/lib/supabase";
 
@@ -52,7 +59,9 @@ export const Route = createFileRoute("/news/$slug")({
     <SiteLayout>
       <div className="mx-auto max-w-2xl px-4 py-20 text-center">
         <p className="text-sm text-destructive">{error.message}</p>
-        <Link to="/news" className="mt-4 inline-block text-sm text-primary hover:underline">← Back to news</Link>
+        <Link to="/news" className="mt-4 inline-block text-sm text-primary hover:underline">
+          ← Back to news
+        </Link>
       </div>
     </SiteLayout>
   ),
@@ -60,8 +69,12 @@ export const Route = createFileRoute("/news/$slug")({
     <SiteLayout>
       <div className="mx-auto max-w-2xl px-4 py-20 text-center">
         <h1 className="font-serif text-3xl">Post not found</h1>
-        <p className="mt-2 text-sm text-muted-foreground">This post doesn't exist or has been unpublished.</p>
-        <Link to="/news" className="mt-4 inline-block text-sm text-primary hover:underline">← Back to news</Link>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This post doesn't exist or has been unpublished.
+        </p>
+        <Link to="/news" className="mt-4 inline-block text-sm text-primary hover:underline">
+          ← Back to news
+        </Link>
       </div>
     </SiteLayout>
   ),
@@ -71,6 +84,7 @@ export const Route = createFileRoute("/news/$slug")({
 function PostPage() {
   const { post, images } = Route.useLoaderData();
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [failedImageUrls, setFailedImageUrls] = useState<string[]>([]);
   const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
@@ -78,7 +92,8 @@ function PostPage() {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") setLightbox(null);
       if (e.key === "ArrowRight") setLightbox((i) => (i === null ? null : (i + 1) % images.length));
-      if (e.key === "ArrowLeft") setLightbox((i) => (i === null ? null : (i - 1 + images.length) % images.length));
+      if (e.key === "ArrowLeft")
+        setLightbox((i) => (i === null ? null : (i - 1 + images.length) % images.length));
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
@@ -88,11 +103,15 @@ function PostPage() {
     if (lightbox === null) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, [lightbox]);
 
   const date = new Date(post.published_at).toLocaleDateString("en-IE", {
-    day: "numeric", month: "long", year: "numeric",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
 
   return (
@@ -100,24 +119,43 @@ function PostPage() {
       <article className="bg-background">
         {post.cover_image_url && (
           <div className="w-full bg-muted">
-            <img src={post.cover_image_url} alt="" className="mx-auto max-h-[460px] w-full max-w-5xl object-cover" />
+            <img
+              src={post.cover_image_url}
+              alt=""
+              className="mx-auto max-h-[460px] w-full max-w-5xl object-cover"
+            />
           </div>
         )}
 
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
-          <Link to="/news" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary">
+          <Link
+            to="/news"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary"
+          >
             <ArrowLeft className="h-3.5 w-3.5" /> Back to news
           </Link>
 
-          <h1 className="mt-6 font-serif text-3xl font-bold text-foreground sm:text-4xl">{post.title}</h1>
+          <h1 className="mt-6 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+            {post.title}
+          </h1>
 
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5"><CalendarIcon className="h-3.5 w-3.5" />{date}</span>
-            {post.author_name && <span className="inline-flex items-center gap-1.5"><User className="h-3.5 w-3.5" />{post.author_name}</span>}
+            <span className="inline-flex items-center gap-1.5">
+              <CalendarIcon className="h-3.5 w-3.5" />
+              {date}
+            </span>
+            {post.author_name && (
+              <span className="inline-flex items-center gap-1.5">
+                <User className="h-3.5 w-3.5" />
+                {post.author_name}
+              </span>
+            )}
           </div>
 
           {post.excerpt && (
-            <p className="mt-6 border-l-4 border-secondary pl-4 text-lg italic text-muted-foreground">{post.excerpt}</p>
+            <p className="mt-6 border-l-4 border-secondary pl-4 text-lg italic text-muted-foreground">
+              {post.excerpt}
+            </p>
           )}
 
           <div
@@ -125,37 +163,58 @@ function PostPage() {
             dangerouslySetInnerHTML={{ __html: post.content_html }}
           />
 
-          {images.length > 0 && (
-            <div className="mt-12">
-              <h2 className="font-serif text-2xl font-bold">Gallery</h2>
-              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {images.map((img: PostImage, i: number) => (
-                  <button
-                    key={img.id}
-                    type="button"
-                    onClick={() => setLightbox(i)}
-                    className="group block w-full aspect-square overflow-hidden rounded-lg border bg-muted"
-                  >
-                    <img
-                      src={img.url}
-                      alt={img.caption ?? ""}
-                      loading="lazy"
-                      decoding="async"
-                      onError={(e) => {
-                        const el = e.currentTarget;
-                        el.style.visibility = "hidden";
-                        el.parentElement?.classList.add("opacity-50");
-                      }}
-                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
-                    />
-                  </button>
-                ))}
-              </div>
-              {images.length > 1 && (
-                <p className="mt-2 text-xs text-muted-foreground sm:hidden">Tap an image to enlarge</p>
-              )}
+          <div className="mt-12">
+            <div className="mb-4 rounded-md border border-secondary bg-secondary/10 p-3 text-xs text-foreground">
+              <p className="font-semibold">Gallery count: {images?.length ?? 0}</p>
+              <p className="mt-1 break-all">
+                First image URL: {images?.[0]?.url ?? "No URL available"}
+              </p>
             </div>
-          )}
+
+            {!images || images.length === 0 ? (
+              <p className="rounded-md border border-destructive bg-destructive/10 p-3 text-sm font-medium text-destructive">
+                Debug: No images found in post gallery array.
+              </p>
+            ) : (
+              <>
+                <h2 className="font-serif text-2xl font-bold">Gallery</h2>
+                <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {images.map((img: PostImage, i: number) => (
+                    <div key={img.id} className="min-w-0">
+                      <button
+                        type="button"
+                        onClick={() => setLightbox(i)}
+                        className="group block aspect-square w-full overflow-hidden rounded-lg border bg-muted"
+                      >
+                        <img
+                          src={img.url}
+                          alt={img.caption ?? ""}
+                          loading="lazy"
+                          decoding="async"
+                          onError={() =>
+                            setFailedImageUrls((urls) =>
+                              urls.includes(img.url) ? urls : [...urls, img.url],
+                            )
+                          }
+                          className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                        />
+                      </button>
+                      {failedImageUrls.includes(img.url) && (
+                        <p className="mt-1 break-all text-xs font-medium text-destructive">
+                          Failed to load image: {img.url}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {images.length > 1 && (
+                  <p className="mt-2 text-xs text-muted-foreground sm:hidden">
+                    Tap an image to enlarge
+                  </p>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </article>
 
@@ -163,19 +222,28 @@ function PostPage() {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
           onClick={() => setLightbox(null)}
-          onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+          onTouchStart={(e) => {
+            touchStartX.current = e.touches[0].clientX;
+          }}
           onTouchEnd={(e) => {
             if (touchStartX.current === null) return;
             const dx = e.changedTouches[0].clientX - touchStartX.current;
             touchStartX.current = null;
             if (Math.abs(dx) < 40 || images.length < 2) return;
-            setLightbox(dx < 0 ? (lightbox + 1) % images.length : (lightbox - 1 + images.length) % images.length);
+            setLightbox(
+              dx < 0
+                ? (lightbox + 1) % images.length
+                : (lightbox - 1 + images.length) % images.length,
+            );
           }}
         >
           <button
             type="button"
             className="absolute top-4 right-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-            onClick={(e) => { e.stopPropagation(); setLightbox(null); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setLightbox(null);
+            }}
             aria-label="Close"
           >
             <X className="h-5 w-5" />
@@ -185,7 +253,10 @@ function PostPage() {
               <button
                 type="button"
                 className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-                onClick={(e) => { e.stopPropagation(); setLightbox((lightbox - 1 + images.length) % images.length); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightbox((lightbox - 1 + images.length) % images.length);
+                }}
                 aria-label="Previous"
               >
                 <ChevronLeft className="h-6 w-6" />
@@ -193,7 +264,10 @@ function PostPage() {
               <button
                 type="button"
                 className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-                onClick={(e) => { e.stopPropagation(); setLightbox((lightbox + 1) % images.length); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightbox((lightbox + 1) % images.length);
+                }}
                 aria-label="Next"
               >
                 <ChevronRight className="h-6 w-6" />
