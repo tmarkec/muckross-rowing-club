@@ -84,7 +84,6 @@ export const Route = createFileRoute("/news/$slug")({
 function PostPage() {
   const { post, images } = Route.useLoaderData();
   const [lightbox, setLightbox] = useState<number | null>(null);
-  const [failedImageUrls, setFailedImageUrls] = useState<string[]>([]);
   const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {

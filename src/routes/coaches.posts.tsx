@@ -117,7 +117,6 @@ function PostEditor({
   const originalPublishedAt = (post?.published_at ?? "").slice(0, 10);
   const [coverUrl, setCoverUrl] = useState<string | null>(post?.cover_image_url ?? null);
   const [images, setImages] = useState<PostImage[]>([]);
-  const [failedImageUrls, setFailedImageUrls] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
