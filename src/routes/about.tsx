@@ -202,7 +202,7 @@ function AboutPage() {
               a carbon-fibre Olympic scull, past and future side by side.
             </p>
           </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
             {[
               {
                 title: "Traditional rowing",
@@ -211,10 +211,6 @@ function AboutPage() {
               {
                 title: "Olympic-style rowing",
                 body: "Sliding-seat crews training year-round and racing at regattas and championships around the country.",
-              },
-              {
-                title: "One club",
-                body: "Both sides share the same boathouse, the same coaches and the same yellow kit on the start line.",
               },
             ].map((v) => (
               <div
