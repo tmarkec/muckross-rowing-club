@@ -67,12 +67,11 @@ function AboutPage() {
               <p className="mt-5 leading-relaxed text-muted-foreground">
                 Muckross Rowing Club is based in Killarney, Co. Kerry, on the shores of Lough Leane,
                 the largest of Killarney's three lakes. Surrounded by ancient oak woodland and the
-                MacGillycuddy's Reeks, our rowing waters are among the most scenic in Europe.
+                MacGillycuddy's Reeks, it is a spectacular stretch of water to row on.
               </p>
               <p className="mt-4 leading-relaxed text-muted-foreground">
                 Widely considered the oldest rowing club in Killarney, Muckross has been the
-                heartbeat of the local community for over 150 years, deeply intertwined with the
-                families who lived and worked on the Muckross Estate. Our distinctive yellow kit is
+                heartbeat of the local community for over 150 years. Our distinctive yellow kit is
                 known across the national regatta circuit.
               </p>
             </div>
@@ -206,16 +205,16 @@ function AboutPage() {
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {[
               {
-                title: "Heritage",
-                body: "Honouring the Killarney Six and the world's oldest traditional regatta, a 150-year-old spirit carried by every new generation.",
+                title: "Traditional rowing",
+                body: "Fixed-seat racing in the Killarney Six, the style the club was built on and still races every summer on the lakes.",
               },
               {
-                title: "Community",
-                body: "A welcoming home for rowers of every background and ability, rooted in the families and traditions of the Muckross Estate.",
+                title: "Olympic-style rowing",
+                body: "Sliding-seat crews training year-round and racing at regattas and championships around the country.",
               },
               {
-                title: "Excellence",
-                body: "From the Bourn Vincent Trophy to the Olympic Games, supporting our crews to compete with pride at the highest level.",
+                title: "One club",
+                body: "Both sides share the same boathouse, the same coaches and the same yellow kit on the start line.",
               },
             ].map((v) => (
               <div
@@ -241,8 +240,8 @@ function AboutPage() {
             </h2>
             <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-muted-foreground">
               From juniors taking their first strokes to masters rowers chasing personal bests,
-              Muckross has a place for you. Coaching, kit and a friendly crew, all here on the
-              water.
+              Muckross has a place for you. Good coaching, a friendly crew and plenty of time on
+              the water.
             </p>
           </div>
           <div className="mx-auto mt-10 grid max-w-4xl gap-4 sm:grid-cols-3">
