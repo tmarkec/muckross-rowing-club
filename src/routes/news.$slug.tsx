@@ -84,7 +84,6 @@ export const Route = createFileRoute("/news/$slug")({
 function PostPage() {
   const { post, images } = Route.useLoaderData();
   const [lightbox, setLightbox] = useState<number | null>(null);
-  const [failedImageUrls, setFailedImageUrls] = useState<string[]>([]);
   const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
@@ -164,18 +163,7 @@ function PostPage() {
           />
 
           <div className="mt-12">
-            <div className="mb-4 rounded-md border border-secondary bg-secondary/10 p-3 text-xs text-foreground">
-              <p className="font-semibold">Gallery count: {images?.length ?? 0}</p>
-              <p className="mt-1 break-all">
-                First image URL: {images?.[0]?.url ?? "No URL available"}
-              </p>
-            </div>
-
-            {!images || images.length === 0 ? (
-              <p className="rounded-md border border-destructive bg-destructive/10 p-3 text-sm font-medium text-destructive">
-                Debug: No images found in post gallery array.
-              </p>
-            ) : (
+            {!images || images.length === 0 ? null : (
               <>
                 <h2 className="font-serif text-2xl font-bold">Gallery</h2>
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -191,19 +179,9 @@ function PostPage() {
                           alt={img.caption ?? ""}
                           loading="lazy"
                           decoding="async"
-                          onError={() =>
-                            setFailedImageUrls((urls) =>
-                              urls.includes(img.url) ? urls : [...urls, img.url],
-                            )
-                          }
                           className="h-full w-full object-cover transition-transform group-hover:scale-105"
                         />
                       </button>
-                      {failedImageUrls.includes(img.url) && (
-                        <p className="mt-1 break-all text-xs font-medium text-destructive">
-                          Failed to load image: {img.url}
-                        </p>
-                      )}
                     </div>
                   ))}
                 </div>
