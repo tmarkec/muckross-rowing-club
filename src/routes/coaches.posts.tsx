@@ -376,16 +376,8 @@ function PostEditor({
               />
             </label>
           </div>
-          <div className="rounded-md border border-secondary bg-secondary/10 p-3 text-xs text-foreground">
-            <p className="font-semibold">Gallery count: {images?.length ?? 0}</p>
-            <p className="mt-1 break-all">
-              First image URL: {images?.[0]?.url ?? "No URL available"}
-            </p>
-          </div>
           {images.length === 0 ? (
-            <p className="rounded-md border border-destructive bg-destructive/10 p-3 text-sm font-medium text-destructive">
-              Debug: No images found in post gallery array.
-            </p>
+            <p className="text-sm text-muted-foreground">No images yet.</p>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {images.map((img) => (
@@ -396,11 +388,6 @@ function PostEditor({
                       alt={img.caption ?? ""}
                       loading="lazy"
                       decoding="async"
-                      onError={() =>
-                        setFailedImageUrls((urls) =>
-                          urls.includes(img.url) ? urls : [...urls, img.url],
-                        )
-                      }
                       className="w-full aspect-video object-cover rounded-lg border bg-muted"
                     />
                     <button
@@ -412,11 +399,6 @@ function PostEditor({
                       <X className="h-3.5 w-3.5" />
                     </button>
                   </div>
-                  {failedImageUrls.includes(img.url) && (
-                    <p className="mt-1 break-all text-xs font-medium text-destructive">
-                      Failed to load image: {img.url}
-                    </p>
-                  )}
                 </div>
               ))}
             </div>

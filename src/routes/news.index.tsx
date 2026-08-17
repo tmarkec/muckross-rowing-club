@@ -138,6 +138,7 @@ function NewsPage() {
     return days;
   }, [upcomingFixtures]);
   const [month, setMonth] = useState<Date>(() => new Date());
+  const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
   const highlightDay = new Date(2026, 7, 30);
 
   return (
@@ -247,6 +248,8 @@ function NewsPage() {
                 weekStartsOn={1}
                 month={month}
                 onMonthChange={setMonth}
+                selected={selectedDay}
+                onSelect={setSelectedDay}
                 today={new Date()}
                 modifiers={{ event: eventDays, highlight: [highlightDay] }}
                 modifiersClassNames={{
@@ -254,9 +257,12 @@ function NewsPage() {
                     "bg-gradient-navy text-primary-foreground rounded-md font-bold cursor-pointer",
                   highlight:
                     "bg-secondary text-secondary-foreground rounded-md font-bold ring-2 ring-secondary cursor-pointer",
+                  selected:
+                    "!bg-primary !text-primary-foreground rounded-md font-bold opacity-100",
                 }}
                 className="pointer-events-auto"
                 onDayClick={(day) => {
+                  setSelectedDay(day);
                   const isEvent = eventDays.some((d) => d.toDateString() === day.toDateString());
                   if (isEvent) setOpen(true);
                 }}
