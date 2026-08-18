@@ -17,7 +17,7 @@ export const Route = createFileRoute("/contact")({
   }),
   head: () => ({
     meta: [
-      { title: "Contact — Muckross Rowing Club, Killarney" },
+      { title: "Contact Muckross Rowing Club | Killarney" },
       {
         name: "description",
         content:
@@ -115,7 +115,7 @@ function ContactPage() {
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="font-serif text-3xl font-bold sm:text-4xl">Contact the Club</h1>
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
-            We'd love to hear from you — whether you're keen to row or just curious about the club.
+            We'd love to hear from you, whether you're keen to row or just curious about the club.
           </p>
         </div>
       </section>

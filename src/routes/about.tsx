@@ -8,11 +8,11 @@ const juniorSquad = "/junior-squad.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Muckross Rowing Club, Killarney" },
+      { title: "About Muckross Rowing Club | Killarney" },
       {
         name: "description",
         content:
-          "Over 150 years of rowing heritage on the Lakes of Killarney — from the Killarney Six to the Olympic Games. Discover the story of Muckross Rowing Club.",
+          "Over 150 years of rowing on the Lakes of Killarney, from the Killarney Six to the Olympic Games. The story of Muckross Rowing Club.",
       },
       { property: "og:title", content: "About Muckross Rowing Club" },
       {

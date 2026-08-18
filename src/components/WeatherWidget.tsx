@@ -8,7 +8,7 @@ import { Cloud, CloudDrizzle, CloudRain, CloudSnow, Sun, CloudSun, Wind, Loader2
 const LAT = 52.02;
 const LON = -9.51;
 
-// Windy.com — most reliable wind forecast for rowers — centred on Lough Leane / Muckross.
+// Windy.com wind forecast, centred on Lough Leane at Muckross.
 const WINDY_URL = `https://www.windy.com/?${LAT},${LON},11`;
 
 type Current = {

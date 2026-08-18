@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { OarDivider } from "./OarDivider";
 
 /**
- * Current club sponsors. `url` is optional — when present the card
+ * Current club sponsors. `url` is optional; when present the card
  * renders as an external link to the sponsor's website.
  */
 const sponsors: { name: string; url?: string }[] = [

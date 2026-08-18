@@ -8,7 +8,7 @@ import { CLUBFORCE_URL as LOTTO_URL } from "@/lib/site";
 export const Route = createFileRoute("/support")({
   head: () => ({
     meta: [
-      { title: "Support the Club — Muckross Rowing Club" },
+      { title: "Support the Club | Muckross Rowing Club" },
       { name: "description", content: "Support Muckross Rowing Club. Thank our sponsors and help us keep rowing on Lough Leane through donations and partnerships." },
       { property: "og:title", content: "Support Muckross Rowing Club" },
       { property: "og:description", content: "Sponsors, donations and how you can help keep Muckross rowing strong on Lough Leane." },
@@ -41,8 +41,8 @@ function SupportPage() {
             Support Muckross
           </h1>
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
-            Every stroke on Lough Leane is made possible by the volunteers, coaches,
-            families and business supporters who stand behind the club.
+            The club keeps going thanks to the volunteers, coaches, families and local businesses
+            behind it.
           </p>
         </div>
       </section>
@@ -59,17 +59,17 @@ function SupportPage() {
             </h2>
             <div className="mt-6 space-y-4 text-left text-base leading-relaxed text-muted-foreground sm:text-[1.0625rem]">
               <p>
-                Running a rowing club takes a lot of work behind the scenes. The day-to-day
-                costs add up quickly: petrol for the safety launches that follow every crew,
-                insurance, and the regular bills (electricity and water) that keep the
-                boathouse open year-round.
+                Running a rowing club takes a lot of work behind the scenes, and the day-to-day
+                costs add up quickly.
               </p>
+              <ul className="ml-5 list-disc space-y-2">
+                <li>Petrol for the safety launches that follow every crew, plus insurance.</li>
+                <li>Electricity and water bills that keep the boathouse open year-round.</li>
+                <li>Upkeep of the old and new boathouses and the pontoons.</li>
+              </ul>
               <p>
-                On top of that there's the ongoing upkeep of both the old and new
-                boathouses and the pontoons, with the dozens of small repairs that come
-                with buildings sat on the shore of the lake. And of course the equipment
-                itself: boat repairs, replacement oars, new ergometers and eventually new
-                racing shells from{" "}
+                Then there's the equipment itself. Boat repairs, replacement oars, new ergometers
+                and eventually new racing shells from{" "}
                 <a
                   href="https://www.filippiboats.it/en/"
                   target="_blank"
@@ -107,19 +107,19 @@ function SupportPage() {
               Make a donation
             </h2>
               <p className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base">
-                Donations of any size go directly toward boats, equipment and keeping
+                Donations of any size go straight towards boats, equipment and keeping
                 the club running for the next generation.
               </p>
             </div>
 
-            {/* Secondary — bank transfer */}
+            {/* Secondary: bank transfer */}
             <BankTransferDetails />
 
             <p className="mt-4 text-center text-xs text-muted-foreground">
               Please use your name as the payment reference.
             </p>
 
-            {/* Become a sponsor — businesses */}
+            {/* Become a sponsor (businesses) */}
             <div className="mt-6 rounded-2xl border border-dashed border-border bg-muted/40 p-5">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-primary shadow-elegant">
@@ -196,13 +196,12 @@ function SupportPage() {
               Volunteering
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Volunteering is at the heart of Muckross Rowing Club. It's what underpins the club's
-              success and what enables every rower and cox to realise their ambition on the water.
+              Nothing at Muckross happens without volunteers. They are the reason crews get on the
+              water week after week.
             </p>
             <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Whether you're a new member, a parent or guardian of a junior, a life-long member,
-              a lover of sport, or a friend of Muckross, your help from time to time is greatly
-              appreciated. There's so much to choose from…
+              New members, parents, long-standing members and friends of the club are all welcome to
+              lend a hand, even now and again. There's plenty to choose from.
             </p>
           </div>
 
