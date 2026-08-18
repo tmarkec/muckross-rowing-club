@@ -144,9 +144,8 @@ function HomePage() {
               Rowing in Killarney National Park
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              From complete beginners stepping into a boat for the first time to elite competitors,
-              Muckross brings together athletes of every age and fitness level. We are one
-              community, proudly sharing our passion for rowing.
+              Beginners getting into a boat for the first time train alongside rowers racing at the
+              top level. Every age and every fitness level, all in the one club.
             </p>
           </div>
         </div>
