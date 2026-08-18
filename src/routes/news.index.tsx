@@ -291,8 +291,8 @@ function NewsPage() {
                   Click a highlighted day for details
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-secondary" /> 30 Aug, Loughuittane
-                  Heritage Regatta
+                  <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy ring-2 ring-secondary" />{" "}
+                  30 Aug, Loughuittane Heritage Regatta
                 </span>
               </div>
             </div>
