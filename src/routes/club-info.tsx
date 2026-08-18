@@ -59,9 +59,8 @@ function ClubInfoPage() {
               Club documents & policies
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-              Muckross Rowing Club is committed to providing a safe, welcoming and
-              well-governed environment for all members. Our key policy documents are
-              available to download below.
+              We want the club to be a safe and welcoming place for everyone. Our main policy
+              documents are below to download.
             </p>
           </div>
 
@@ -105,8 +104,8 @@ function ClubInfoPage() {
               People who keep us rowing
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-              A small group of volunteers, coaches and committee members keep the club
-              running week in, week out.
+              A small group of volunteers, coaches and committee members keeps the club running week
+              in, week out.
             </p>
           </div>
 

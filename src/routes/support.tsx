@@ -41,8 +41,8 @@ function SupportPage() {
             Support Muckross
           </h1>
           <p className="mt-3 text-base text-primary-foreground/85 sm:text-lg">
-            Every stroke on Lough Leane is made possible by the volunteers, coaches,
-            families and business supporters who stand behind the club.
+            The club keeps going thanks to the volunteers, coaches, families and local businesses
+            behind it.
           </p>
         </div>
       </section>
@@ -196,13 +196,12 @@ function SupportPage() {
               Volunteering
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Volunteering is at the heart of Muckross Rowing Club. It's what underpins the club's
-              success and what enables every rower and cox to realise their ambition on the water.
+              Nothing at Muckross happens without volunteers. They are the reason crews get on the
+              water week after week.
             </p>
             <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Whether you're a new member, a parent or guardian of a junior, a life-long member,
-              a lover of sport, or a friend of Muckross, your help from time to time is greatly
-              appreciated. There's plenty to choose from.
+              New members, parents, long-standing members and friends of the club are all welcome to
+              lend a hand, even now and again. There's plenty to choose from.
             </p>
           </div>
 
