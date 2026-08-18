@@ -78,6 +78,24 @@ const fixtures: Fixture[] = [
     location: "NRC, Farran Wood, Cork",
     tag: "Head race",
   },
+  {
+    date: new Date(2026, 8, 5),
+    endDate: new Date(2026, 8, 5),
+    dateLabel: "Sat 5 Sep 2026",
+    name: "Kenmare Endurance Regatta (Coastal)",
+    location: "Kenmare, Co. Kerry",
+    tag: "Coastal",
+    url: ROWING_IRELAND_EVENTS_URL,
+  },
+  {
+    date: new Date(2026, 8, 12),
+    endDate: new Date(2026, 8, 12),
+    dateLabel: "Sat 12 Sep 2026",
+    name: "Swift Racing Coastal Junior Championships",
+    location: "Bantry, Co. Cork",
+    tag: "Championships",
+    url: ROWING_IRELAND_EVENTS_URL,
+  },
 ];
 
 function NewsPage() {
@@ -254,9 +272,9 @@ function NewsPage() {
                 modifiers={{ event: eventDays, highlight: [highlightDay] }}
                 modifiersClassNames={{
                   event:
-                    "bg-gradient-navy text-primary-foreground rounded-md font-bold cursor-pointer",
+                    "!bg-gradient-navy !text-primary-foreground rounded-md font-bold cursor-pointer",
                   highlight:
-                    "bg-secondary text-secondary-foreground rounded-md font-bold ring-2 ring-secondary cursor-pointer",
+                    "!bg-gradient-navy !text-primary-foreground rounded-md font-bold ring-2 ring-secondary cursor-pointer",
                   selected:
                     "!bg-primary !text-primary-foreground rounded-md font-bold opacity-100",
                 }}
@@ -273,8 +291,8 @@ function NewsPage() {
                   Click a highlighted day for details
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-secondary" /> 30 Aug, Loughuittane
-                  Heritage Regatta
+                  <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy ring-2 ring-secondary" />{" "}
+                  30 Aug, Loughuittane Heritage Regatta
                 </span>
               </div>
             </div>
