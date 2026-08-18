@@ -272,9 +272,9 @@ function NewsPage() {
                 modifiers={{ event: eventDays, highlight: [highlightDay] }}
                 modifiersClassNames={{
                   event:
-                    "bg-gradient-navy text-primary-foreground rounded-md font-bold cursor-pointer",
+                    "!bg-gradient-navy !text-primary-foreground rounded-md font-bold cursor-pointer",
                   highlight:
-                    "!bg-secondary !text-primary-foreground rounded-md font-bold ring-2 ring-secondary cursor-pointer",
+                    "!bg-gradient-navy !text-primary-foreground rounded-md font-bold ring-2 ring-secondary cursor-pointer",
                   selected:
                     "!bg-primary !text-primary-foreground rounded-md font-bold opacity-100",
                 }}
