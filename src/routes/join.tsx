@@ -6,7 +6,7 @@ import { CLUBFORCE_URL } from "@/lib/site";
 export const Route = createFileRoute("/join")({
   head: () => ({
     meta: [
-      { title: "Join Muckross Rowing Club — Membership" },
+      { title: "Join Muckross Rowing Club | Membership" },
       { name: "description", content: "Become a member of Muckross Rowing Club. Junior, senior, masters and recreational rowing on Lough Leane, Killarney." },
       { property: "og:title", content: "Join Muckross Rowing Club" },
       { property: "og:description", content: "Membership info and how to join Muckross Rowing Club in Killarney." },

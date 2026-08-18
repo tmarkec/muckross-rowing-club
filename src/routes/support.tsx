@@ -8,7 +8,7 @@ import { CLUBFORCE_URL as LOTTO_URL } from "@/lib/site";
 export const Route = createFileRoute("/support")({
   head: () => ({
     meta: [
-      { title: "Support the Club — Muckross Rowing Club" },
+      { title: "Support the Club | Muckross Rowing Club" },
       { name: "description", content: "Support Muckross Rowing Club. Thank our sponsors and help us keep rowing on Lough Leane through donations and partnerships." },
       { property: "og:title", content: "Support Muckross Rowing Club" },
       { property: "og:description", content: "Sponsors, donations and how you can help keep Muckross rowing strong on Lough Leane." },
@@ -107,19 +107,19 @@ function SupportPage() {
               Make a donation
             </h2>
               <p className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base">
-                Donations of any size go directly toward boats, equipment and keeping
+                Donations of any size go straight towards boats, equipment and keeping
                 the club running for the next generation.
               </p>
             </div>
 
-            {/* Secondary — bank transfer */}
+            {/* Secondary: bank transfer */}
             <BankTransferDetails />
 
             <p className="mt-4 text-center text-xs text-muted-foreground">
               Please use your name as the payment reference.
             </p>
 
-            {/* Become a sponsor — businesses */}
+            {/* Become a sponsor (businesses) */}
             <div className="mt-6 rounded-2xl border border-dashed border-border bg-muted/40 p-5">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-primary shadow-elegant">
@@ -202,7 +202,7 @@ function SupportPage() {
             <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
               Whether you're a new member, a parent or guardian of a junior, a life-long member,
               a lover of sport, or a friend of Muckross, your help from time to time is greatly
-              appreciated. There's so much to choose from…
+              appreciated. There's plenty to choose from.
             </p>
           </div>
 

@@ -5,9 +5,9 @@ import { SiteLayout } from "@/components/SiteLayout";
 export const Route = createFileRoute("/club-info")({
   head: () => ({
     meta: [
-      { title: "Club Info — Muckross Rowing Club" },
+      { title: "Club Info | Muckross Rowing Club" },
       { name: "description", content: "Club documents, policies and the people who keep Muckross Rowing Club running." },
-      { property: "og:title", content: "Club Info — Muckross Rowing Club" },
+      { property: "og:title", content: "Club Info | Muckross Rowing Club" },
       { property: "og:description", content: "Club documents, policies and the committee behind Muckross Rowing Club." },
     ],
   }),

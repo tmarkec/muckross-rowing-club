@@ -19,13 +19,13 @@ import {
 export const Route = createFileRoute("/news/")({
   head: () => ({
     meta: [
-      { title: "News & Updates — Muckross Rowing Club" },
+      { title: "News & Updates | Muckross Rowing Club" },
       {
         name: "description",
         content:
           "Latest news, race results and announcements from Muckross Rowing Club, Killarney.",
       },
-      { property: "og:title", content: "News — Muckross Rowing Club" },
+      { property: "og:title", content: "News | Muckross Rowing Club" },
       {
         property: "og:description",
         content: "Race results, club announcements and stories from Muckross RC.",
@@ -269,11 +269,11 @@ function NewsPage() {
               />
               <div className="mt-3 flex flex-wrap items-center justify-center gap-3 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy" /> Muckross RC competing
-                  — click a highlighted day for details
+                  <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy" /> Muckross RC competing.
+                  Click a highlighted day for details
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-secondary" /> 30 Aug — Loughuittane
+                  <span className="h-2.5 w-2.5 rounded-sm bg-secondary" /> 30 Aug, Loughuittane
                   Heritage Regatta
                 </span>
               </div>
@@ -289,7 +289,7 @@ function NewsPage() {
           ) : posts.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-border bg-muted/40 p-10 text-center">
               <p className="text-sm text-muted-foreground">
-                No news posts yet. Check back soon — or follow the club on social media for live
+                No news posts yet. Check back soon, or follow the club on social media for live
                 updates.
               </p>
             </div>

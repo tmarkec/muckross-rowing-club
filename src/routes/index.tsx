@@ -15,7 +15,7 @@ const heroSlides = [
   { src: "/rowing-eight-mist.jpg", alt: "Junior eight training in misty conditions on the lake" },
 ];
 
-/** Structured data for the homepage — describes the club to search engines. */
+/** Structured data for the homepage, describing the club to search engines. */
 const homeJsonLd = {
   "@context": "https://schema.org",
   "@type": "SportsClub",
@@ -26,7 +26,7 @@ const homeJsonLd = {
   logo: `${SITE_URL}/muckross-logo.png`,
   image: `${SITE_URL}/hero-lake.jpg`,
   description:
-    "Muckross Rowing Club — rowing on the historic lakes of Killarney, Co. Kerry. Welcoming members of all ages and abilities.",
+    "Muckross Rowing Club, rowing on the historic lakes of Killarney, Co. Kerry. Everyone welcome, all ages and abilities.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Muckross Rd, Muckross",
@@ -47,11 +47,11 @@ const homeJsonLd = {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Muckross Rowing Club | Killarney, Co. Kerry — Rowing on the Lakes of Killarney" },
+      { title: "Muckross Rowing Club | Rowing in Killarney, Co. Kerry" },
       {
         name: "description",
         content:
-          "Muckross Rowing Club — a welcoming rowing club on the historic lakes of Killarney, Co. Kerry. Junior, senior, masters & learn-to-row programmes for all ages and abilities.",
+          "A friendly rowing club on the lakes of Killarney, Co. Kerry. Junior, senior, masters and learn-to-row programmes for all ages and abilities.",
       },
       {
         name: "keywords",
@@ -60,7 +60,7 @@ export const Route = createFileRoute("/")({
       },
       { name: "robots", content: "index, follow, max-image-preview:large" },
       { name: "theme-color", content: "#0a2540" },
-      { property: "og:title", content: "Muckross Rowing Club — Killarney, Co. Kerry" },
+      { property: "og:title", content: "Muckross Rowing Club | Killarney, Co. Kerry" },
       {
         property: "og:description",
         content: "Rowing on the historic lakes of Killarney, beneath the MacGillycuddy's Reeks.",
