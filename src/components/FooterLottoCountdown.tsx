@@ -72,7 +72,7 @@ export function FooterLottoCountdown() {
         Muckross Lotto
       </h4>
       <p className="mt-4 text-xs text-primary-foreground/70">
-        Next draw — Saturday 20:00
+        Next draw, Saturday 20:00
       </p>
       <div className="mt-3 flex max-w-[220px] gap-1 sm:max-w-none sm:grid sm:grid-cols-4 sm:gap-1.5">
         {cells.map((c) => (

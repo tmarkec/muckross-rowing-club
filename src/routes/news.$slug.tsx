@@ -44,10 +44,10 @@ export const Route = createFileRoute("/news/$slug")({
   loader: ({ params }) => fetchPost(params.slug),
   head: ({ loaderData }) => {
     const p = loaderData?.post;
-    if (!p) return { meta: [{ title: "Post — Muckross Rowing Club" }] };
+    if (!p) return { meta: [{ title: "Post | Muckross Rowing Club" }] };
     return {
       meta: [
-        { title: `${p.title} — Muckross Rowing Club` },
+        { title: `${p.title} | Muckross Rowing Club` },
         { name: "description", content: p.excerpt ?? p.title },
         { property: "og:title", content: p.title },
         { property: "og:description", content: p.excerpt ?? p.title },

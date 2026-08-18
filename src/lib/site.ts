@@ -1,13 +1,13 @@
 /**
  * Site-wide constants shared across routes and components.
  * Centralising these avoids drift when an external URL or
- * contact detail changes — update once, propagate everywhere.
+ * contact detail changes: update once, propagate everywhere.
  */
 
 /** Public Muckross Rowing Club site URL (used for canonical / JSON-LD). */
 export const SITE_URL = "https://muckrossrowingclub.ie";
 
-/** ClubForce membership / payments portal — opened in a new tab. */
+/** ClubForce membership and payments portal, opened in a new tab. */
 export const CLUBFORCE_URL =
   "https://muckrossrowingclub.clubforce.com/products/shop";
 
