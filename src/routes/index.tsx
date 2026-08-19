@@ -13,6 +13,10 @@ const heroSlides = [
     alt: "Single sculler at dawn with mist over the lake and mountains",
   },
   { src: "/rowing-eight-mist.jpg", alt: "Junior eight training in misty conditions on the lake" },
+  {
+    src: "/lake-reflection-crews.png",
+    alt: "Crews rowing on a mirror-calm Killarney lake with snow-capped mountains behind",
+  },
 ];
 
 /** Structured data for the homepage, describing the club to search engines. */
