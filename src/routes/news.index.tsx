@@ -272,11 +272,11 @@ function NewsPage() {
                 modifiers={{ event: eventDays, highlight: [highlightDay] }}
                 modifiersClassNames={{
                   event:
-                    "rounded-md cursor-pointer [&>button]:!bg-gradient-navy [&>button]:!text-primary-foreground [&>button]:!opacity-100 [&>button]:rounded-md [&>button]:font-bold [&>button]:transition-transform hover:[&>button]:!brightness-125 hover:[&>button]:scale-105",
+                    "rounded-md cursor-pointer [&>button]:bg-gradient-navy [&>button]:text-primary-foreground [&>button]:opacity-100 [&>button]:rounded-md [&>button]:font-bold [&>button]:transition-transform [&>button:hover]:bg-gradient-navy [&>button:hover]:text-primary-foreground [&>button:hover]:brightness-125 [&>button:hover]:scale-105",
                   highlight:
-                    "rounded-md cursor-pointer ring-2 ring-secondary [&>button]:!bg-gradient-navy [&>button]:!text-primary-foreground [&>button]:!opacity-100 [&>button]:rounded-md [&>button]:font-bold [&>button]:transition-transform hover:[&>button]:!brightness-125 hover:[&>button]:scale-105",
+                    "rounded-md cursor-pointer ring-2 ring-secondary [&>button]:bg-gradient-navy [&>button]:text-primary-foreground [&>button]:opacity-100 [&>button]:rounded-md [&>button]:font-bold [&>button]:transition-transform [&>button:hover]:bg-gradient-navy [&>button:hover]:text-primary-foreground [&>button:hover]:brightness-125 [&>button:hover]:scale-105",
                   selected:
-                    "rounded-md [&>button]:!bg-primary [&>button]:!text-primary-foreground [&>button]:!opacity-100 [&>button]:rounded-md [&>button]:font-bold",
+                    "rounded-md [&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:opacity-100 [&>button]:rounded-md [&>button]:font-bold [&>button:hover]:bg-primary [&>button:hover]:text-primary-foreground",
                 }}
                 className="pointer-events-auto"
                 onDayClick={(day) => {
