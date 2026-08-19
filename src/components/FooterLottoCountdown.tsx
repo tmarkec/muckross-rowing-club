@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Ticket } from "lucide-react";
-import { CLUBFORCE_URL } from "@/lib/site";
+import { LOTTO_URL } from "@/lib/site";
 
 /**
  * Compact countdown to the next Saturday 20:00 Europe/Dublin lotto draw,
@@ -90,7 +90,7 @@ export function FooterLottoCountdown() {
         ))}
       </div>
       <a
-        href={CLUBFORCE_URL}
+        href={LOTTO_URL}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-yellow px-4 py-2 text-xs font-semibold text-primary shadow-yellow transition-transform hover:scale-105"
