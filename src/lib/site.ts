@@ -11,6 +11,10 @@ export const SITE_URL = "https://muckrossrowingclub.ie";
 export const CLUBFORCE_URL =
   "https://muckrossrowingclub.clubforce.com/products/shop";
 
+/** Muckross Community Association lotto page. */
+export const LOTTO_URL =
+  "https://muckrosscommunityassociation.clubforce.com/products/lotto/muckross-community-assocation-lotto";
+
 /** Primary club contact email. */
 export const CLUB_EMAIL = "muckrossrowingclub@gmail.com";
 
