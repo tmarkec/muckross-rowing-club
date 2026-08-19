@@ -272,11 +272,11 @@ function NewsPage() {
     modifiers={{ event: eventDays, highlight: [highlightDay] }}
     modifiersClassNames={{
       event:
-        "!bg-gradient-navy !text-primary-foreground opacity-100 rounded-md font-bold transition-transform hover:brightness-125 hover:scale-105 cursor-pointer",
+        "[&_button]:!bg-blue-900 [&_button]:!text-white [&_button]:!font-bold [&_button]:!opacity-100 rounded-md cursor-pointer",
       highlight:
-        "!bg-gradient-navy !text-primary-foreground opacity-100 rounded-md font-bold ring-2 ring-secondary transition-transform hover:brightness-125 hover:scale-105 cursor-pointer",
+        "[&_button]:!bg-blue-900 [&_button]:!text-white [&_button]:!font-bold [&_button]:!opacity-100 [&_button]:ring-2 [&_button]:ring-amber-400 rounded-md cursor-pointer",
       selected:
-        "!bg-primary !text-primary-foreground opacity-100 rounded-md font-bold",
+        "[&_button]:!bg-blue-600 [&_button]:!text-white [&_button]:!font-bold rounded-md",
     }}
     className="pointer-events-auto"
     onDayClick={(day) => {
@@ -287,12 +287,12 @@ function NewsPage() {
   />
   <div className="mt-3 flex flex-wrap items-center justify-center gap-3 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
     <span className="inline-flex items-center gap-1.5">
-      <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy" /> Muckross RC competing.
+      <span className="h-2.5 w-2.5 rounded-sm bg-blue-900" /> Muckross RC competing.
       Click a highlighted day for details
     </span>
     <span className="inline-flex items-center gap-1.5">
-      <span className="h-2.5 w-2.5 rounded-sm bg-gradient-navy ring-2 ring-secondary" />{" "}
-      30 Aug, Loughuittane Heritage Regatta
+      <span className="h-2.5 w-2.5 rounded-sm bg-blue-900 ring-2 ring-amber-400" />{" "}
+      30 Aug, Loughquittane Heritage Regatta
     </span>
   </div>
 </div>
