@@ -47,7 +47,7 @@ type NewsPost = {
 };
 
 const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
-const LOUGHUITTANE_DOC_URL =
+const LOUGHQUITTANE_DOC_URL =
   "https://docs.google.com/document/d/1Pn9WN71Uy3xYIQ1sO4FJzbL_95N-YKNkicJEAKes6EU/edit?tab=t.0";
 
 type Fixture = {
@@ -68,7 +68,7 @@ const fixtures: Fixture[] = [
     name: "Loughquittane Heritage Regatta",
     location: "Loughquittane Lake",
     tag: "Regatta",
-    url: LOUGHUITTANE_DOC_URL,
+    url: LOUGHQUITTANE_DOC_URL,
   },
   {
     date: new Date(2026, 11, 5),
