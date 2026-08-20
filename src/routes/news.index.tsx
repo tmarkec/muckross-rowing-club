@@ -65,8 +65,8 @@ const fixtures: Fixture[] = [
     date: new Date(2026, 7, 30),
     endDate: new Date(2026, 7, 30),
     dateLabel: "Sun 30 Aug 2026",
-    name: "Loughuittane Heritage Regatta",
-    location: "Loughuittane Lake",
+    name: "Loughquittane Heritage Regatta",
+    location: "Loughquittane Lake",
     tag: "Regatta",
     url: LOUGHUITTANE_DOC_URL,
   },
@@ -294,7 +294,7 @@ function NewsPage() {
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <span className="h-2.5 w-2.5 rounded-sm bg-primary ring-2 ring-secondary" />{" "}
-                  30 Aug, Loughuittane Heritage Regatta
+                  30 Aug, Loughquittane Heritage Regatta
                 </span>
               </div>
             </div>
