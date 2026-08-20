@@ -261,41 +261,43 @@ function NewsPage() {
             </div>
 
             <div className="mx-auto w-fit rounded-2xl border border-border/60 bg-card p-2 shadow-soft [--cell-size:1.5rem]">
-  <Calendar
-    mode="single"
-    weekStartsOn={1}
-    month={month}
-    onMonthChange={setMonth}
-    selected={selectedDay}
-    onSelect={setSelectedDay}
-    today={new Date()}
-    modifiers={{ event: eventDays, highlight: [highlightDay] }}
-    modifiersClassNames={{
-      event:
-        "[&_button]:!bg-blue-900 [&_button]:!text-white [&_button]:!font-bold [&_button]:!opacity-100 rounded-md cursor-pointer",
-      highlight:
-        "[&_button]:!bg-blue-900 [&_button]:!text-white [&_button]:!font-bold [&_button]:!opacity-100 [&_button]:ring-2 [&_button]:ring-amber-400 rounded-md cursor-pointer",
-      selected:
-        "[&_button]:!bg-blue-600 [&_button]:!text-white [&_button]:!font-bold rounded-md",
-    }}
-    className="pointer-events-auto"
-    onDayClick={(day) => {
-      setSelectedDay(day);
-      const isEvent = eventDays.some((d) => d.toDateString() === day.toDateString());
-      if (isEvent) setOpen(true);
-    }}
-  />
-  <div className="mt-3 flex flex-wrap items-center justify-center gap-3 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
-    <span className="inline-flex items-center gap-1.5">
-      <span className="h-2.5 w-2.5 rounded-sm bg-blue-900" /> Muckross RC competing.
-      Click a highlighted day for details
-    </span>
-    <span className="inline-flex items-center gap-1.5">
-      <span className="h-2.5 w-2.5 rounded-sm bg-blue-900 ring-2 ring-amber-400" />{" "}
-      30 Aug, Loughquittane Heritage Regatta
-    </span>
-  </div>
-</div>
+              <Calendar
+                mode="single"
+                weekStartsOn={1}
+                month={month}
+                onMonthChange={setMonth}
+                selected={selectedDay}
+                onSelect={setSelectedDay}
+                today={new Date()}
+                modifiers={{ event: eventDays, highlight: [highlightDay] }}
+                modifiersClassNames={{
+                  event:
+                    "cursor-pointer rounded-md [&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:font-bold [&>button]:opacity-100 hover:[&>button]:bg-primary hover:[&>button]:text-primary-foreground hover:[&>button]:brightness-125",
+                  highlight:
+                    "cursor-pointer rounded-md ring-2 ring-secondary [&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:font-bold [&>button]:opacity-100 hover:[&>button]:bg-primary hover:[&>button]:text-primary-foreground hover:[&>button]:brightness-125",
+                  selected:
+                    "rounded-md [&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:font-bold [&>button]:opacity-100 hover:[&>button]:bg-primary hover:[&>button]:text-primary-foreground",
+                }}
+                className="pointer-events-auto"
+                onDayClick={(day) => {
+                  setSelectedDay(day);
+                  const isEvent = eventDays.some(
+                    (eventDay) => eventDay.toDateString() === day.toDateString(),
+                  );
+                  if (isEvent) setOpen(true);
+                }}
+              />
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-3 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-sm bg-primary" /> Muckross RC competing.
+                  Click a highlighted day for details
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-sm bg-primary ring-2 ring-secondary" />{" "}
+                  30 Aug, Loughuittane Heritage Regatta
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
