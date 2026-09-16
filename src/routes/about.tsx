@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Anchor, Trophy, Globe2, Users, Sparkles, Heart } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 const boathouse = "/boats-aerial.jpg";
-const community = "/club-community.jpg";
+
 const juniorSquad = "/junior-squad.jpg";
 
 export const Route = createFileRoute("/about")({
