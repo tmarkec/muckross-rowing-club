@@ -271,12 +271,9 @@ function NewsPage() {
                 today={new Date()}
                 modifiers={{ event: eventDays, highlight: [highlightDay] }}
                 modifiersClassNames={{
-                  event:
-                    "cursor-pointer rounded-md [&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:font-bold [&>button]:opacity-100 hover:[&>button]:bg-primary hover:[&>button]:text-primary-foreground hover:[&>button]:brightness-125",
-                  highlight:
-                    "cursor-pointer rounded-md ring-2 ring-secondary [&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:font-bold [&>button]:opacity-100 hover:[&>button]:bg-primary hover:[&>button]:text-primary-foreground hover:[&>button]:brightness-125",
-                  selected:
-                    "rounded-md [&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:font-bold [&>button]:opacity-100 hover:[&>button]:bg-primary hover:[&>button]:text-primary-foreground",
+                  event: "cursor-pointer rounded-md",
+                  highlight: "cursor-pointer rounded-md",
+                  selected: "rounded-md",
                 }}
                 className="pointer-events-auto"
                 onDayClick={(day) => {
