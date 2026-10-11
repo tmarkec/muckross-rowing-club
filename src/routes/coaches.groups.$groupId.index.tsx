@@ -278,11 +278,18 @@ function TodayTab({ groupId }: { groupId: string }) {
     if (ids.length === 0) { setSaved({}); setDraft({}); return; }
     const { data: att } = await supabase.from("attendance").select("*").in("athlete_id", ids).eq("session_date", date);
     const map: Record<string, Status> = {};
-    (att ?? []).forEach((r) => { const rec = r as Attendance; map[`${rec.athlete_id}|${rec.session_part}`] = rec.status; });
+    const recs = (att ?? []) as Attendance[];
+    const dbl = recs.some((r) => r.session_part === "am" || r.session_part === "pm");
+    recs.forEach((rec) => {
+      // On a double day, a legacy "single" record counts as AM (never as a third session)
+      const part: SessionPart = dbl && rec.session_part === "single" ? "am" : rec.session_part;
+      const k = `${rec.athlete_id}|${part}`;
+      if (map[k] && rec.session_part === "single") return; // real AM record wins
+      map[k] = rec.status;
+    });
     setSaved(map);
     setDraft(map); // seed draft from saved
-    // auto-detect double if any am/pm rows exist
-    if ((att ?? []).some((r: any) => r.session_part === "am" || r.session_part === "pm")) setIsDouble(true);
+    setIsDouble(dbl);
   }, [groupId, date]);
 
   useEffect(() => { void load(); }, [load]);
@@ -299,6 +306,25 @@ function TodayTab({ groupId }: { groupId: string }) {
     });
   };
 
+  const switchMode = (toDouble: boolean) => {
+    if (toDouble === isDouble) return;
+    setDraft((prev) => {
+      const next: Record<string, Status | undefined> = {};
+      athletes.forEach((a) => {
+        if (toDouble) {
+          // existing single tick becomes AM, PM left unticked
+          next[`${a.id}|am`] = prev[`${a.id}|single`] ?? prev[`${a.id}|am`];
+        } else {
+          const am = prev[`${a.id}|am`], pm = prev[`${a.id}|pm`];
+          next[`${a.id}|single`] = am === "present" || pm === "present" ? "present" : (am ?? pm ?? prev[`${a.id}|single`]);
+        }
+      });
+      return next;
+    });
+    setSaved({}); // force dirty so the new layout gets saved
+    setIsDouble(toDouble);
+  };
+
   const submit = async () => {
     const parts: SessionPart[] = isDouble ? ["am", "pm"] : ["single"];
     const rows: { athlete_id: string; session_date: string; session_part: SessionPart; status: Status }[] = [];
@@ -310,6 +336,15 @@ function TodayTab({ groupId }: { groupId: string }) {
     });
     if (rows.length === 0) return toast.error("No athletes to record");
     setSubmitting(true);
+    // Remove records of the other session type so totals never exceed 1 (single) or 2 (double)
+    const staleParts: SessionPart[] = isDouble ? ["single"] : ["am", "pm"];
+    const { error: delErr } = await supabase
+      .from("attendance")
+      .delete()
+      .in("athlete_id", athletes.map((a) => a.id))
+      .eq("session_date", date)
+      .in("session_part", staleParts);
+    if (delErr) { setSubmitting(false); return toast.error(delErr.message); }
     const { error } = await supabase
       .from("attendance")
       .upsert(rows, { onConflict: "athlete_id,session_date,session_part" });
@@ -340,13 +375,13 @@ function TodayTab({ groupId }: { groupId: string }) {
             type="button"
             size="sm"
             variant={isDouble ? "outline" : "default"}
-            onClick={() => setIsDouble(false)}
+            onClick={() => switchMode(false)}
           >Single</Button>
           <Button
             type="button"
             size="sm"
             variant={isDouble ? "default" : "outline"}
-            onClick={() => setIsDouble(true)}
+            onClick={() => switchMode(true)}
           >Double (AM/PM)</Button>
         </div>
       </div>
@@ -382,6 +417,9 @@ function TodayTab({ groupId }: { groupId: string }) {
                   <div className="font-medium truncate">{a.last_name}, {a.first_name}</div>
                   <div className="text-xs text-muted-foreground">2k {fmt2k(a.erg_2k_seconds)}</div>
                 </div>
+                <span className="text-xs tabular-nums text-muted-foreground">
+                  {parts.filter((p) => draft[`${a.id}|${p}`] === "present").length}/{parts.length}
+                </span>
                 <div className="flex flex-col gap-2">
                   {parts.map((p) => {
                     const status = draft[`${a.id}|${p}`];

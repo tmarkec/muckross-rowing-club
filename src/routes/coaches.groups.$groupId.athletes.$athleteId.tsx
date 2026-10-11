@@ -68,7 +68,10 @@ function AthleteProfile() {
     setAthlete((a as Athlete | null) ?? null);
     if (a) {
       const { data: att } = await supabase.from("attendance").select("*").eq("athlete_id", athleteId).order("session_date", { ascending: false });
-      setRecords((att ?? []) as Attendance[]);
+      const all = (att ?? []) as Attendance[];
+      // Ignore legacy "single" rows on dates that also have AM/PM rows (max 2 per double day)
+      const dblDates = new Set(all.filter((r) => r.session_part !== "single").map((r) => r.session_date));
+      setRecords(all.filter((r) => !(r.session_part === "single" && dblDates.has(r.session_date))));
     }
     setBusy(false);
   }, [athleteId, groupId]);
