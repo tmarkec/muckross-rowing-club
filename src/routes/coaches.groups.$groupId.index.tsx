@@ -269,6 +269,7 @@ function AthletesTab({ groupId }: { groupId: string }) {
 function TodayTab({ groupId }: { groupId: string }) {
   const [date, setDate] = useState(todayISO());
   const [isDouble, setIsDouble] = useState(false);
+  const [savedDouble, setSavedDouble] = useState(false);
   const [athletes, setAthletes] = useState<Athlete[]>([]);
   // saved records (in DB), keyed by `${athleteId}|${part}`
   const [saved, setSaved] = useState<Record<string, Status>>({});
@@ -280,7 +281,7 @@ function TodayTab({ groupId }: { groupId: string }) {
     const { data: ath } = await supabase.from("athletes").select("*").eq("group_id", groupId).order("last_name");
     setAthletes(ath ?? []);
     const ids = (ath ?? []).map((a) => a.id);
-    if (ids.length === 0) { setSaved({}); setDraft({}); return; }
+    if (ids.length === 0) { setSaved({}); setDraft({}); setIsDouble(false); setSavedDouble(false); return; }
     const { data: att } = await supabase.from("attendance").select("*").in("athlete_id", ids).eq("session_date", date);
     const map: Record<string, Status> = {};
     const recs = (att ?? []) as Attendance[];
@@ -295,6 +296,7 @@ function TodayTab({ groupId }: { groupId: string }) {
     setSaved(map);
     setDraft(map); // seed draft from saved
     setIsDouble(dbl);
+    setSavedDouble(dbl);
   }, [groupId, date]);
 
   useEffect(() => { void load(); }, [load]);
@@ -326,7 +328,6 @@ function TodayTab({ groupId }: { groupId: string }) {
       });
       return next;
     });
-    setSaved({}); // force dirty so the new layout gets saved
     setIsDouble(toDouble);
   };
 
@@ -341,29 +342,42 @@ function TodayTab({ groupId }: { groupId: string }) {
     });
     if (rows.length === 0) return toast.error("No athletes to record");
     setSubmitting(true);
-    // Remove records of the other session type so totals never exceed 1 (single) or 2 (double)
-    const staleParts: SessionPart[] = isDouble ? ["single"] : ["am", "pm"];
+    // Replace the whole day: wipe every record for this date, then write exactly
+    // 1 row per rower (Single) or 2 rows per rower (Double). Totals can never accumulate.
     const { error: delErr } = await supabase
       .from("attendance")
       .delete()
       .in("athlete_id", athletes.map((a) => a.id))
-      .eq("session_date", date)
-      .in("session_part", staleParts);
+      .eq("session_date", date);
     if (delErr) { setSubmitting(false); return toast.error(delErr.message); }
-    const { error } = await supabase
-      .from("attendance")
-      .upsert(rows, { onConflict: "athlete_id,session_date,session_part" });
+    const { error } = await supabase.from("attendance").insert(rows);
     setSubmitting(false);
     if (error) return toast.error(error.message);
     toast.success(`Saved ${rows.length} record${rows.length === 1 ? "" : "s"}`);
     void load();
   };
 
+  const clearDay = async () => {
+    if (!confirm(`Clear all attendance for ${date}? Every rower goes back to 0 and you can mark them again.`)) return;
+    setSubmitting(true);
+    const { error } = await supabase
+      .from("attendance")
+      .delete()
+      .in("athlete_id", athletes.map((a) => a.id))
+      .eq("session_date", date);
+    setSubmitting(false);
+    if (error) return toast.error(error.message);
+    toast.success("Day cleared");
+    setIsDouble(false);
+    void load();
+  };
+
   const isDirty = useMemo(() => {
+    if (isDouble !== savedDouble) return true;
     const keys = new Set([...Object.keys(saved), ...Object.keys(draft)]);
     for (const k of keys) if ((saved[k] ?? undefined) !== (draft[k] ?? undefined)) return true;
     return false;
-  }, [saved, draft]);
+  }, [saved, draft, isDouble, savedDouble]);
 
   const parts: SessionPart[] = isDouble ? ["am", "pm"] : ["single"];
   const partLabel = (p: SessionPart) => (p === "am" ? "AM" : p === "pm" ? "PM" : "Session");
@@ -450,8 +464,9 @@ function TodayTab({ groupId }: { groupId: string }) {
           </ul>
 
           <div className="mt-6 flex items-center justify-end gap-3 border-t pt-4">
+            <Button type="button" variant="ghost" size="sm" className="mr-auto text-destructive hover:text-destructive" onClick={clearDay} disabled={submitting || Object.keys(saved).length === 0}>Clear day</Button>
             {isDirty && <span className="text-xs text-muted-foreground">Unsaved changes</span>}
-            <Button type="button" variant="outline" size="sm" onClick={() => setDraft(saved)} disabled={!isDirty || submitting}>Reset</Button>
+            <Button type="button" variant="outline" size="sm" onClick={() => { setDraft(saved); setIsDouble(savedDouble); }} disabled={!isDirty || submitting}>Reset</Button>
             <Button type="button" onClick={submit} disabled={submitting || !isDirty}>
               {submitting ? "Saving…" : "Submit attendance"}
             </Button>
