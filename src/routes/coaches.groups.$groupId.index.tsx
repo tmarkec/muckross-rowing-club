@@ -21,6 +21,11 @@ type Group = { id: string; name: string; description: string | null };
 type Athlete = { id: string; group_id: string; first_name: string; last_name: string; dob: string | null; erg_2k_seconds: number | null; notes: string | null };
 type SessionPart = "single" | "am" | "pm";
 type Status = "present" | "absent";
+// On a day with AM/PM records, ignore any legacy "single" record (max 2 sessions per double day)
+function dedupeSessions<T extends { athlete_id: string; session_date: string; session_part: string }>(rows: T[]): T[] {
+  const dbl = new Set(rows.filter((r) => r.session_part !== "single").map((r) => `${r.athlete_id}|${r.session_date}`));
+  return rows.filter((r) => !(r.session_part === "single" && dbl.has(`${r.athlete_id}|${r.session_date}`)));
+}
 type Attendance = { id: string; athlete_id: string; session_date: string; session_part: SessionPart; status: Status; notes: string | null };
 
 function fmt2k(seconds: number | null): string {
@@ -103,7 +108,7 @@ function AthletesTab({ groupId }: { groupId: string }) {
     const ids = (data ?? []).map((a) => a.id);
     if (ids.length === 0) { setAttendance([]); return; }
     const { data: att } = await supabase.from("attendance").select("*").in("athlete_id", ids);
-    setAttendance((att ?? []) as Attendance[]);
+    setAttendance(dedupeSessions((att ?? []) as Attendance[]));
   }, [groupId]);
 
   useEffect(() => { void load(); }, [load]);
@@ -478,7 +483,7 @@ function MonthlyTab({ groupId }: { groupId: string }) {
     const ids = (ath ?? []).map((a) => a.id);
     if (ids.length === 0) { setRecords([]); return; }
     const { data: att } = await supabase.from("attendance").select("*").in("athlete_id", ids).gte("session_date", monthStart).lte("session_date", monthEnd);
-    setRecords((att ?? []) as Attendance[]);
+    setRecords(dedupeSessions((att ?? []) as Attendance[]));
   }, [groupId, monthStart, monthEnd]);
 
   useEffect(() => { void load(); }, [load]);
