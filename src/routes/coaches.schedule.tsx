@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -12,7 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, Pencil, Check, Plus, Trash2, X } from "lucide-react";
+import { Pencil, Check, Plus, Trash2, X, Clock, MapPin } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type Location = "Boathouse" | "Gym";
 type Row = {
@@ -21,30 +23,28 @@ type Row = {
   group_name: string;
   time_text: string;
   location: Location;
+  details: string | null;
   sort_order: number;
 };
 
-type Draft = Omit<Row, "id"> & { id?: string };
+type Draft = Omit<Row, "id"> & { id?: string; tempId?: string };
 
-const DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export const Route = createFileRoute("/coaches/schedule")({
   head: () => ({
     meta: [
-      { title: "Group Training Schedule — Coaches Corner" },
+      { title: "Group Training Schedule | Coaches Corner" },
       { name: "robots", content: "noindex" },
     ],
   }),
   component: SchedulePage,
 });
+
+function todayIndex() {
+  const d = new Date().getDay();
+  return d === 0 ? 7 : d;
+}
 
 function SchedulePage() {
   const { loading, session, isAdmin, isCoach } = useAuth();
@@ -52,9 +52,10 @@ function SchedulePage() {
   const [rows, setRows] = useState<Row[]>([]);
   const [editMode, setEditMode] = useState(false);
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
-  const [newRow, setNewRow] = useState<Draft | null>(null);
+  const [newRows, setNewRows] = useState<Draft[]>([]);
   const [saving, setSaving] = useState(false);
   const [loadingRows, setLoadingRows] = useState(true);
+  const [mobileDay, setMobileDay] = useState<number>(todayIndex());
 
   useEffect(() => {
     if (!loading && !session) void navigate({ to: "/coaches/login" });
@@ -64,7 +65,7 @@ function SchedulePage() {
     setLoadingRows(true);
     const { data, error } = await supabase
       .from("training_schedules")
-      .select("id, day_of_week, group_name, time_text, location, sort_order")
+      .select("id, day_of_week, group_name, time_text, location, details, sort_order")
       .order("day_of_week")
       .order("sort_order");
     if (error) toast.error(error.message);
@@ -83,7 +84,10 @@ function SchedulePage() {
     return map;
   }, [rows]);
 
+  const canEdit = isAdmin;
+
   const startEdit = () => {
+    if (!canEdit) return;
     setEditMode(true);
     const d: Record<string, Draft> = {};
     for (const r of rows) d[r.id] = { ...r };
@@ -93,11 +97,28 @@ function SchedulePage() {
   const cancelEdit = () => {
     setEditMode(false);
     setDrafts({});
-    setNewRow(null);
+    setNewRows([]);
   };
 
   const updateDraft = (id: string, patch: Partial<Draft>) =>
     setDrafts((prev) => ({ ...prev, [id]: { ...prev[id], ...patch } }));
+
+  const updateNew = (tempId: string, patch: Partial<Draft>) =>
+    setNewRows((prev) => prev.map((n) => (n.tempId === tempId ? { ...n, ...patch } : n)));
+
+  const addNew = (day: number) =>
+    setNewRows((prev) => [
+      ...prev,
+      {
+        tempId: crypto.randomUUID(),
+        day_of_week: day,
+        group_name: "",
+        time_text: "",
+        location: "Boathouse",
+        details: "",
+        sort_order: 0,
+      },
+    ]);
 
   const removeRow = async (id: string) => {
     if (!confirm("Delete this session?")) return;
@@ -115,7 +136,6 @@ function SchedulePage() {
   const saveAll = async () => {
     setSaving(true);
     try {
-      // Update changed rows
       for (const r of rows) {
         const d = drafts[r.id];
         if (!d) continue;
@@ -123,7 +143,8 @@ function SchedulePage() {
           d.day_of_week !== r.day_of_week ||
           d.group_name !== r.group_name ||
           d.time_text !== r.time_text ||
-          d.location !== r.location
+          d.location !== r.location ||
+          (d.details ?? "") !== (r.details ?? "")
         ) {
           const { error } = await supabase
             .from("training_schedules")
@@ -132,28 +153,38 @@ function SchedulePage() {
               group_name: d.group_name.trim(),
               time_text: d.time_text.trim(),
               location: d.location,
+              details: d.details?.trim() || null,
             })
             .eq("id", r.id);
           if (error) throw error;
         }
       }
-      // Insert new row if present
-      if (newRow) {
-        if (!newRow.group_name.trim() || !newRow.time_text.trim()) {
-          throw new Error("New row needs a group name and time");
+      const toInsert = newRows.filter((n) => n.group_name.trim() || n.time_text.trim());
+      for (const n of toInsert) {
+        if (!n.group_name.trim() || !n.time_text.trim()) {
+          throw new Error(`${DAYS[n.day_of_week - 1]}: each new session needs a group and a time`);
         }
-        const { error } = await supabase.from("training_schedules").insert({
-          day_of_week: newRow.day_of_week,
-          group_name: newRow.group_name.trim(),
-          time_text: newRow.time_text.trim(),
-          location: newRow.location,
-          sort_order: rows.filter((r) => r.day_of_week === newRow.day_of_week).length,
+      }
+      if (toInsert.length) {
+        const counts: Record<number, number> = {};
+        const payload = toInsert.map((n) => {
+          const base = rows.filter((r) => r.day_of_week === n.day_of_week).length;
+          counts[n.day_of_week] = (counts[n.day_of_week] ?? 0) + 1;
+          return {
+            day_of_week: n.day_of_week,
+            group_name: n.group_name.trim(),
+            time_text: n.time_text.trim(),
+            location: n.location,
+            details: n.details?.trim() || null,
+            sort_order: base + counts[n.day_of_week],
+          };
         });
+        const { error } = await supabase.from("training_schedules").insert(payload);
         if (error) throw error;
       }
       toast.success("Schedule saved");
       setEditMode(false);
-      setNewRow(null);
+      setNewRows([]);
       setDrafts({});
       await load();
     } catch (e) {
@@ -171,222 +202,191 @@ function SchedulePage() {
     );
   }
 
-  const canEdit = isAdmin;
+  const editing = canEdit && editMode;
+
+  const renderDay = (day: number) => {
+    const items = grouped.get(day) ?? [];
+    const pending = newRows.filter((n) => n.day_of_week === day);
+    return (
+      <div className="space-y-2">
+        {items.length === 0 && pending.length === 0 && (
+          <p className="text-xs italic text-muted-foreground px-1 py-2">No sessions</p>
+        )}
+        {items.map((r) =>
+          editing ? (
+            <EditCard
+              key={r.id}
+              d={drafts[r.id] ?? r}
+              onChange={(p) => updateDraft(r.id, p)}
+              onRemove={() => void removeRow(r.id)}
+            />
+          ) : (
+            <ViewCard key={r.id} r={r} />
+          ),
+        )}
+        {editing &&
+          pending.map((n) => (
+            <EditCard
+              key={n.tempId}
+              d={n}
+              isNew
+              onChange={(p) => updateNew(n.tempId!, p)}
+              onRemove={() => setNewRows((prev) => prev.filter((x) => x.tempId !== n.tempId))}
+            />
+          ))}
+        {editing && (
+          <Button variant="outline" size="sm" className="w-full border-dashed" onClick={() => addNew(day)}>
+            <Plus className="h-3.5 w-3.5 mr-1" /> Add timeslot
+          </Button>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-muted/30 px-4 py-12">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-6 flex items-center justify-between gap-3">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
           <div>
-            <Link
-              to="/coaches"
-              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4" /> Coaches Corner
-            </Link>
-            <h1 className="mt-2 font-serif text-2xl sm:text-3xl">
-              Group Training Schedule
-            </h1>
+            <h1 className="font-serif text-2xl sm:text-3xl">Group Training Schedule</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Weekly sessions for all squads.
+              Weekly sessions for all squads.{!canEdit && " View only."}
             </p>
           </div>
-          {canEdit && !editMode && (
-            <Button onClick={startEdit} size="sm">
-              <Pencil className="h-4 w-4 mr-2" /> Edit schedule
+          <div className="flex flex-wrap gap-2">
+            {canEdit && !editMode && (
+              <Button onClick={startEdit} size="sm">
+                <Pencil className="h-4 w-4 mr-2" /> Edit schedule
+              </Button>
+            )}
+            {editing && (
+              <>
+                <Button variant="outline" size="sm" onClick={cancelEdit} disabled={saving}>
+                  <X className="h-4 w-4 mr-1" /> Cancel
+                </Button>
+                <Button size="sm" onClick={saveAll} disabled={saving}>
+                  <Check className="h-4 w-4 mr-1" /> {saving ? "Saving…" : "Save"}
+                </Button>
+              </>
+            )}
+            <Button asChild size="sm" variant="outline">
+              <Link to="/coaches">← Coaches Corner</Link>
             </Button>
-          )}
-          {canEdit && editMode && (
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={cancelEdit} disabled={saving}>
-                <X className="h-4 w-4 mr-1" /> Cancel
-              </Button>
-              <Button size="sm" onClick={saveAll} disabled={saving}>
-                <Check className="h-4 w-4 mr-1" /> {saving ? "Saving…" : "Save"}
-              </Button>
-            </div>
-          )}
+          </div>
         </div>
 
         {!isAdmin && !isCoach && (
-          <p className="text-sm text-muted-foreground">
-            You don&apos;t have access to coach tools.
-          </p>
+          <p className="text-sm text-muted-foreground">You don&apos;t have access to coach tools.</p>
         )}
 
-        <div className="overflow-hidden rounded-xl border bg-background shadow-sm">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
-              <tr>
-                <th className="px-4 py-3 w-32">Day</th>
-                <th className="px-4 py-3">Squad / Group</th>
-                <th className="px-4 py-3 w-40">Time</th>
-                <th className="px-4 py-3 w-40">Location</th>
-                {editMode && <th className="px-4 py-3 w-12" />}
-              </tr>
-            </thead>
-            <tbody>
-              {loadingRows && (
-                <tr>
-                  <td colSpan={editMode ? 5 : 4} className="px-4 py-6 text-center text-muted-foreground">
-                    Loading…
-                  </td>
-                </tr>
-              )}
-              {!loadingRows &&
-                DAYS.map((dayLabel, idx) => {
-                  const day = idx + 1;
-                  const items = grouped.get(day) ?? [];
-                  if (items.length === 0) {
-                    return (
-                      <tr key={day} className="border-t">
-                        <td className="px-4 py-3 font-medium align-top">{dayLabel}</td>
-                        <td className="px-4 py-3 text-muted-foreground italic" colSpan={editMode ? 4 : 3}>
-                          No sessions
-                        </td>
-                      </tr>
-                    );
-                  }
-                  return items.map((r, i) => {
-                    const d = drafts[r.id] ?? r;
-                    return (
-                      <tr key={r.id} className="border-t">
-                        <td className="px-4 py-3 font-medium align-top">
-                          {i === 0 ? dayLabel : ""}
-                        </td>
-                        <td className="px-4 py-3">
-                          {editMode ? (
-                            <Input
-                              value={d.group_name}
-                              onChange={(e) => updateDraft(r.id, { group_name: e.target.value })}
-                            />
-                          ) : (
-                            r.group_name
-                          )}
-                        </td>
-                        <td className="px-4 py-3">
-                          {editMode ? (
-                            <Input
-                              value={d.time_text}
-                              placeholder="e.g. 06:30 – 08:00"
-                              onChange={(e) => updateDraft(r.id, { time_text: e.target.value })}
-                            />
-                          ) : (
-                            r.time_text
-                          )}
-                        </td>
-                        <td className="px-4 py-3">
-                          {editMode ? (
-                            <Select
-                              value={d.location}
-                              onValueChange={(v) => updateDraft(r.id, { location: v as Location })}
-                            >
-                              <SelectTrigger className="h-9">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Boathouse">Boathouse</SelectItem>
-                                <SelectItem value="Gym">Gym</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          ) : (
-                            <span className="inline-flex items-center rounded-full bg-secondary/30 px-2.5 py-0.5 text-xs font-medium">
-                              {r.location}
-                            </span>
-                          )}
-                        </td>
-                        {editMode && (
-                          <td className="px-4 py-3 text-right">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => removeRow(r.id)}
-                              aria-label="Delete row"
-                            >
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
-                          </td>
-                        )}
-                      </tr>
-                    );
-                  });
-                })}
-              {editMode && newRow && (
-                <tr className="border-t bg-muted/30">
-                  <td className="px-4 py-3">
-                    <Select
-                      value={String(newRow.day_of_week)}
-                      onValueChange={(v) => setNewRow({ ...newRow, day_of_week: Number(v) })}
-                    >
-                      <SelectTrigger className="h-9">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {DAYS.map((d, i) => (
-                          <SelectItem key={d} value={String(i + 1)}>{d}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </td>
-                  <td className="px-4 py-3">
-                    <Input
-                      value={newRow.group_name}
-                      placeholder="Squad / group"
-                      onChange={(e) => setNewRow({ ...newRow, group_name: e.target.value })}
-                    />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Input
-                      value={newRow.time_text}
-                      placeholder="e.g. 06:30 – 08:00"
-                      onChange={(e) => setNewRow({ ...newRow, time_text: e.target.value })}
-                    />
-                  </td>
-                  <td className="px-4 py-3">
-                    <Select
-                      value={newRow.location}
-                      onValueChange={(v) => setNewRow({ ...newRow, location: v as Location })}
-                    >
-                      <SelectTrigger className="h-9">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Boathouse">Boathouse</SelectItem>
-                        <SelectItem value="Gym">Gym</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <Button variant="ghost" size="icon" onClick={() => setNewRow(null)} aria-label="Cancel new row">
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-
-          {editMode && !newRow && (
-            <div className="border-t bg-muted/20 px-4 py-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  setNewRow({
-                    day_of_week: 1,
-                    group_name: "",
-                    time_text: "",
-                    location: "Boathouse",
-                    sort_order: 0,
-                  })
-                }
-              >
-                <Plus className="h-4 w-4 mr-2" /> Add session
-              </Button>
+        {loadingRows ? (
+          <p className="py-6 text-center text-muted-foreground">Loading…</p>
+        ) : (
+          <>
+            {/* Desktop: 7-column matrix */}
+            <div className="hidden lg:grid grid-cols-7 gap-3">
+              {DAYS.map((label, i) => (
+                <div
+                  key={label}
+                  className={cn(
+                    "rounded-xl border bg-background p-2 shadow-sm",
+                    todayIndex() === i + 1 && "ring-2 ring-primary/40",
+                  )}
+                >
+                  <div className="mb-2 flex items-center justify-between px-1">
+                    <span className="text-sm font-semibold">{label}</span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {(grouped.get(i + 1) ?? []).length}
+                    </span>
+                  </div>
+                  {renderDay(i + 1)}
+                </div>
+              ))}
             </div>
-          )}
-        </div>
+
+            {/* Mobile / tablet: day tabs */}
+            <div className="lg:hidden">
+              <div className="grid grid-cols-7 gap-1 rounded-lg border bg-background p-1">
+                {DAYS.map((label, i) => {
+                  const count = (grouped.get(i + 1) ?? []).length;
+                  const active = mobileDay === i + 1;
+                  return (
+                    <button
+                      key={label}
+                      type="button"
+                      onClick={() => setMobileDay(i + 1)}
+                      className={cn(
+                        "rounded-md py-2 text-xs font-medium transition",
+                        active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted",
+                      )}
+                    >
+                      {label.slice(0, 3)}
+                      <span className="block text-[10px] opacity-80">{count}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="mt-3 rounded-xl border bg-background p-3 shadow-sm">
+                <h2 className="mb-2 font-semibold">{DAYS[mobileDay - 1]}</h2>
+                {renderDay(mobileDay)}
+              </div>
+            </div>
+          </>
+        )}
       </div>
+    </div>
+  );
+}
+
+function ViewCard({ r }: { r: Row }) {
+  return (
+    <div className="rounded-lg border bg-muted/20 p-2.5">
+      <div className="font-medium text-sm leading-tight break-words">{r.group_name}</div>
+      <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+        <Clock className="h-3 w-3 shrink-0" /> {r.time_text}
+      </div>
+      <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+        <MapPin className="h-3 w-3 shrink-0" /> {r.location}
+      </div>
+      {r.details && <p className="mt-1.5 text-xs whitespace-pre-wrap break-words">{r.details}</p>}
+    </div>
+  );
+}
+
+function EditCard({
+  d,
+  onChange,
+  onRemove,
+  isNew,
+}: {
+  d: Draft;
+  onChange: (p: Partial<Draft>) => void;
+  onRemove: () => void;
+  isNew?: boolean;
+}) {
+  return (
+    <div className={cn("space-y-1.5 rounded-lg border p-2", isNew ? "bg-primary/5 border-dashed" : "bg-muted/20")}>
+      <Input className="h-8 text-xs" placeholder="Squad / group" value={d.group_name} onChange={(e) => onChange({ group_name: e.target.value })} />
+      <Input className="h-8 text-xs" placeholder="e.g. 06:30 – 08:00" value={d.time_text} onChange={(e) => onChange({ time_text: e.target.value })} />
+      <div className="flex gap-1">
+        <Select value={String(d.day_of_week)} onValueChange={(v) => onChange({ day_of_week: Number(v) })}>
+          <SelectTrigger className="h-8 text-xs flex-1"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            {DAYS.map((x, i) => <SelectItem key={x} value={String(i + 1)}>{x}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        <Select value={d.location} onValueChange={(v) => onChange({ location: v as Location })}>
+          <SelectTrigger className="h-8 text-xs flex-1"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Boathouse">Boathouse</SelectItem>
+            <SelectItem value="Gym">Gym</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <Textarea rows={2} className="min-h-0 text-xs" placeholder="Session details (optional)" value={d.details ?? ""} onChange={(e) => onChange({ details: e.target.value })} />
+      <Button variant="ghost" size="sm" className="h-7 w-full text-destructive" onClick={onRemove}>
+        <Trash2 className="h-3.5 w-3.5 mr-1" /> {isNew ? "Discard" : "Delete"}
+      </Button>
     </div>
   );
 }

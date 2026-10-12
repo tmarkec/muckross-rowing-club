@@ -78,7 +78,7 @@ function GroupDetail() {
         </div>
 
         <Tabs defaultValue="athletes">
-          <TabsList>
+          <TabsList className="h-auto flex-wrap justify-start">
             <TabsTrigger value="athletes">Athletes</TabsTrigger>
             <TabsTrigger value="today">Today's session</TabsTrigger>
             <TabsTrigger value="monthly">Monthly attendance</TabsTrigger>
