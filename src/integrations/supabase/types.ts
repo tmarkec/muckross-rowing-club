@@ -400,10 +400,49 @@ export type Database = {
         }
         Relationships: []
       }
+      training_programmes: {
+        Row: {
+          created_at: string
+          data: Json
+          group_id: string
+          id: string
+          start_date: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          group_id: string
+          id?: string
+          start_date: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          group_id?: string
+          id?: string
+          start_date?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_programmes_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: true
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       training_schedules: {
         Row: {
           created_at: string
           day_of_week: number
+          details: string | null
           group_name: string
           id: string
           location: string
@@ -414,6 +453,7 @@ export type Database = {
         Insert: {
           created_at?: string
           day_of_week: number
+          details?: string | null
           group_name: string
           id?: string
           location: string
@@ -424,6 +464,7 @@ export type Database = {
         Update: {
           created_at?: string
           day_of_week?: number
+          details?: string | null
           group_name?: string
           id?: string
           location?: string

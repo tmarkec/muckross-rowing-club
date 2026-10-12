@@ -11,6 +11,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
+import GeneratedProgrammeTab from "@/components/GeneratedProgrammeTab";
 
 export const Route = createFileRoute("/coaches/groups/$groupId/")({
   head: () => ({ meta: [{ title: "Group — Coaches Corner" }, { name: "robots", content: "noindex" }] }),
@@ -77,14 +78,16 @@ function GroupDetail() {
         </div>
 
         <Tabs defaultValue="athletes">
-          <TabsList>
+          <TabsList className="h-auto flex-wrap justify-start">
             <TabsTrigger value="athletes">Athletes</TabsTrigger>
             <TabsTrigger value="today">Today's session</TabsTrigger>
             <TabsTrigger value="monthly">Monthly attendance</TabsTrigger>
+            <TabsTrigger value="programme">Generated Training Programme</TabsTrigger>
           </TabsList>
           <TabsContent value="athletes"><AthletesTab groupId={groupId} /></TabsContent>
           <TabsContent value="today"><TodayTab groupId={groupId} /></TabsContent>
           <TabsContent value="monthly"><MonthlyTab groupId={groupId} /></TabsContent>
+          <TabsContent value="programme"><GeneratedProgrammeTab groupId={groupId} /></TabsContent>
         </Tabs>
       </div>
     </div>

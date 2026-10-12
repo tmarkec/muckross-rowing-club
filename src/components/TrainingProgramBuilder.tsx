@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { format, addDays } from "date-fns";
-import { CalendarIcon, Plus, Printer, Trash2, X, Pencil } from "lucide-react";
+import { CalendarIcon, Plus, Printer, Trash2, X, Pencil, Save, StickyNote } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +25,7 @@ type DayCell = {
   pm: Slot | null;       // optional pm slot
   hasPm: boolean;
   dayOff: boolean;
+  notes?: string;
 };
 type WeekRow = Record<DayName, DayCell>;
 
@@ -53,9 +55,54 @@ function nextMonday(from: Date = new Date()): Date {
 
 type Props = { isAdmin: boolean };
 
+export type ProgrammeData = { weeks: WeekRow[]; weekNotes: string[] };
+
 export default function TrainingProgramBuilder({ isAdmin }: Props) {
   const [startDate, setStartDate] = useState<Date>(() => nextMonday());
   const [weeks, setWeeks] = useState<WeekRow[]>(() => [emptyWeek(), emptyWeek(), emptyWeek(), emptyWeek()]);
+  const [weekNotes, setWeekNotes] = useState<string[]>([]);
+  const [notesOpen, setNotesOpen] = useState<Record<string, boolean>>({});
+  const [groups, setGroups] = useState<{ id: string; name: string }[]>([]);
+  const [groupId, setGroupId] = useState<string>("");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    void supabase.from("groups").select("id,name").order("name").then(({ data }) => setGroups(data ?? []));
+  }, []);
+
+  async function loadProgramme(gid: string) {
+    setGroupId(gid);
+    const { data } = await supabase.from("training_programmes").select("start_date,data").eq("group_id", gid).maybeSingle();
+    if (data) {
+      const d = data.data as unknown as ProgrammeData;
+      setStartDate(new Date(data.start_date + "T00:00:00"));
+      setWeeks(d.weeks?.length ? d.weeks : [emptyWeek()]);
+      setWeekNotes(d.weekNotes ?? []);
+      toast.success("Loaded saved programme for this group");
+    }
+  }
+
+  async function saveProgramme() {
+    if (!groupId) { toast.error("Choose a group to save to"); return; }
+    setSaving(true);
+    const { data: u } = await supabase.auth.getUser();
+    const { error } = await supabase.from("training_programmes").upsert({
+      group_id: groupId,
+      start_date: format(startDate, "yyyy-MM-dd"),
+      data: { weeks, weekNotes } as never,
+      updated_by: u.user?.id ?? null,
+    }, { onConflict: "group_id" });
+    setSaving(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Programme saved to the group");
+  }
+
+  function setDayNote(wi: number, day: DayName, notes: string) {
+    updateCell(wi, day, (c) => ({ ...c, notes }));
+  }
+  function setWeekNote(wi: number, v: string) {
+    setWeekNotes((p) => { const n = [...p]; n[wi] = v; return n; });
+  }
   const [presets, setPresets] = useState<Preset[]>([]);
   const [assigning, setAssigning] = useState<{ wi: number; day: DayName; slot: "am" | "pm" } | null>(null);
   const [customTitle, setCustomTitle] = useState("");
@@ -121,7 +168,38 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
   }
 
   function appendWeek() { setWeeks((p) => [...p, emptyWeek()]); }
-  function removeWeek(i: number) { setWeeks((p) => p.filter((_, idx) => idx !== i)); }
+  function removeWeek(i: number) {
+    setWeeks((p) => p.filter((_, idx) => idx !== i));
+    setWeekNotes((p) => p.filter((_, idx) => idx !== i));
+  }
+
+  function dayNotesBlock(wi: number, d: DayName, cell: DayCell) {
+    const key = `${wi}-${d}`;
+    const open = notesOpen[key] || !!cell.notes;
+    if (!open) {
+      return (
+        <button type="button" onClick={() => setNotesOpen((p) => ({ ...p, [key]: true }))}
+          className="mt-1 w-full text-[10px] text-muted-foreground hover:text-foreground print:hidden">
+          + daily notes
+        </button>
+      );
+    }
+    return (
+      <>
+        <Textarea rows={2} placeholder="Daily notes" value={cell.notes ?? ""}
+          onChange={(e) => setDayNote(wi, d, e.target.value)}
+          className="mt-1 min-h-0 text-[11px] print:hidden" />
+        {cell.notes && <p className="hidden print:block mt-0.5 text-[9px] italic whitespace-pre-wrap">{cell.notes}</p>}
+      </>
+    );
+  }
+
+  function weekNotesBlock(wi: number) {
+    return (
+      <Textarea rows={2} placeholder={`Weekly notes for week ${wi + 1} (optional)`} value={weekNotes[wi] ?? ""}
+        onChange={(e) => setWeekNote(wi, e.target.value)} className="text-xs print:hidden" />
+    );
+  }
 
   return (
     <div className="space-y-6 print:space-y-3">
@@ -155,7 +233,19 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
               <p className="text-xs text-destructive">Start date must be a Monday.</p>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-end gap-2">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Save to group</Label>
+              <Select value={groupId} onValueChange={(v) => void loadProgramme(v)}>
+                <SelectTrigger className="w-[200px]"><SelectValue placeholder="Choose group" /></SelectTrigger>
+                <SelectContent>
+                  {groups.map((g) => <SelectItem key={g.id} value={g.id}>{g.name}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button onClick={saveProgramme} disabled={saving || !groupId} variant="secondary">
+              <Save className="mr-2 h-4 w-4" /> {saving ? "Saving…" : "Save to group"}
+            </Button>
             <Button onClick={() => window.print()} variant="default">
               <Printer className="mr-2 h-4 w-4" /> Download Training Program
             </Button>
@@ -187,7 +277,7 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
             </tr>
           </thead>
           <tbody>
-            {weeks.map((week, wi) => (
+            {weeks.flatMap((week, wi) => [
               <tr key={wi} className="align-top">
                 <td className="border-b border-r p-2 font-semibold">
                   <div>Week {wi + 1}</div>
@@ -229,6 +319,7 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
                           {cell.hasPm ? "− Remove PM" : "+ Add PM Session"}
                         </button>
                       )}
+                      {dayNotesBlock(wi, d, cell)}
                     </td>
                   );
                 })}
@@ -239,8 +330,18 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
                     </Button>
                   )}
                 </td>
-              </tr>
-            ))}
+              </tr>,
+              <tr key={`notes-${wi}`}>
+                <td colSpan={9} className="border-b p-2 bg-muted/20">
+                  <div className="flex items-start gap-2">
+                    <StickyNote className="h-4 w-4 mt-1 text-muted-foreground print:hidden" />
+                    <div className="flex-1">
+                      {weekNotesBlock(wi)}
+                      {weekNotes[wi] && <p className="hidden print:block text-[10px] whitespace-pre-wrap"><b>Week {wi + 1} notes:</b> {weekNotes[wi]}</p>}
+                    </div>
+                  </div>
+                </td>
+            ])}
           </tbody>
         </table>
       </div>
@@ -282,10 +383,12 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
                         {cell.hasPm ? "− Remove PM" : "+ Add PM Session"}
                       </button>
                     )}
+                    {dayNotesBlock(wi, d, cell)}
                   </div>
                 );
               })}
             </div>
+            <div className="p-3 border-t">{weekNotesBlock(wi)}</div>
           </details>
         ))}
       </div>
