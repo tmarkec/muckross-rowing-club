@@ -148,16 +148,18 @@ function SchedulePage() {
         const d = drafts[r.id];
         if (!d) continue;
         if (
-          d.day_of_week !== r.day_of_week ||
+          dayNumber(d.day_of_week) !== dayNumber(r.day_of_week) ||
           d.group_name !== r.group_name ||
           d.time_text !== r.time_text ||
           d.location !== r.location ||
           (d.details ?? "") !== (r.details ?? "")
         ) {
+          const day = dayNumber(d.day_of_week);
+          if (day === null) throw new Error(`${d.group_name || "This session"}: please choose a day`);
           const { error } = await supabase
             .from("training_schedules")
             .update({
-              day_of_week: d.day_of_week,
+              day_of_week: day,
               group_name: d.group_name.trim(),
               time_text: d.time_text.trim(),
               location: d.location,
@@ -170,21 +172,23 @@ function SchedulePage() {
       const toInsert = newRows.filter((n) => n.group_name.trim() || n.time_text.trim());
       for (const n of toInsert) {
         if (!n.group_name.trim() || !n.time_text.trim()) {
-          throw new Error(`${DAYS[n.day_of_week - 1]}: each new session needs a group and a time`);
+          throw new Error(`${dayLabel(n.day_of_week)}: each new session needs a group and a time`);
         }
       }
       if (toInsert.length) {
         const counts: Record<number, number> = {};
         const payload = toInsert.map((n) => {
-          const base = rows.filter((r) => r.day_of_week === n.day_of_week).length;
-          counts[n.day_of_week] = (counts[n.day_of_week] ?? 0) + 1;
+          const day = dayNumber(n.day_of_week);
+          if (day === null) throw new Error(`${n.group_name}: please choose a day`);
+          const base = rows.filter((r) => dayNumber(r.day_of_week) === day).length;
+          counts[day] = (counts[day] ?? 0) + 1;
           return {
-            day_of_week: n.day_of_week,
+            day_of_week: day,
             group_name: n.group_name.trim(),
             time_text: n.time_text.trim(),
             location: n.location,
             details: n.details?.trim() || null,
-            sort_order: base + counts[n.day_of_week],
+            sort_order: base + counts[day],
           };
         });
         const { error } = await supabase.from("training_schedules").insert(payload);
@@ -213,8 +217,8 @@ function SchedulePage() {
   const editing = canEdit && editMode;
 
   const renderDay = (day: number) => {
-    const items = grouped.get(day) ?? [];
-    const pending = newRows.filter((n) => n.day_of_week === day);
+    const items = byDay.get(day) ?? [];
+    const pending = newRows.filter((n) => matchesDay(n.day_of_week, day));
     return (
       <div className="space-y-2">
         {items.length === 0 && pending.length === 0 && (
