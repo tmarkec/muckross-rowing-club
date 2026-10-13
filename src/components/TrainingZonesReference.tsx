@@ -75,7 +75,7 @@ export function TrainingZonesReferenceButton() {
           Helper Tool
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-4xl max-h-[85vh] overflow-y-auto p-4 sm:p-6">
+      <DialogContent className="flex max-h-[85vh] w-[calc(100%-2rem)] max-w-4xl flex-col overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
           <DialogTitle>Training Zones Reference Guide</DialogTitle>
           <DialogDescription>
@@ -83,7 +83,7 @@ export function TrainingZonesReferenceButton() {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="overflow-x-auto rounded-md border">
+        <div className="min-w-0 max-w-full overflow-x-auto rounded-md border">
           <Table className="min-w-[760px]">
             <TableHeader>
               <TableRow className="bg-muted/60 hover:bg-muted/60">
