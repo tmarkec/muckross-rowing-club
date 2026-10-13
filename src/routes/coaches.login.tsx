@@ -55,6 +55,22 @@ function LoginPage() {
             {submitting ? "Signing in…" : "Sign in"}
           </Button>
         </form>
+        <div className="mt-4 text-center text-sm">
+          <button
+            type="button"
+            className="text-primary hover:underline"
+            onClick={async () => {
+              if (!email) return toast.error("Enter your email above first.");
+              const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: `${window.location.origin}/reset-password`,
+              });
+              if (error) toast.error(error.message);
+              else toast.success("Check your email for a password reset link.");
+            }}
+          >
+            Forgot password?
+          </button>
+        </div>
         <div className="mt-6 text-center text-xs text-muted-foreground">
           <Link to="/" className="hover:underline">← Back to club site</Link>
         </div>
