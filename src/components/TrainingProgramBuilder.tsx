@@ -89,12 +89,18 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
     if (!groupId) { toast.error("Choose a group to save to"); return; }
     setSaving(true);
     const { data: u } = await supabase.auth.getUser();
-    const { error } = await supabase.from("training_programmes").upsert({
+    const programmeData: Record<string, unknown> = {
       group_id: groupId,
       start_date: format(startDate, "yyyy-MM-dd"),
       data: { weeks, weekNotes } as never,
       updated_by: u.user?.id ?? null,
-    }, { onConflict: "group_id" });
+    };
+    // Only send an id when we're updating a saved programme; otherwise let the
+    // database generate the UUID (an empty id string would fail the insert).
+    if (programmeId) programmeData.id = programmeId;
+    const { error } = await supabase.from("training_programmes").upsert(programmeData, {
+      onConflict: programmeId ? "id" : "group_id,start_date",
+    });
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Programme saved to the group");
