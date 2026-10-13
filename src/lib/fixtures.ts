@@ -1,4 +1,4 @@
-const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
+export const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
 const LOUGHQUITTANE_DOC_URL =
   "https://docs.google.com/document/d/1Pn9WN71Uy3xYIQ1sO4FJzbL_95N-YKNkicJEAKes6EU/edit?tab=t.0";
 

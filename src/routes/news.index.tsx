@@ -5,7 +5,7 @@ import { Calendar as CalendarIcon, MapPin, ExternalLink } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { fixtures } from "@/lib/fixtures";
+import { fixtures, ROWING_IRELAND_EVENTS_URL } from "@/lib/fixtures";
 import { WeatherWidget } from "@/components/WeatherWidget";
 import { supabase } from "@/lib/supabase";
 import {
@@ -27,6 +27,8 @@ export const Route = createFileRoute("/news/")({
           "Latest news, race results and announcements from Muckross Rowing Club, Killarney.",
       },
       { property: "og:title", content: "News | Muckross Rowing Club" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Race results, club announcements and stories from Muckross RC.",
@@ -130,7 +132,7 @@ function NewsPage() {
         </div>
       </section>
 
-      <section className="bg-muted/40 py-10 sm:py-12">
+      <section id="regatta-calendar" className="scroll-mt-24 bg-muted/40 py-10 sm:py-12">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-start">
             <div>
