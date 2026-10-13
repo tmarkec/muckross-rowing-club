@@ -462,8 +462,11 @@ function EditCard({
       <Input className="h-8 text-xs" placeholder="Squad / group" value={d.group_name} onChange={(e) => onChange({ group_name: e.target.value })} />
       <Input className="h-8 text-xs" placeholder="e.g. 06:30 – 08:00" value={d.time_text} onChange={(e) => onChange({ time_text: e.target.value })} />
       <div className="flex gap-1">
-        <Select value={String(d.day_of_week)} onValueChange={(v) => onChange({ day_of_week: Number(v) })}>
-          <SelectTrigger className="h-8 text-xs flex-1"><SelectValue /></SelectTrigger>
+        <Select
+          value={String(dayNumber(d.day_of_week) ?? "")}
+          onValueChange={(v) => onChange({ day_of_week: Number(v) })}
+        >
+          <SelectTrigger className="h-8 text-xs flex-1"><SelectValue placeholder="Day" /></SelectTrigger>
           <SelectContent>
             {DAYS.map((x, i) => <SelectItem key={x} value={String(i + 1)}>{x}</SelectItem>)}
           </SelectContent>
