@@ -11,13 +11,13 @@ type NewsData = Awaited<ReturnType<typeof getHomeNews>>;
 export function HomeNewsAndDates({ news, today }: { news: NewsData; today: string }) {
   const events = getUpcomingFixtures(new Date(today), 4);
   return (
-    <section aria-labelledby="home-news-heading" className="bg-card py-14 sm:py-20">
+    <section aria-labelledby="home-news-heading" className="bg-card py-10 sm:py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <h2 id="home-news-heading" className="font-serif text-3xl font-bold text-primary sm:text-4xl">Latest News &amp; Key Dates</h2>
           <p className="mt-4 text-base leading-relaxed text-muted-foreground">Stay up to date with the latest club news, regatta results, and upcoming calendar events.</p>
         </div>
-        <div className="mt-10 grid min-w-0 gap-10 md:grid-cols-2">
+        <div className="mt-8 grid min-w-0 gap-8 md:grid-cols-2">
           <div className="min-w-0">
             <h3 className="mb-5 border-b-2 border-secondary pb-3 font-serif text-2xl font-bold text-primary">Recent News</h3>
             <div className="space-y-4">
@@ -58,7 +58,7 @@ export function HomeNewsAndDates({ news, today }: { news: NewsData; today: strin
             <Button asChild variant="link" className="mt-4 px-0"><Link to="/news" hash="regatta-calendar">View Full Calendar <ArrowRight aria-hidden="true" /></Link></Button>
           </div>
         </div>
-        <div className="mt-10 flex justify-center">
+        <div className="mt-6 flex justify-center">
           <Button asChild size="lg" className="h-auto min-h-10 max-w-full whitespace-normal py-3 text-center"><Link to="/news">View All News &amp; Articles <ArrowRight aria-hidden="true" /></Link></Button>
         </div>
       </div>
