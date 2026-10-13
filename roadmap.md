@@ -4,6 +4,6 @@
 - [x] Align TanStack package versions and keep the security fix in place.
 - [x] Let visitors read article pictures without a sign-in.
 - [x] Show schedule sessions whatever form the stored day takes (number, '1', or 'Monday').
-- [ ] Restore published homepage news and verify public articles render.
-- [ ] Order dynamic published news by article creation date, newest first.
-- [ ] Remove Loughquittane Heritage Regatta and tighten calendar whitespace.
+- [x] Restore homepage public news connection and verify real articles render in preview.
+- [x] Order dynamic published news by article creation date, newest first.
+- [x] Remove Loughquittane Heritage Regatta and tighten calendar whitespace.
