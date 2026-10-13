@@ -295,52 +295,135 @@ function SchedulePage() {
           <p className="py-6 text-center text-muted-foreground">Loading…</p>
         ) : (
           <>
-            {/* Desktop: 7-column matrix */}
-            <div className="hidden lg:grid grid-cols-7 gap-3">
-              {DAYS.map((label, i) => (
-                <div
-                  key={label}
-                  className={cn(
-                    "rounded-xl border bg-background p-2 shadow-sm",
-                    todayIndex() === i + 1 && "ring-2 ring-primary/40",
-                  )}
-                >
-                  <div className="mb-2 flex items-center justify-between px-1">
-                    <span className="text-sm font-semibold">{label}</span>
-                    <span className="text-[10px] text-muted-foreground">
-                      {(grouped.get(i + 1) ?? []).length}
-                    </span>
-                  </div>
-                  {renderDay(i + 1)}
-                </div>
-              ))}
-            </div>
-
-            {/* Mobile / tablet: full week, stacked by day */}
-            <div className="lg:hidden space-y-3">
+            <div className="mb-4 flex flex-wrap gap-1.5" role="group" aria-label="Filter the schedule by day">
+              <button
+                type="button"
+                aria-pressed={dayFilter === null}
+                onClick={() => setDayFilter(null)}
+                className={cn(
+                  "rounded-full border px-3 py-1 text-xs transition-colors",
+                  dayFilter === null
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "bg-background hover:bg-muted",
+                )}
+              >
+                All week <span className="opacity-70">({rows.length})</span>
+              </button>
               {DAYS.map((label, i) => {
-                const count = (grouped.get(i + 1) ?? []).length;
-                const isToday = todayIndex() === i + 1;
+                const n = i + 1;
+                const count = (byDay.get(n) ?? []).length;
+                const active = dayFilter === n;
                 return (
-                  <div
+                  <button
                     key={label}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setDayFilter(active ? null : n)}
                     className={cn(
-                      "rounded-xl border bg-background p-3 shadow-sm",
-                      isToday && "ring-2 ring-primary/40",
+                      "rounded-full border px-3 py-1 text-xs transition-colors",
+                      active
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "bg-background hover:bg-muted",
+                      count === 0 && !active && "text-muted-foreground",
                     )}
                   >
-                    <div className="mb-2 flex items-center justify-between px-0.5">
-                      <h2 className="text-sm font-semibold">
-                        {label}
-                        {isToday && <span className="ml-2 text-[10px] font-medium uppercase tracking-wide text-primary">Today</span>}
-                      </h2>
-                      <span className="text-[10px] text-muted-foreground">{count}</span>
-                    </div>
-                    {renderDay(i + 1)}
-                  </div>
+                    {label} <span className="opacity-70">({count})</span>
+                  </button>
                 );
               })}
             </div>
+
+            {dayFilter === null ? (
+              <>
+                {/* Desktop: 7-column matrix */}
+                <div className="hidden lg:grid grid-cols-7 gap-3">
+                  {DAYS.map((label, i) => (
+                    <div
+                      key={label}
+                      className={cn(
+                        "rounded-xl border bg-background p-2 shadow-sm",
+                        todayIndex() === i + 1 && "ring-2 ring-primary/40",
+                      )}
+                    >
+                      <div className="mb-2 flex items-center justify-between px-1">
+                        <span className="text-sm font-semibold">{label}</span>
+                        <span className="text-[10px] text-muted-foreground">
+                          {(byDay.get(i + 1) ?? []).length}
+                        </span>
+                      </div>
+                      {renderDay(i + 1)}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Mobile / tablet: full week, stacked by day */}
+                <div className="lg:hidden space-y-3">
+                  {DAYS.map((label, i) => {
+                    const count = (byDay.get(i + 1) ?? []).length;
+                    const isToday = todayIndex() === i + 1;
+                    return (
+                      <div
+                        key={label}
+                        className={cn(
+                          "rounded-xl border bg-background p-3 shadow-sm",
+                          isToday && "ring-2 ring-primary/40",
+                        )}
+                      >
+                        <div className="mb-2 flex items-center justify-between px-0.5">
+                          <h2 className="text-sm font-semibold">
+                            {label}
+                            {isToday && <span className="ml-2 text-[10px] font-medium uppercase tracking-wide text-primary">Today</span>}
+                          </h2>
+                          <span className="text-[10px] text-muted-foreground">{count}</span>
+                        </div>
+                        {renderDay(i + 1)}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {other.length > 0 && (
+                  <div className="mt-3 rounded-xl border border-dashed bg-background p-3 shadow-sm">
+                    <div className="mb-2 flex items-center justify-between px-0.5">
+                      <h2 className="text-sm font-semibold">Other days</h2>
+                      <span className="text-[10px] text-muted-foreground">{other.length}</span>
+                    </div>
+                    <p className="mb-2 px-0.5 text-xs text-muted-foreground">
+                      These sessions don&apos;t have a day the page could recognise.
+                    </p>
+                    <div className="space-y-2">
+                      {other.map((r) =>
+                        editing ? (
+                          <EditCard
+                            key={r.id}
+                            d={drafts[r.id] ?? r}
+                            onChange={(p) => updateDraft(r.id, p)}
+                            onRemove={() => void removeRow(r.id)}
+                          />
+                        ) : (
+                          <ViewCard key={r.id} r={r} />
+                        ),
+                      )}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="rounded-xl border bg-background p-3 shadow-sm">
+                <div className="mb-2 flex items-center justify-between px-0.5">
+                  <h2 className="text-sm font-semibold">
+                    {DAYS[dayFilter - 1]}
+                    {todayIndex() === dayFilter && (
+                      <span className="ml-2 text-[10px] font-medium uppercase tracking-wide text-primary">Today</span>
+                    )}
+                  </h2>
+                  <span className="text-[10px] text-muted-foreground">
+                    {(byDay.get(dayFilter) ?? []).length}
+                  </span>
+                </div>
+                {renderDay(dayFilter)}
+              </div>
+            )}
           </>
         )}
       </div>
