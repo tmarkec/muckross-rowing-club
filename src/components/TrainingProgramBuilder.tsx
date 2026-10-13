@@ -12,6 +12,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { TrainingZonesReferenceButton } from "@/components/TrainingZonesReference";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
@@ -249,6 +250,7 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
             <Button onClick={() => window.print()} variant="default">
               <Printer className="mr-2 h-4 w-4" /> Download Training Program
             </Button>
+            <TrainingZonesReferenceButton />
           </div>
         </div>
       </div>
