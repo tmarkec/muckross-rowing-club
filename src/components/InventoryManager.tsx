@@ -729,8 +729,10 @@ function CoachReadOnlyView({
   const privateBoats = boats.filter((b) => b.is_private);
   // Exclude private, Offshore, and odd/to-be-fixed oars from the main displayed lists.
   const visibleOars = oars.filter((o) => !o.is_private && o.category !== "Offshore" && !o.needs_repair);
-  const unmatchedOars = visibleOars.filter((o) => isUnmatched(o.assigned_group));
-  const matchedPublicOars = visibleOars.filter((o) => !isUnmatched(o.assigned_group));
+  // All usable oars belong in the main Oars list, whatever group text they carry.
+  const unmatchedOars: typeof visibleOars = [];
+  const matchedPublicOars = visibleOars;
+  void isUnmatched;
   const oddOars = oars.filter((o) => o.needs_repair);
 
   const sortedPublicBoats = useMemo(() => {
