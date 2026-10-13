@@ -303,32 +303,30 @@ function SchedulePage() {
               ))}
             </div>
 
-            {/* Mobile / tablet: day tabs */}
-            <div className="lg:hidden">
-              <div className="grid grid-cols-7 gap-1 rounded-lg border bg-background p-1">
-                {DAYS.map((label, i) => {
-                  const count = (grouped.get(i + 1) ?? []).length;
-                  const active = mobileDay === i + 1;
-                  return (
-                    <button
-                      key={label}
-                      type="button"
-                      onClick={() => setMobileDay(i + 1)}
-                      className={cn(
-                        "rounded-md py-2 text-xs font-medium transition",
-                        active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted",
-                      )}
-                    >
-                      {label.slice(0, 3)}
-                      <span className="block text-[10px] opacity-80">{count}</span>
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="mt-3 rounded-xl border bg-background p-3 shadow-sm">
-                <h2 className="mb-2 font-semibold">{DAYS[mobileDay - 1]}</h2>
-                {renderDay(mobileDay)}
-              </div>
+            {/* Mobile / tablet: full week, stacked by day */}
+            <div className="lg:hidden space-y-3">
+              {DAYS.map((label, i) => {
+                const count = (grouped.get(i + 1) ?? []).length;
+                const isToday = todayIndex() === i + 1;
+                return (
+                  <div
+                    key={label}
+                    className={cn(
+                      "rounded-xl border bg-background p-3 shadow-sm",
+                      isToday && "ring-2 ring-primary/40",
+                    )}
+                  >
+                    <div className="mb-2 flex items-center justify-between px-0.5">
+                      <h2 className="text-sm font-semibold">
+                        {label}
+                        {isToday && <span className="ml-2 text-[10px] font-medium uppercase tracking-wide text-primary">Today</span>}
+                      </h2>
+                      <span className="text-[10px] text-muted-foreground">{count}</span>
+                    </div>
+                    {renderDay(i + 1)}
+                  </div>
+                );
+              })}
             </div>
           </>
         )}
