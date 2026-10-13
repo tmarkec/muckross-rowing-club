@@ -1,6 +1,4 @@
 export const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
-const LOUGHQUITTANE_DOC_URL =
-  "https://docs.google.com/document/d/1Pn9WN71Uy3xYIQ1sO4FJzbL_95N-YKNkicJEAKes6EU/edit?tab=t.0";
 
 export type Fixture = {
   date: Date;
@@ -13,15 +11,6 @@ export type Fixture = {
 };
 
 export const fixtures: Fixture[] = [
-  {
-    date: new Date(2026, 7, 30),
-    endDate: new Date(2026, 7, 30),
-    dateLabel: "Sun 30 Aug 2026",
-    name: "Loughquittane Heritage Regatta",
-    location: "Loughquittane Lake",
-    tag: "Regatta",
-    url: LOUGHQUITTANE_DOC_URL,
-  },
   {
     date: new Date(2026, 11, 5),
     endDate: new Date(2026, 11, 5),

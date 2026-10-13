@@ -4,3 +4,5 @@
 - [x] Align TanStack package versions and keep the security fix in place.
 - [x] Let visitors read article pictures without a sign-in.
 - [x] Show schedule sessions whatever form the stored day takes (number, '1', or 'Monday').
+- [ ] Restore published homepage news and verify public articles render.
+- [ ] Remove Loughquittane Heritage Regatta and tighten calendar whitespace.

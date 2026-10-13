@@ -109,7 +109,6 @@ function NewsPage() {
   }, [upcomingFixtures]);
   const [month, setMonth] = useState<Date>(() => new Date());
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
-  const highlightDay = new Date(2026, 7, 30);
 
   return (
     <SiteLayout>
@@ -132,9 +131,9 @@ function NewsPage() {
         </div>
       </section>
 
-      <section id="regatta-calendar" className="scroll-mt-24 bg-muted/40 py-10 sm:py-12">
+      <section id="regatta-calendar" className="scroll-mt-24 bg-muted/40 py-6 sm:py-8">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-start">
+          <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
             <div>
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                 Events
@@ -212,7 +211,7 @@ function NewsPage() {
               </Dialog>
             </div>
 
-            <div className="mx-auto w-fit rounded-2xl border border-border/60 bg-card p-2 shadow-soft [--cell-size:1.5rem]">
+            <div className="mx-auto w-fit max-w-full rounded-lg border border-border/60 bg-card p-2 shadow-soft [--cell-size:1.5rem]">
               <Calendar
                 mode="single"
                 weekStartsOn={1}
@@ -221,10 +220,9 @@ function NewsPage() {
                 selected={selectedDay}
                 onSelect={setSelectedDay}
                 today={new Date()}
-                modifiers={{ event: eventDays, highlight: [highlightDay] }}
+                modifiers={{ event: eventDays }}
                 modifiersClassNames={{
                   event: "cursor-pointer rounded-md",
-                  highlight: "cursor-pointer rounded-md",
                   selected: "rounded-md",
                 }}
                 className="pointer-events-auto"
@@ -236,14 +234,10 @@ function NewsPage() {
                   if (isEvent) setOpen(true);
                 }}
               />
-              <div className="mt-3 flex flex-wrap items-center justify-center gap-3 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
+              <div className="mx-auto mt-2 max-w-64 border-t border-border/60 pt-2 text-[11px] text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
                   <span className="h-2.5 w-2.5 rounded-sm bg-primary" /> Muckross RC competing.
                   Click a highlighted day for details
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm bg-primary ring-2 ring-secondary" />{" "}
-                  30 Aug, Loughquittane Heritage Regatta
                 </span>
               </div>
             </div>

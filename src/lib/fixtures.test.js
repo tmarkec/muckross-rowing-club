@@ -1,7 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { getUpcomingFixtures } from "./fixtures.ts";
+import { fixtures, getUpcomingFixtures } from "./fixtures.ts";
 
 describe("homepage upcoming calendar events", () => {
+  test("removes Loughquittane Heritage Regatta from the shared calendar", () => {
+    expect(fixtures.some((event) => event.name === "Loughquittane Heritage Regatta")).toBe(false);
+  });
   test("excludes past dates and keeps the three remaining 2026 fixtures in chronological order", () => {
     expect(getUpcomingFixtures(new Date(2026, 9, 13), 4).map((event) => event.name))
       .toEqual(["Castleconnell Head", "Skibbereen HOR", "Muckross Head"]);
