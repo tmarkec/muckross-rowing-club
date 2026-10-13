@@ -65,6 +65,7 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
   const [notesOpen, setNotesOpen] = useState<Record<string, boolean>>({});
   const [groups, setGroups] = useState<{ id: string; name: string }[]>([]);
   const [groupId, setGroupId] = useState<string>("");
+  const [programmeId, setProgrammeId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
