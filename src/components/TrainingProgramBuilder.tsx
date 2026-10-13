@@ -341,6 +341,7 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
                     </div>
                   </div>
                 </td>
+              </tr>,
             ])}
           </tbody>
         </table>
