@@ -3,3 +3,4 @@
 - [x] Provide the query cache app-wide so the schedule page stops erroring.
 - [x] Align TanStack package versions and keep the security fix in place.
 - [x] Let visitors read article pictures without a sign-in.
+- [x] Show schedule sessions whatever form the stored day takes (number, '1', or 'Monday').

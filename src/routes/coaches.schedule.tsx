@@ -16,11 +16,14 @@ import {
 } from "@/components/ui/select";
 import { Pencil, Check, Plus, Trash2, X, Clock, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DAYS, dayLabel, dayNumber, matchesDay, todayIndex } from "@/lib/schedule-days";
 
 type Location = "Boathouse" | "Gym";
 type Row = {
   id: string;
-  day_of_week: number;
+  // Stored as a number, but some records hold numeric strings ('1', '2', ...),
+  // so values are normalised before they are grouped or filtered.
+  day_of_week: number | string;
   group_name: string;
   time_text: string;
   location: Location;
@@ -29,8 +32,6 @@ type Row = {
 };
 
 type Draft = Omit<Row, "id"> & { id?: string; tempId?: string };
-
-const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export const Route = createFileRoute("/coaches/schedule")({
   head: () => ({
@@ -42,10 +43,6 @@ export const Route = createFileRoute("/coaches/schedule")({
   component: SchedulePage,
 });
 
-function todayIndex() {
-  const d = new Date().getDay();
-  return d === 0 ? 7 : d;
-}
 
 function SchedulePage() {
   const { loading, session, isAdmin, isCoach } = useAuth();
@@ -55,6 +52,8 @@ function SchedulePage() {
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
   const [newRows, setNewRows] = useState<Draft[]>([]);
   const [saving, setSaving] = useState(false);
+  // null means no day tab is active: the whole week renders unfiltered.
+  const [dayFilter, setDayFilter] = useState<number | null>(null);
 
   useEffect(() => {
     if (!loading && !session) void navigate({ to: "/coaches/login" });
@@ -80,11 +79,17 @@ function SchedulePage() {
     },
   });
 
-  const grouped = useMemo(() => {
+  const { byDay, other } = useMemo(() => {
     const map = new Map<number, Row[]>();
     for (let d = 1; d <= 7; d++) map.set(d, []);
-    for (const r of rows) map.get(r.day_of_week)?.push(r);
-    return map;
+    const rest: Row[] = [];
+    for (const r of rows) {
+      const d = dayNumber(r.day_of_week);
+      if (d) map.get(d)!.push(r);
+      else rest.push(r);
+    }
+    for (const list of map.values()) list.sort((a, b) => a.sort_order - b.sort_order);
+    return { byDay: map, other: rest };
   }, [rows]);
 
   const canEdit = isAdmin;
@@ -143,16 +148,18 @@ function SchedulePage() {
         const d = drafts[r.id];
         if (!d) continue;
         if (
-          d.day_of_week !== r.day_of_week ||
+          dayNumber(d.day_of_week) !== dayNumber(r.day_of_week) ||
           d.group_name !== r.group_name ||
           d.time_text !== r.time_text ||
           d.location !== r.location ||
           (d.details ?? "") !== (r.details ?? "")
         ) {
+          const day = dayNumber(d.day_of_week);
+          if (day === null) throw new Error(`${d.group_name || "This session"}: please choose a day`);
           const { error } = await supabase
             .from("training_schedules")
             .update({
-              day_of_week: d.day_of_week,
+              day_of_week: day,
               group_name: d.group_name.trim(),
               time_text: d.time_text.trim(),
               location: d.location,
@@ -165,21 +172,23 @@ function SchedulePage() {
       const toInsert = newRows.filter((n) => n.group_name.trim() || n.time_text.trim());
       for (const n of toInsert) {
         if (!n.group_name.trim() || !n.time_text.trim()) {
-          throw new Error(`${DAYS[n.day_of_week - 1]}: each new session needs a group and a time`);
+          throw new Error(`${dayLabel(n.day_of_week)}: each new session needs a group and a time`);
         }
       }
       if (toInsert.length) {
         const counts: Record<number, number> = {};
         const payload = toInsert.map((n) => {
-          const base = rows.filter((r) => r.day_of_week === n.day_of_week).length;
-          counts[n.day_of_week] = (counts[n.day_of_week] ?? 0) + 1;
+          const day = dayNumber(n.day_of_week);
+          if (day === null) throw new Error(`${n.group_name}: please choose a day`);
+          const base = rows.filter((r) => dayNumber(r.day_of_week) === day).length;
+          counts[day] = (counts[day] ?? 0) + 1;
           return {
-            day_of_week: n.day_of_week,
+            day_of_week: day,
             group_name: n.group_name.trim(),
             time_text: n.time_text.trim(),
             location: n.location,
             details: n.details?.trim() || null,
-            sort_order: base + counts[n.day_of_week],
+            sort_order: base + counts[day],
           };
         });
         const { error } = await supabase.from("training_schedules").insert(payload);
@@ -208,8 +217,8 @@ function SchedulePage() {
   const editing = canEdit && editMode;
 
   const renderDay = (day: number) => {
-    const items = grouped.get(day) ?? [];
-    const pending = newRows.filter((n) => n.day_of_week === day);
+    const items = byDay.get(day) ?? [];
+    const pending = newRows.filter((n) => matchesDay(n.day_of_week, day));
     return (
       <div className="space-y-2">
         {items.length === 0 && pending.length === 0 && (
@@ -286,52 +295,135 @@ function SchedulePage() {
           <p className="py-6 text-center text-muted-foreground">Loading…</p>
         ) : (
           <>
-            {/* Desktop: 7-column matrix */}
-            <div className="hidden lg:grid grid-cols-7 gap-3">
-              {DAYS.map((label, i) => (
-                <div
-                  key={label}
-                  className={cn(
-                    "rounded-xl border bg-background p-2 shadow-sm",
-                    todayIndex() === i + 1 && "ring-2 ring-primary/40",
-                  )}
-                >
-                  <div className="mb-2 flex items-center justify-between px-1">
-                    <span className="text-sm font-semibold">{label}</span>
-                    <span className="text-[10px] text-muted-foreground">
-                      {(grouped.get(i + 1) ?? []).length}
-                    </span>
-                  </div>
-                  {renderDay(i + 1)}
-                </div>
-              ))}
-            </div>
-
-            {/* Mobile / tablet: full week, stacked by day */}
-            <div className="lg:hidden space-y-3">
+            <div className="mb-4 flex flex-wrap gap-1.5" role="group" aria-label="Filter the schedule by day">
+              <button
+                type="button"
+                aria-pressed={dayFilter === null}
+                onClick={() => setDayFilter(null)}
+                className={cn(
+                  "rounded-full border px-3 py-1 text-xs transition-colors",
+                  dayFilter === null
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "bg-background hover:bg-muted",
+                )}
+              >
+                All week <span className="opacity-70">({rows.length})</span>
+              </button>
               {DAYS.map((label, i) => {
-                const count = (grouped.get(i + 1) ?? []).length;
-                const isToday = todayIndex() === i + 1;
+                const n = i + 1;
+                const count = (byDay.get(n) ?? []).length;
+                const active = dayFilter === n;
                 return (
-                  <div
+                  <button
                     key={label}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setDayFilter(active ? null : n)}
                     className={cn(
-                      "rounded-xl border bg-background p-3 shadow-sm",
-                      isToday && "ring-2 ring-primary/40",
+                      "rounded-full border px-3 py-1 text-xs transition-colors",
+                      active
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "bg-background hover:bg-muted",
+                      count === 0 && !active && "text-muted-foreground",
                     )}
                   >
-                    <div className="mb-2 flex items-center justify-between px-0.5">
-                      <h2 className="text-sm font-semibold">
-                        {label}
-                        {isToday && <span className="ml-2 text-[10px] font-medium uppercase tracking-wide text-primary">Today</span>}
-                      </h2>
-                      <span className="text-[10px] text-muted-foreground">{count}</span>
-                    </div>
-                    {renderDay(i + 1)}
-                  </div>
+                    {label} <span className="opacity-70">({count})</span>
+                  </button>
                 );
               })}
             </div>
+
+            {dayFilter === null ? (
+              <>
+                {/* Desktop: 7-column matrix */}
+                <div className="hidden lg:grid grid-cols-7 gap-3">
+                  {DAYS.map((label, i) => (
+                    <div
+                      key={label}
+                      className={cn(
+                        "rounded-xl border bg-background p-2 shadow-sm",
+                        todayIndex() === i + 1 && "ring-2 ring-primary/40",
+                      )}
+                    >
+                      <div className="mb-2 flex items-center justify-between px-1">
+                        <span className="text-sm font-semibold">{label}</span>
+                        <span className="text-[10px] text-muted-foreground">
+                          {(byDay.get(i + 1) ?? []).length}
+                        </span>
+                      </div>
+                      {renderDay(i + 1)}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Mobile / tablet: full week, stacked by day */}
+                <div className="lg:hidden space-y-3">
+                  {DAYS.map((label, i) => {
+                    const count = (byDay.get(i + 1) ?? []).length;
+                    const isToday = todayIndex() === i + 1;
+                    return (
+                      <div
+                        key={label}
+                        className={cn(
+                          "rounded-xl border bg-background p-3 shadow-sm",
+                          isToday && "ring-2 ring-primary/40",
+                        )}
+                      >
+                        <div className="mb-2 flex items-center justify-between px-0.5">
+                          <h2 className="text-sm font-semibold">
+                            {label}
+                            {isToday && <span className="ml-2 text-[10px] font-medium uppercase tracking-wide text-primary">Today</span>}
+                          </h2>
+                          <span className="text-[10px] text-muted-foreground">{count}</span>
+                        </div>
+                        {renderDay(i + 1)}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {other.length > 0 && (
+                  <div className="mt-3 rounded-xl border border-dashed bg-background p-3 shadow-sm">
+                    <div className="mb-2 flex items-center justify-between px-0.5">
+                      <h2 className="text-sm font-semibold">Other days</h2>
+                      <span className="text-[10px] text-muted-foreground">{other.length}</span>
+                    </div>
+                    <p className="mb-2 px-0.5 text-xs text-muted-foreground">
+                      These sessions don&apos;t have a day the page could recognise.
+                    </p>
+                    <div className="space-y-2">
+                      {other.map((r) =>
+                        editing ? (
+                          <EditCard
+                            key={r.id}
+                            d={drafts[r.id] ?? r}
+                            onChange={(p) => updateDraft(r.id, p)}
+                            onRemove={() => void removeRow(r.id)}
+                          />
+                        ) : (
+                          <ViewCard key={r.id} r={r} />
+                        ),
+                      )}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="rounded-xl border bg-background p-3 shadow-sm">
+                <div className="mb-2 flex items-center justify-between px-0.5">
+                  <h2 className="text-sm font-semibold">
+                    {DAYS[dayFilter - 1]}
+                    {todayIndex() === dayFilter && (
+                      <span className="ml-2 text-[10px] font-medium uppercase tracking-wide text-primary">Today</span>
+                    )}
+                  </h2>
+                  <span className="text-[10px] text-muted-foreground">
+                    {(byDay.get(dayFilter) ?? []).length}
+                  </span>
+                </div>
+                {renderDay(dayFilter)}
+              </div>
+            )}
           </>
         )}
       </div>
@@ -370,8 +462,11 @@ function EditCard({
       <Input className="h-8 text-xs" placeholder="Squad / group" value={d.group_name} onChange={(e) => onChange({ group_name: e.target.value })} />
       <Input className="h-8 text-xs" placeholder="e.g. 06:30 – 08:00" value={d.time_text} onChange={(e) => onChange({ time_text: e.target.value })} />
       <div className="flex gap-1">
-        <Select value={String(d.day_of_week)} onValueChange={(v) => onChange({ day_of_week: Number(v) })}>
-          <SelectTrigger className="h-8 text-xs flex-1"><SelectValue /></SelectTrigger>
+        <Select
+          value={String(dayNumber(d.day_of_week) ?? "")}
+          onValueChange={(v) => onChange({ day_of_week: Number(v) })}
+        >
+          <SelectTrigger className="h-8 text-xs flex-1"><SelectValue placeholder="Day" /></SelectTrigger>
           <SelectContent>
             {DAYS.map((x, i) => <SelectItem key={x} value={String(i + 1)}>{x}</SelectItem>)}
           </SelectContent>
