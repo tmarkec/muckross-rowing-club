@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
@@ -49,32 +50,35 @@ function todayIndex() {
 function SchedulePage() {
   const { loading, session, isAdmin, isCoach } = useAuth();
   const navigate = useNavigate();
-  const [rows, setRows] = useState<Row[]>([]);
+  const queryClient = useQueryClient();
   const [editMode, setEditMode] = useState(false);
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
   const [newRows, setNewRows] = useState<Draft[]>([]);
   const [saving, setSaving] = useState(false);
-  const [loadingRows, setLoadingRows] = useState(true);
 
   useEffect(() => {
     if (!loading && !session) void navigate({ to: "/coaches/login" });
   }, [loading, session, navigate]);
 
-  const load = async () => {
-    setLoadingRows(true);
-    const { data, error } = await supabase
-      .from("training_schedules")
-      .select("id, day_of_week, group_name, time_text, location, details, sort_order")
-      .order("day_of_week")
-      .order("sort_order");
-    if (error) toast.error(error.message);
-    setRows((data ?? []) as Row[]);
-    setLoadingRows(false);
-  };
-
-  useEffect(() => {
-    if (session) void load();
-  }, [session]);
+  const { data: rows = [], isLoading: loadingRows } = useQuery({
+    queryKey: ["training_schedules"],
+    enabled: !!session,
+    staleTime: 0,
+    refetchOnMount: "always",
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("training_schedules")
+        .select("id, day_of_week, group_name, time_text, location, details, sort_order")
+        .order("day_of_week")
+        .order("sort_order");
+      console.log("Fetched schedules:", data, error);
+      if (error) {
+        toast.error(error.message);
+        throw error;
+      }
+      return (data ?? []) as Row[];
+    },
+  });
 
   const grouped = useMemo(() => {
     const map = new Map<number, Row[]>();
@@ -123,7 +127,7 @@ function SchedulePage() {
     if (!confirm("Delete this session?")) return;
     const { error } = await supabase.from("training_schedules").delete().eq("id", id);
     if (error) return toast.error(error.message);
-    setRows((r) => r.filter((x) => x.id !== id));
+    await queryClient.invalidateQueries({ queryKey: ["training_schedules"] });
     setDrafts((d) => {
       const n = { ...d };
       delete n[id];
@@ -185,7 +189,7 @@ function SchedulePage() {
       setEditMode(false);
       setNewRows([]);
       setDrafts({});
-      await load();
+      await queryClient.invalidateQueries({ queryKey: ["training_schedules"] });
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
