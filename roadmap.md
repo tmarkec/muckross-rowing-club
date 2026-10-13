@@ -1,2 +1,5 @@
 - [x] Add shared calendar data and dynamic homepage news section.
 - [x] Verify live news, upcoming dates, links and mobile layout.
+- [x] Provide the query cache app-wide so the schedule page stops erroring.
+- [x] Align TanStack package versions and keep the security fix in place.
+- [x] Let visitors read article pictures without a sign-in.

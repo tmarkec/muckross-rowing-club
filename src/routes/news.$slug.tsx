@@ -55,10 +55,10 @@ export const Route = createFileRoute("/news/$slug")({
       ],
     };
   },
-  errorComponent: ({ error }) => (
+  errorComponent: ({ error }: { error: unknown }) => (
     <SiteLayout>
       <div className="mx-auto max-w-2xl px-4 py-20 text-center">
-        <p className="text-sm text-destructive">{error.message}</p>
+        <p className="text-sm text-destructive">{error instanceof Error ? error.message : String(error)}</p>
         <Link to="/news" className="mt-4 inline-block text-sm text-primary hover:underline">
           ← Back to news
         </Link>
