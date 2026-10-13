@@ -1,2 +1,2 @@
-- [ ] Add shared calendar data and dynamic homepage news section.
+- [x] Add shared calendar data and dynamic homepage news section.
 - [ ] Verify live news, upcoming dates, links and mobile layout.

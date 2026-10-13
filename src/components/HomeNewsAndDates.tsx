@@ -23,7 +23,7 @@ export function HomeNewsAndDates({ news, today }: { news: NewsData; today: strin
             <div className="space-y-4">
               {news.posts.map((post) => (
                 <Card key={post.id} className="grid min-w-0 grid-cols-1 gap-4 rounded-lg p-4 shadow-none sm:grid-cols-[112px_minmax(0,1fr)]">
-                  <img src={post.thumbnail} alt={post.title} loading="lazy" width={112} height={112} className="aspect-[16/9] w-full rounded-md object-cover sm:aspect-square" />
+                  <img src={post.thumbnail} alt={post.title} loading="lazy" width={112} height={112} className={`aspect-[16/9] w-full rounded-md sm:aspect-square ${post.thumbnail === "/muckross-logo.png" ? "object-contain" : "object-cover"}`} />
                   <div className="min-w-0">
                     <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:flex-wrap">
                       <Badge variant="secondary" className="w-fit">Club News</Badge>
