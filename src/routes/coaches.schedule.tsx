@@ -55,7 +55,6 @@ function SchedulePage() {
   const [newRows, setNewRows] = useState<Draft[]>([]);
   const [saving, setSaving] = useState(false);
   const [loadingRows, setLoadingRows] = useState(true);
-  const [mobileDay, setMobileDay] = useState<number>(todayIndex());
 
   useEffect(() => {
     if (!loading && !session) void navigate({ to: "/coaches/login" });
