@@ -9,59 +9,34 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SupportRouteImport } from './routes/support'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as NewsRouteImport } from './routes/news'
-import { Route as JoinRouteImport } from './routes/join'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as ClubInfoRouteImport } from './routes/club-info'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as NewsIndexRouteImport } from './routes/news.index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ClubInfoRouteImport } from './routes/club-info'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as JoinRouteImport } from './routes/join'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SupportRouteImport } from './routes/support'
 import { Route as CoachesIndexRouteImport } from './routes/coaches.index'
-import { Route as NewsSlugRouteImport } from './routes/news.$slug'
-import { Route as CoachesScheduleRouteImport } from './routes/coaches.schedule'
-import { Route as CoachesRiggingRouteImport } from './routes/coaches.rigging'
-import { Route as CoachesProgramRouteImport } from './routes/coaches.program'
-import { Route as CoachesPostsRouteImport } from './routes/coaches.posts'
-import { Route as CoachesPaceRouteImport } from './routes/coaches.pace'
-import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
-import { Route as CoachesInventoryRouteImport } from './routes/coaches.inventory'
-import { Route as CoachesCrewsRouteImport } from './routes/coaches.crews'
 import { Route as CoachesAdminRouteImport } from './routes/coaches.admin'
-import { Route as CoachesGroupsGroupIdRouteImport } from './routes/coaches.groups.$groupId'
+import { Route as CoachesCrewsRouteImport } from './routes/coaches.crews'
+import { Route as CoachesInventoryRouteImport } from './routes/coaches.inventory'
+import { Route as CoachesLoginRouteImport } from './routes/coaches.login'
+import { Route as CoachesPaceRouteImport } from './routes/coaches.pace'
+import { Route as CoachesPostsRouteImport } from './routes/coaches.posts'
+import { Route as CoachesProgramRouteImport } from './routes/coaches.program'
+import { Route as CoachesRiggingRouteImport } from './routes/coaches.rigging'
+import { Route as CoachesScheduleRouteImport } from './routes/coaches.schedule'
+import { Route as NewsIndexRouteImport } from './routes/news.index'
+import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as CoachesAdminRiggingRouteImport } from './routes/coaches.admin.rigging'
+import { Route as CoachesGroupsGroupIdRouteImport } from './routes/coaches.groups.$groupId'
 import { Route as CoachesGroupsGroupIdIndexRouteImport } from './routes/coaches.groups.$groupId.index'
 import { Route as CoachesGroupsGroupIdAthletesAthleteIdRouteImport } from './routes/coaches.groups.$groupId.athletes.$athleteId'
 
-const SupportRoute = SupportRouteImport.update({
-  id: '/support',
-  path: '/support',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewsRoute = NewsRouteImport.update({
-  id: '/news',
-  path: '/news',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JoinRoute = JoinRouteImport.update({
-  id: '/join',
-  path: '/join',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ClubInfoRoute = ClubInfoRouteImport.update({
-  id: '/club-info',
-  path: '/club-info',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -69,64 +44,39 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ClubInfoRoute = ClubInfoRouteImport.update({
+  id: '/club-info',
+  path: '/club-info',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewsIndexRoute = NewsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => NewsRoute,
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinRoute = JoinRouteImport.update({
+  id: '/join',
+  path: '/join',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CoachesIndexRoute = CoachesIndexRouteImport.update({
   id: '/coaches/',
   path: '/coaches/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewsSlugRoute = NewsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => NewsRoute,
-} as any)
-const CoachesScheduleRoute = CoachesScheduleRouteImport.update({
-  id: '/coaches/schedule',
-  path: '/coaches/schedule',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CoachesRiggingRoute = CoachesRiggingRouteImport.update({
-  id: '/coaches/rigging',
-  path: '/coaches/rigging',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CoachesProgramRoute = CoachesProgramRouteImport.update({
-  id: '/coaches/program',
-  path: '/coaches/program',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CoachesPostsRoute = CoachesPostsRouteImport.update({
-  id: '/coaches/posts',
-  path: '/coaches/posts',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CoachesPaceRoute = CoachesPaceRouteImport.update({
-  id: '/coaches/pace',
-  path: '/coaches/pace',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CoachesLoginRoute = CoachesLoginRouteImport.update({
-  id: '/coaches/login',
-  path: '/coaches/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CoachesInventoryRoute = CoachesInventoryRouteImport.update({
-  id: '/coaches/inventory',
-  path: '/coaches/inventory',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CoachesCrewsRoute = CoachesCrewsRouteImport.update({
-  id: '/coaches/crews',
-  path: '/coaches/crews',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoachesAdminRoute = CoachesAdminRouteImport.update({
@@ -134,15 +84,65 @@ const CoachesAdminRoute = CoachesAdminRouteImport.update({
   path: '/coaches/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CoachesGroupsGroupIdRoute = CoachesGroupsGroupIdRouteImport.update({
-  id: '/coaches/groups/$groupId',
-  path: '/coaches/groups/$groupId',
+const CoachesCrewsRoute = CoachesCrewsRouteImport.update({
+  id: '/coaches/crews',
+  path: '/coaches/crews',
   getParentRoute: () => rootRouteImport,
+} as any)
+const CoachesInventoryRoute = CoachesInventoryRouteImport.update({
+  id: '/coaches/inventory',
+  path: '/coaches/inventory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoachesLoginRoute = CoachesLoginRouteImport.update({
+  id: '/coaches/login',
+  path: '/coaches/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoachesPaceRoute = CoachesPaceRouteImport.update({
+  id: '/coaches/pace',
+  path: '/coaches/pace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoachesPostsRoute = CoachesPostsRouteImport.update({
+  id: '/coaches/posts',
+  path: '/coaches/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoachesProgramRoute = CoachesProgramRouteImport.update({
+  id: '/coaches/program',
+  path: '/coaches/program',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoachesRiggingRoute = CoachesRiggingRouteImport.update({
+  id: '/coaches/rigging',
+  path: '/coaches/rigging',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoachesScheduleRoute = CoachesScheduleRouteImport.update({
+  id: '/coaches/schedule',
+  path: '/coaches/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsIndexRoute = NewsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => NewsRoute,
+} as any)
+const NewsSlugRoute = NewsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => NewsRoute,
 } as any)
 const CoachesAdminRiggingRoute = CoachesAdminRiggingRouteImport.update({
   id: '/rigging',
   path: '/rigging',
   getParentRoute: () => CoachesAdminRoute,
+} as any)
+const CoachesGroupsGroupIdRoute = CoachesGroupsGroupIdRouteImport.update({
+  id: '/coaches/groups/$groupId',
+  path: '/coaches/groups/$groupId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CoachesGroupsGroupIdIndexRoute =
   CoachesGroupsGroupIdIndexRouteImport.update({
@@ -337,46 +337,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/support': {
-      id: '/support'
-      path: '/support'
-      fullPath: '/support'
-      preLoaderRoute: typeof SupportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/news': {
-      id: '/news'
-      path: '/news'
-      fullPath: '/news'
-      preLoaderRoute: typeof NewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/join': {
-      id: '/join'
-      path: '/join'
-      fullPath: '/join'
-      preLoaderRoute: typeof JoinRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/club-info': {
-      id: '/club-info'
-      path: '/club-info'
-      fullPath: '/club-info'
-      preLoaderRoute: typeof ClubInfoRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -386,88 +351,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/club-info': {
+      id: '/club-info'
+      path: '/club-info'
+      fullPath: '/club-info'
+      preLoaderRoute: typeof ClubInfoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/news/': {
-      id: '/news/'
-      path: '/'
-      fullPath: '/news/'
-      preLoaderRoute: typeof NewsIndexRouteImport
-      parentRoute: typeof NewsRoute
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join': {
+      id: '/join'
+      path: '/join'
+      fullPath: '/join'
+      preLoaderRoute: typeof JoinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/coaches/': {
       id: '/coaches/'
       path: '/coaches'
       fullPath: '/coaches/'
       preLoaderRoute: typeof CoachesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/news/$slug': {
-      id: '/news/$slug'
-      path: '/$slug'
-      fullPath: '/news/$slug'
-      preLoaderRoute: typeof NewsSlugRouteImport
-      parentRoute: typeof NewsRoute
-    }
-    '/coaches/schedule': {
-      id: '/coaches/schedule'
-      path: '/coaches/schedule'
-      fullPath: '/coaches/schedule'
-      preLoaderRoute: typeof CoachesScheduleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/coaches/rigging': {
-      id: '/coaches/rigging'
-      path: '/coaches/rigging'
-      fullPath: '/coaches/rigging'
-      preLoaderRoute: typeof CoachesRiggingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/coaches/program': {
-      id: '/coaches/program'
-      path: '/coaches/program'
-      fullPath: '/coaches/program'
-      preLoaderRoute: typeof CoachesProgramRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/coaches/posts': {
-      id: '/coaches/posts'
-      path: '/coaches/posts'
-      fullPath: '/coaches/posts'
-      preLoaderRoute: typeof CoachesPostsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/coaches/pace': {
-      id: '/coaches/pace'
-      path: '/coaches/pace'
-      fullPath: '/coaches/pace'
-      preLoaderRoute: typeof CoachesPaceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/coaches/login': {
-      id: '/coaches/login'
-      path: '/coaches/login'
-      fullPath: '/coaches/login'
-      preLoaderRoute: typeof CoachesLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/coaches/inventory': {
-      id: '/coaches/inventory'
-      path: '/coaches/inventory'
-      fullPath: '/coaches/inventory'
-      preLoaderRoute: typeof CoachesInventoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/coaches/crews': {
-      id: '/coaches/crews'
-      path: '/coaches/crews'
-      fullPath: '/coaches/crews'
-      preLoaderRoute: typeof CoachesCrewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/coaches/admin': {
@@ -477,12 +407,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/coaches/groups/$groupId': {
-      id: '/coaches/groups/$groupId'
-      path: '/coaches/groups/$groupId'
-      fullPath: '/coaches/groups/$groupId'
-      preLoaderRoute: typeof CoachesGroupsGroupIdRouteImport
+    '/coaches/crews': {
+      id: '/coaches/crews'
+      path: '/coaches/crews'
+      fullPath: '/coaches/crews'
+      preLoaderRoute: typeof CoachesCrewsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/coaches/inventory': {
+      id: '/coaches/inventory'
+      path: '/coaches/inventory'
+      fullPath: '/coaches/inventory'
+      preLoaderRoute: typeof CoachesInventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coaches/login': {
+      id: '/coaches/login'
+      path: '/coaches/login'
+      fullPath: '/coaches/login'
+      preLoaderRoute: typeof CoachesLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coaches/pace': {
+      id: '/coaches/pace'
+      path: '/coaches/pace'
+      fullPath: '/coaches/pace'
+      preLoaderRoute: typeof CoachesPaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coaches/posts': {
+      id: '/coaches/posts'
+      path: '/coaches/posts'
+      fullPath: '/coaches/posts'
+      preLoaderRoute: typeof CoachesPostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coaches/program': {
+      id: '/coaches/program'
+      path: '/coaches/program'
+      fullPath: '/coaches/program'
+      preLoaderRoute: typeof CoachesProgramRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coaches/rigging': {
+      id: '/coaches/rigging'
+      path: '/coaches/rigging'
+      fullPath: '/coaches/rigging'
+      preLoaderRoute: typeof CoachesRiggingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coaches/schedule': {
+      id: '/coaches/schedule'
+      path: '/coaches/schedule'
+      fullPath: '/coaches/schedule'
+      preLoaderRoute: typeof CoachesScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news/': {
+      id: '/news/'
+      path: '/'
+      fullPath: '/news/'
+      preLoaderRoute: typeof NewsIndexRouteImport
+      parentRoute: typeof NewsRoute
+    }
+    '/news/$slug': {
+      id: '/news/$slug'
+      path: '/$slug'
+      fullPath: '/news/$slug'
+      preLoaderRoute: typeof NewsSlugRouteImport
+      parentRoute: typeof NewsRoute
     }
     '/coaches/admin/rigging': {
       id: '/coaches/admin/rigging'
@@ -490,6 +483,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/coaches/admin/rigging'
       preLoaderRoute: typeof CoachesAdminRiggingRouteImport
       parentRoute: typeof CoachesAdminRoute
+    }
+    '/coaches/groups/$groupId': {
+      id: '/coaches/groups/$groupId'
+      path: '/coaches/groups/$groupId'
+      fullPath: '/coaches/groups/$groupId'
+      preLoaderRoute: typeof CoachesGroupsGroupIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/coaches/groups/$groupId/': {
       id: '/coaches/groups/$groupId/'
