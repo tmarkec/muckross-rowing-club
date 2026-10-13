@@ -88,8 +88,7 @@ export function CoachingSafetyGuidance() {
     <div className="space-y-3 text-sm leading-relaxed">
       <p>
         <strong>GOLDEN RULE:</strong> Do not follow this chart blindly. These numbers are an
-        algorithmic baseline. Coaches must know their individual athletes, monitor recovery,
-        and track physiological progress through real-world boathouse observation.
+        algorithmic baseline. Know your athletes, watch how they recover, and adjust from there.
       </p>
       <p>
         <strong>DEVELOPING & LIGHTER ROWERS:</strong> Lighter, younger, or developing junior
