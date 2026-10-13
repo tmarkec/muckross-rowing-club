@@ -127,7 +127,7 @@ function SchedulePage() {
     if (!confirm("Delete this session?")) return;
     const { error } = await supabase.from("training_schedules").delete().eq("id", id);
     if (error) return toast.error(error.message);
-    setRows((r) => r.filter((x) => x.id !== id));
+    await queryClient.invalidateQueries({ queryKey: ["training_schedules"] });
     setDrafts((d) => {
       const n = { ...d };
       delete n[id];
@@ -189,7 +189,7 @@ function SchedulePage() {
       setEditMode(false);
       setNewRows([]);
       setDrafts({});
-      await load();
+      await queryClient.invalidateQueries({ queryKey: ["training_schedules"] });
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
