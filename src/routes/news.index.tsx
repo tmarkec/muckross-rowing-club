@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { fixtures, ROWING_IRELAND_EVENTS_URL } from "@/lib/fixtures";
 import { WeatherWidget } from "@/components/WeatherWidget";
 import { supabase } from "@/lib/supabase";
+import { fetchPublishedNews } from "@/lib/published-news";
 import {
   Dialog,
   DialogContent,
@@ -56,12 +57,7 @@ function NewsPage() {
   const [postsLoading, setPostsLoading] = useState(true);
 
   useEffect(() => {
-    void supabase
-      .from("posts")
-      .select("id, slug, title, excerpt, cover_image_url, author_name, published_at")
-      .eq("published", true)
-      .order("published_at", { ascending: false })
-      .limit(60)
+    void fetchPublishedNews(supabase, 60)
       .then(async ({ data: postsData }) => {
         const posts = (postsData ?? []) as Omit<NewsPost, "thumbnail_url">[];
         const postIds = posts.map((p) => p.id);
