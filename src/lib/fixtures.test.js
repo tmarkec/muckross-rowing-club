@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { getUpcomingFixtures } from "./fixtures";
+import { getUpcomingFixtures } from "./fixtures.ts";
 
 describe("homepage upcoming calendar events", () => {
   test("excludes past dates and keeps the three remaining 2026 fixtures in chronological order", () => {
