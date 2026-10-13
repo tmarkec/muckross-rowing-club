@@ -16,11 +16,14 @@ import {
 } from "@/components/ui/select";
 import { Pencil, Check, Plus, Trash2, X, Clock, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DAYS, dayLabel, dayNumber, matchesDay, todayIndex } from "@/lib/schedule-days";
 
 type Location = "Boathouse" | "Gym";
 type Row = {
   id: string;
-  day_of_week: number;
+  // Stored as a number, but some records hold numeric strings ('1', '2', ...),
+  // so values are normalised before they are grouped or filtered.
+  day_of_week: number | string;
   group_name: string;
   time_text: string;
   location: Location;
@@ -29,8 +32,6 @@ type Row = {
 };
 
 type Draft = Omit<Row, "id"> & { id?: string; tempId?: string };
-
-const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export const Route = createFileRoute("/coaches/schedule")({
   head: () => ({
@@ -42,10 +43,6 @@ export const Route = createFileRoute("/coaches/schedule")({
   component: SchedulePage,
 });
 
-function todayIndex() {
-  const d = new Date().getDay();
-  return d === 0 ? 7 : d;
-}
 
 function SchedulePage() {
   const { loading, session, isAdmin, isCoach } = useAuth();
@@ -55,6 +52,8 @@ function SchedulePage() {
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
   const [newRows, setNewRows] = useState<Draft[]>([]);
   const [saving, setSaving] = useState(false);
+  // null means no day tab is active: the whole week renders unfiltered.
+  const [dayFilter, setDayFilter] = useState<number | null>(null);
 
   useEffect(() => {
     if (!loading && !session) void navigate({ to: "/coaches/login" });
@@ -80,11 +79,17 @@ function SchedulePage() {
     },
   });
 
-  const grouped = useMemo(() => {
+  const { byDay, other } = useMemo(() => {
     const map = new Map<number, Row[]>();
     for (let d = 1; d <= 7; d++) map.set(d, []);
-    for (const r of rows) map.get(r.day_of_week)?.push(r);
-    return map;
+    const rest: Row[] = [];
+    for (const r of rows) {
+      const d = dayNumber(r.day_of_week);
+      if (d) map.get(d)!.push(r);
+      else rest.push(r);
+    }
+    for (const list of map.values()) list.sort((a, b) => a.sort_order - b.sort_order);
+    return { byDay: map, other: rest };
   }, [rows]);
 
   const canEdit = isAdmin;
