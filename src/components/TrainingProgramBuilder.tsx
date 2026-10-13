@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { TrainingZonesReferenceButton } from "@/components/TrainingZonesReference";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
+import type { Database } from "@/integrations/supabase/types";
 import { toast } from "sonner";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as const;
