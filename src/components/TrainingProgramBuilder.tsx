@@ -74,7 +74,8 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
 
   async function loadProgramme(gid: string) {
     setGroupId(gid);
-    const { data } = await supabase.from("training_programmes").select("start_date,data").eq("group_id", gid).maybeSingle();
+    const { data } = await supabase.from("training_programmes").select("id,start_date,data").eq("group_id", gid).maybeSingle();
+    setProgrammeId(data?.id ?? null);
     if (data) {
       const d = data.data as unknown as ProgrammeData;
       setStartDate(new Date(data.start_date + "T00:00:00"));
