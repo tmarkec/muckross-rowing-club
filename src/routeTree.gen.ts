@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SupportRouteImport } from './routes/support'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -36,6 +37,11 @@ import { Route as CoachesGroupsGroupIdAthletesAthleteIdRouteImport } from './rou
 const SupportRoute = SupportRouteImport.update({
   id: '/support',
   path: '/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsRoute = NewsRouteImport.update({
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/join': typeof JoinRoute
   '/news': typeof NewsRouteWithChildren
+  '/reset-password': typeof ResetPasswordRoute
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
   '/coaches/crews': typeof CoachesCrewsRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/club-info': typeof ClubInfoRoute
   '/contact': typeof ContactRoute
   '/join': typeof JoinRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
   '/coaches/crews': typeof CoachesCrewsRoute
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/join': typeof JoinRoute
   '/news': typeof NewsRouteWithChildren
+  '/reset-password': typeof ResetPasswordRoute
   '/support': typeof SupportRoute
   '/coaches/admin': typeof CoachesAdminRouteWithChildren
   '/coaches/crews': typeof CoachesCrewsRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/join'
     | '/news'
+    | '/reset-password'
     | '/support'
     | '/coaches/admin'
     | '/coaches/crews'
@@ -258,6 +268,7 @@ export interface FileRouteTypes {
     | '/club-info'
     | '/contact'
     | '/join'
+    | '/reset-password'
     | '/support'
     | '/coaches/admin'
     | '/coaches/crews'
@@ -282,6 +293,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/join'
     | '/news'
+    | '/reset-password'
     | '/support'
     | '/coaches/admin'
     | '/coaches/crews'
@@ -308,6 +320,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   JoinRoute: typeof JoinRoute
   NewsRoute: typeof NewsRouteWithChildren
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SupportRoute: typeof SupportRoute
   CoachesAdminRoute: typeof CoachesAdminRouteWithChildren
   CoachesCrewsRoute: typeof CoachesCrewsRoute
@@ -329,6 +342,13 @@ declare module '@tanstack/react-router' {
       path: '/support'
       fullPath: '/support'
       preLoaderRoute: typeof SupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/news': {
@@ -533,6 +553,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   JoinRoute: JoinRoute,
   NewsRoute: NewsRouteWithChildren,
+  ResetPasswordRoute: ResetPasswordRoute,
   SupportRoute: SupportRoute,
   CoachesAdminRoute: CoachesAdminRouteWithChildren,
   CoachesCrewsRoute: CoachesCrewsRoute,
