@@ -127,6 +127,9 @@ export function TrainingZonesReferenceButton() {
           </Table>
         </div>
 
+        <p className="text-xs text-muted-foreground md:hidden">
+          Swipe the table sideways to see all columns.
+        </p>
         <p className="text-xs text-muted-foreground">
           Use these as a planning baseline and adjust to the athletes in front of you.
         </p>
