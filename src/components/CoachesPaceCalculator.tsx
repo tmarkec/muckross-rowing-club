@@ -228,11 +228,6 @@ export default function CoachesPaceCalculator() {
           <PacingZoneTable twoKSeconds={submitted} />
         </div>
       )}
-
-      <div className="rounded-lg border border-amber-300 bg-amber-50 p-5 text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100">
-        <h3 className="font-semibold mb-2">⚠️ Coaching &amp; safety guidance</h3>
-        <CoachingSafetyGuidance />
-      </div>
     </div>
   );
 }
