@@ -15,6 +15,13 @@
       "when": 1791903584628,
       "tag": "0001_post_images_public_read_without_has_role",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791919999684,
+      "tag": "0002_migration",
+      "breakpoints": true
     }
   ]
 }
