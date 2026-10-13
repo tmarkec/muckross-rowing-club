@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { TrainingZonesReferenceButton } from "@/components/TrainingZonesReference";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
+import type { Database } from "@/integrations/supabase/types";
 import { toast } from "sonner";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as const;
@@ -65,6 +66,7 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
   const [notesOpen, setNotesOpen] = useState<Record<string, boolean>>({});
   const [groups, setGroups] = useState<{ id: string; name: string }[]>([]);
   const [groupId, setGroupId] = useState<string>("");
+  const [programmeId, setProgrammeId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -73,7 +75,8 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
 
   async function loadProgramme(gid: string) {
     setGroupId(gid);
-    const { data } = await supabase.from("training_programmes").select("start_date,data").eq("group_id", gid).maybeSingle();
+    const { data } = await supabase.from("training_programmes").select("id,start_date,data").eq("group_id", gid).maybeSingle();
+    setProgrammeId(data?.id ?? null);
     if (data) {
       const d = data.data as unknown as ProgrammeData;
       setStartDate(new Date(data.start_date + "T00:00:00"));
@@ -87,12 +90,18 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
     if (!groupId) { toast.error("Choose a group to save to"); return; }
     setSaving(true);
     const { data: u } = await supabase.auth.getUser();
-    const { error } = await supabase.from("training_programmes").upsert({
+    const programmeData: Database["public"]["Tables"]["training_programmes"]["Insert"] = {
       group_id: groupId,
       start_date: format(startDate, "yyyy-MM-dd"),
       data: { weeks, weekNotes } as never,
       updated_by: u.user?.id ?? null,
-    }, { onConflict: "group_id" });
+    };
+    // Only send an id when we're updating a saved programme; otherwise leave it
+    // out so the database generates the UUID (an empty id would fail the insert).
+    if (programmeId) programmeData.id = programmeId;
+    const { error } = await supabase.from("training_programmes").upsert(programmeData, {
+      onConflict: programmeId ? "id" : "group_id,start_date",
+    });
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Programme saved to the group");
