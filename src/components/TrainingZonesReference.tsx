@@ -131,7 +131,7 @@ export function TrainingZonesReferenceButton() {
           Swipe the table sideways to see all columns.
         </p>
         <p className="text-xs text-muted-foreground">
-          Use these as a planning baseline, then adjust to the athletes you are coaching.
+          Use these as a starting point and adjust if needed.
         </p>
       </DialogContent>
     </Dialog>
