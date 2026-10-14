@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { addDays, format } from "date-fns";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Pencil, X } from "lucide-react";
+import TrainingProgramBuilder from "@/components/TrainingProgramBuilder";
+import { useAuth } from "@/lib/auth";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as const;
 type Slot = { title: string; body: string } | null;
@@ -14,6 +16,8 @@ type Row = { start_date: string; data: Data; updated_at: string };
 export default function GeneratedProgrammeTab({ groupId }: { groupId: string }) {
   const [row, setRow] = useState<Row | null>(null);
   const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     const load = async () => {
@@ -33,12 +37,25 @@ export default function GeneratedProgrammeTab({ groupId }: { groupId: string }) 
     return () => { void supabase.removeChannel(ch); };
   }, [groupId]);
 
+  if (editing) {
+    return (
+      <div className="mt-4 space-y-3">
+        <div className="flex justify-end">
+          <Button size="sm" variant="outline" onClick={() => setEditing(false)}>
+            <X className="mr-1 h-4 w-4" /> Close editor
+          </Button>
+        </div>
+        <TrainingProgramBuilder isAdmin={isAdmin} lockedGroupId={groupId} onSaved={() => setEditing(false)} />
+      </div>
+    );
+  }
+
   if (loading) return <p className="py-6 text-sm text-muted-foreground">Loading…</p>;
   if (!row) {
     return (
       <div className="rounded-lg border bg-background p-6 text-sm text-muted-foreground">
         No programme saved for this group yet.{" "}
-        <Button asChild variant="link" className="px-1"><Link to="/coaches/program">Open the Training Programme Builder</Link></Button>
+        <Button variant="link" className="px-1" onClick={() => setEditing(true)}>Create one now</Button>
       </div>
     );
   }
@@ -66,7 +83,7 @@ export default function GeneratedProgrammeTab({ groupId }: { groupId: string }) 
             {weeks.length} weeks · last updated {format(new Date(row.updated_at), "dd MMM yyyy HH:mm")}
           </p>
         </div>
-        <Button asChild size="sm" variant="outline"><Link to="/coaches/program">Edit in builder</Link></Button>
+        <Button size="sm" onClick={() => setEditing(true)}><Pencil className="mr-1 h-4 w-4" /> Edit programme</Button>
       </div>
       {weeks.map((w, wi) => (
         <div key={wi} className="rounded-lg border bg-background">

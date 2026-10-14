@@ -55,11 +55,11 @@ function nextMonday(from: Date = new Date()): Date {
   return d;
 }
 
-type Props = { isAdmin: boolean };
+type Props = { isAdmin: boolean; lockedGroupId?: string; onSaved?: () => void };
 
 export type ProgrammeData = { weeks: WeekRow[]; weekNotes: string[] };
 
-export default function TrainingProgramBuilder({ isAdmin }: Props) {
+export default function TrainingProgramBuilder({ isAdmin, lockedGroupId, onSaved }: Props) {
   const [startDate, setStartDate] = useState<Date>(() => nextMonday());
   const [weeks, setWeeks] = useState<WeekRow[]>(() => [emptyWeek(), emptyWeek(), emptyWeek(), emptyWeek()]);
   const [weekNotes, setWeekNotes] = useState<string[]>([]);
@@ -72,6 +72,12 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
   useEffect(() => {
     void supabase.from("groups").select("id,name").order("name").then(({ data }) => setGroups(data ?? []));
   }, []);
+
+  // When opened from a group's own page, the group is fixed and its saved plan loads straight away.
+  useEffect(() => {
+    if (lockedGroupId) void loadProgramme(lockedGroupId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lockedGroupId]);
 
   async function loadProgramme(gid: string) {
     setGroupId(gid);
@@ -105,6 +111,7 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Programme saved to the group");
+    onSaved?.();
   }
 
   function setDayNote(wi: number, day: DayName, notes: string) {
@@ -244,7 +251,7 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
             )}
           </div>
           <div className="flex flex-wrap items-end gap-2">
-            <div className="space-y-1.5">
+            {!lockedGroupId && <div className="space-y-1.5">
               <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Save to group</Label>
               <Select value={groupId} onValueChange={(v) => void loadProgramme(v)}>
                 <SelectTrigger className="w-[200px]"><SelectValue placeholder="Choose group" /></SelectTrigger>
@@ -252,7 +259,7 @@ export default function TrainingProgramBuilder({ isAdmin }: Props) {
                   {groups.map((g) => <SelectItem key={g.id} value={g.id}>{g.name}</SelectItem>)}
                 </SelectContent>
               </Select>
-            </div>
+            </div>}
             <Button onClick={saveProgramme} disabled={saving || !groupId} variant="secondary">
               <Save className="mr-2 h-4 w-4" /> {saving ? "Saving…" : "Save to group"}
             </Button>
