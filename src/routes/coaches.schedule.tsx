@@ -54,6 +54,8 @@ function SchedulePage() {
   const [saving, setSaving] = useState(false);
   // null means no day tab is active: the whole week renders unfiltered.
   const [dayFilter, setDayFilter] = useState<number | null>(null);
+  // Boathouse and Gym are separate timetables; the toggle decides which one is shown and edited.
+  const [place, setPlace] = useState<Location>("Boathouse");
 
   useEffect(() => {
     if (!loading && !session) void navigate({ to: "/coaches/login" });
@@ -79,18 +81,23 @@ function SchedulePage() {
     },
   });
 
+  const visibleRows = useMemo(
+    () => rows.filter((r) => (r.location === "Gym" ? "Gym" : "Boathouse") === place),
+    [rows, place],
+  );
+
   const { byDay, other } = useMemo(() => {
     const map = new Map<number, Row[]>();
     for (let d = 1; d <= 7; d++) map.set(d, []);
     const rest: Row[] = [];
-    for (const r of rows) {
+    for (const r of visibleRows) {
       const d = dayNumber(r.day_of_week);
       if (d) map.get(d)!.push(r);
       else rest.push(r);
     }
     for (const list of map.values()) list.sort((a, b) => a.sort_order - b.sort_order);
     return { byDay: map, other: rest };
-  }, [rows]);
+  }, [visibleRows]);
 
   const canEdit = isAdmin;
 
@@ -122,7 +129,7 @@ function SchedulePage() {
         day_of_week: day,
         group_name: "",
         time_text: "",
-        location: "Boathouse",
+        location: place,
         details: "",
         sort_order: 0,
       },
@@ -218,7 +225,7 @@ function SchedulePage() {
 
   const renderDay = (day: number) => {
     const items = byDay.get(day) ?? [];
-    const pending = newRows.filter((n) => matchesDay(n.day_of_week, day));
+    const pending = newRows.filter((n) => n.location === place && matchesDay(n.day_of_week, day));
     return (
       <div className="space-y-2">
         {items.length === 0 && pending.length === 0 && (
@@ -291,6 +298,29 @@ function SchedulePage() {
           <p className="text-sm text-muted-foreground">You don&apos;t have access to coach tools.</p>
         )}
 
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="inline-flex rounded-lg border bg-background p-1 shadow-sm" role="tablist" aria-label="Choose timetable">
+            {(["Boathouse", "Gym"] as const).map((p) => (
+              <button
+                key={p}
+                type="button"
+                role="tab"
+                aria-selected={place === p}
+                onClick={() => setPlace(p)}
+                className={cn(
+                  "rounded-md px-4 py-1.5 text-sm font-medium transition-colors",
+                  place === p ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted",
+                )}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
+        <h2 className="mb-3 font-serif text-xl">
+          {place === "Boathouse" ? "Boathouse Schedule" : "Gym Schedule"}
+        </h2>
+
         {loadingRows ? (
           <p className="py-6 text-center text-muted-foreground">Loading…</p>
         ) : (
@@ -307,7 +337,7 @@ function SchedulePage() {
                     : "bg-background hover:bg-muted",
                 )}
               >
-                All week <span className="opacity-70">({rows.length})</span>
+                All week <span className="opacity-70">({visibleRows.length})</span>
               </button>
               {DAYS.map((label, i) => {
                 const n = i + 1;
@@ -469,13 +499,6 @@ function EditCard({
           <SelectTrigger className="h-8 text-xs flex-1"><SelectValue placeholder="Day" /></SelectTrigger>
           <SelectContent>
             {DAYS.map((x, i) => <SelectItem key={x} value={String(i + 1)}>{x}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <Select value={d.location} onValueChange={(v) => onChange({ location: v as Location })}>
-          <SelectTrigger className="h-8 text-xs flex-1"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Boathouse">Boathouse</SelectItem>
-            <SelectItem value="Gym">Gym</SelectItem>
           </SelectContent>
         </Select>
       </div>
