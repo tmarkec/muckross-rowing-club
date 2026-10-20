@@ -61,11 +61,13 @@ function LoginPage() {
             className="text-primary hover:underline"
             onClick={async () => {
               if (!email) return toast.error("Enter your email above first.");
-              const { error } = await supabase.auth.resetPasswordForEmail(email, {
+              const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
                 redirectTo: `${window.location.origin}/reset-password`,
               });
-              if (error) toast.error(error.message);
-              else toast.success("Check your email for a password reset link.");
+              if (error) console.error("Password reset request failed:", error.message);
+              toast.success(
+                "If an account exists for that email, a password reset link has been sent. Please check your inbox.",
+              );
             }}
           >
             Forgot password?
