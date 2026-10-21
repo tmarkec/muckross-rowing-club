@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { AlertTriangle, Download, Maximize2 } from "lucide-react";
-import rossMap from "@/assets/ross-island-copper-mines.png.asset.json";
-import bayMap from "@/assets/bay-osprey-rock.png.asset.json";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,7 +18,7 @@ const zones: Zone[] = [
   {
     id: "ross",
     label: "Ross Island/Copper mines",
-    url: rossMap.url,
+    url: "/maps/ross-island-copper-mines.png",
     file: "MRC-map-ross-island-copper-mines.png",
     rules: [
       { title: "Watch for the rocks near Copper Mines", text: "Position the safety boat right next to them, in the middle of the traffic pattern." },
@@ -34,7 +32,7 @@ const zones: Zone[] = [
   {
     id: "bay",
     label: "Bay/Osprey rock",
-    url: bayMap.url,
+    url: "/maps/bay-osprey-rock.png",
     file: "MRC-map-bay-osprey-rock.png",
     rules: [
       { title: "Stay clear of rocks towards Ash Island", text: "Keep a safe distance from the rocks at the end of the bay." },
@@ -73,7 +71,7 @@ export function LakeNavigationRules() {
   return (
     <section aria-labelledby="lake-nav-heading" className="mb-8 rounded-lg border bg-background p-4 sm:p-6">
       <div className="mb-4 border-l-4 border-accent pl-3">
-        <h2 id="lake-nav-heading" className="font-serif text-xl sm:text-2xl">Lake Navigation &amp; Traffic Rules</h2>
+        <h2 id="lake-nav-heading" className="font-serif text-xl sm:text-2xl">Traffic Rules</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Official circulation patterns, safety boat positions, and navigation guidelines for water sessions on the lakes.
         </p>

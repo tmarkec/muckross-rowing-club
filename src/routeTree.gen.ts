@@ -27,6 +27,7 @@ import { Route as CoachesPostsRouteImport } from './routes/coaches.posts'
 import { Route as CoachesProgramRouteImport } from './routes/coaches.program'
 import { Route as CoachesRiggingRouteImport } from './routes/coaches.rigging'
 import { Route as CoachesScheduleRouteImport } from './routes/coaches.schedule'
+import { Route as CoachesTrafficRouteImport } from './routes/coaches.traffic'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as CoachesAdminRiggingRouteImport } from './routes/coaches.admin.rigging'
@@ -124,6 +125,11 @@ const CoachesScheduleRoute = CoachesScheduleRouteImport.update({
   path: '/coaches/schedule',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesTrafficRoute = CoachesTrafficRouteImport.update({
+  id: '/coaches/traffic',
+  path: '/coaches/traffic',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsIndexRoute = NewsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -175,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/coaches/program': typeof CoachesProgramRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/coaches/schedule': typeof CoachesScheduleRoute
+  '/coaches/traffic': typeof CoachesTrafficRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches/': typeof CoachesIndexRoute
   '/news/': typeof NewsIndexRoute
@@ -200,6 +207,7 @@ export interface FileRoutesByTo {
   '/coaches/program': typeof CoachesProgramRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/coaches/schedule': typeof CoachesScheduleRoute
+  '/coaches/traffic': typeof CoachesTrafficRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches': typeof CoachesIndexRoute
   '/news': typeof NewsIndexRoute
@@ -226,6 +234,7 @@ export interface FileRoutesById {
   '/coaches/program': typeof CoachesProgramRoute
   '/coaches/rigging': typeof CoachesRiggingRoute
   '/coaches/schedule': typeof CoachesScheduleRoute
+  '/coaches/traffic': typeof CoachesTrafficRoute
   '/news/$slug': typeof NewsSlugRoute
   '/coaches/': typeof CoachesIndexRoute
   '/news/': typeof NewsIndexRoute
@@ -254,6 +263,7 @@ export interface FileRouteTypes {
     | '/coaches/program'
     | '/coaches/rigging'
     | '/coaches/schedule'
+    | '/coaches/traffic'
     | '/news/$slug'
     | '/coaches/'
     | '/news/'
@@ -279,6 +289,7 @@ export interface FileRouteTypes {
     | '/coaches/program'
     | '/coaches/rigging'
     | '/coaches/schedule'
+    | '/coaches/traffic'
     | '/news/$slug'
     | '/coaches'
     | '/news'
@@ -304,6 +315,7 @@ export interface FileRouteTypes {
     | '/coaches/program'
     | '/coaches/rigging'
     | '/coaches/schedule'
+    | '/coaches/traffic'
     | '/news/$slug'
     | '/coaches/'
     | '/news/'
@@ -331,6 +343,7 @@ export interface RootRouteChildren {
   CoachesProgramRoute: typeof CoachesProgramRoute
   CoachesRiggingRoute: typeof CoachesRiggingRoute
   CoachesScheduleRoute: typeof CoachesScheduleRoute
+  CoachesTrafficRoute: typeof CoachesTrafficRoute
   CoachesIndexRoute: typeof CoachesIndexRoute
   CoachesGroupsGroupIdRoute: typeof CoachesGroupsGroupIdRouteWithChildren
 }
@@ -463,6 +476,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesScheduleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/traffic': {
+      id: '/coaches/traffic'
+      path: '/coaches/traffic'
+      fullPath: '/coaches/traffic'
+      preLoaderRoute: typeof CoachesTrafficRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/news/': {
       id: '/news/'
       path: '/'
@@ -564,6 +584,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachesProgramRoute: CoachesProgramRoute,
   CoachesRiggingRoute: CoachesRiggingRoute,
   CoachesScheduleRoute: CoachesScheduleRoute,
+  CoachesTrafficRoute: CoachesTrafficRoute,
   CoachesIndexRoute: CoachesIndexRoute,
   CoachesGroupsGroupIdRoute: CoachesGroupsGroupIdRouteWithChildren,
 }

@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
-import { LakeNavigationRules } from "@/components/LakeNavigationRules";
-import { Ruler, Gauge, CalendarRange, Anchor, Users, ShieldCheck, LogOut, Download, CalendarDays } from "lucide-react";
+import { Ruler, Gauge, CalendarRange, Anchor, Users, ShieldCheck, LogOut, Download, CalendarDays, Navigation } from "lucide-react";
 
 type Group = { id: string; name: string; description: string | null };
 
@@ -69,6 +68,7 @@ function CoachesHome() {
               { to: "/coaches/crews", label: "Crew selection", icon: Users },
               { to: "/coaches/inventory", label: "Boats & oars", icon: Anchor },
               { to: "/coaches/schedule", label: "Group schedule", icon: CalendarDays },
+              { to: "/coaches/traffic", label: "Traffic rules", icon: Navigation },
             ].map(({ to, label, icon: Icon }) => (
               <Link
                 key={to}
@@ -99,7 +99,6 @@ function CoachesHome() {
               <span>📥 Download drills card</span>
             </a>
           </div>
-          <LakeNavigationRules />
           </>
         )}
 
