@@ -47,14 +47,7 @@ export function LakeNavigationRules() {
   const [zoomed, setZoomed] = useState<Zone | null>(null);
 
   return (
-    <section aria-labelledby="lake-nav-heading" className="mb-8 rounded-lg border bg-background p-4 sm:p-6">
-      <div className="mb-4 border-l-4 border-accent pl-3">
-        <h2 id="lake-nav-heading" className="font-serif text-xl sm:text-2xl">Traffic Rules</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Official circulation patterns, safety boat positions, and navigation guidelines for water sessions on the lakes.
-        </p>
-      </div>
-
+    <section aria-label="Lake traffic rules" className="rounded-lg border bg-background p-4 sm:p-6">
       <Tabs defaultValue={zones[0].id}>
         <TabsList className="grid h-auto w-full grid-cols-1 gap-1 sm:inline-grid sm:w-auto sm:grid-cols-2">
           {zones.map((z) => (
