@@ -7,3 +7,5 @@
 - [x] Restore homepage public news connection and verify real articles render in preview.
 - [x] Order dynamic published news by article creation date, newest first.
 - [x] Remove Loughquittane Heritage Regatta and tighten calendar whitespace.
+- [x] Drop the map key and safety reminders from Traffic rules.
+- [x] Reword Traffic rules subtitle to "on the lake" and move Back to Coaches Corner to a top-right button.
