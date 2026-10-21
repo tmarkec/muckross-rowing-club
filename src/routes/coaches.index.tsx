@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
+import { LakeNavigationRules } from "@/components/LakeNavigationRules";
 import { Ruler, Gauge, CalendarRange, Anchor, Users, ShieldCheck, LogOut, Download, CalendarDays } from "lucide-react";
 
 type Group = { id: string; name: string; description: string | null };
@@ -98,6 +99,7 @@ function CoachesHome() {
               <span>📥 Download drills card</span>
             </a>
           </div>
+          <LakeNavigationRules />
           </>
         )}
 
