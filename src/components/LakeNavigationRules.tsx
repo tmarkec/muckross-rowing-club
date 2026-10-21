@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { AlertTriangle, Download, Maximize2 } from "lucide-react";
+import { Download, Maximize2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 type Zone = {
@@ -43,27 +42,6 @@ const zones: Zone[] = [
     ],
   },
 ];
-
-const legend = [
-  { key: "solid", label: "Black arrows", text: "Main rowing course traffic flow direction." },
-  { key: "dashed", label: "Dashed arrows", text: "Designated warm-up and cool-down lanes." },
-  { key: "triangle", label: "Red triangles", text: "Mandatory safety boat anchor / patrol zones." },
-];
-
-function LegendSymbol({ kind }: { kind: string }) {
-  if (kind === "triangle")
-    return (
-      <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-destructive" aria-hidden>
-        <path d="M12 3 L22 20 H2 Z" fill="currentColor" />
-      </svg>
-    );
-  return (
-    <svg viewBox="0 0 32 12" className="h-4 w-8 shrink-0 text-foreground" aria-hidden>
-      <line x1="1" y1="6" x2="25" y2="6" stroke="currentColor" strokeWidth="2.5" strokeDasharray={kind === "dashed" ? "4 3" : undefined} />
-      <path d="M24 1 L31 6 L24 11 Z" fill="currentColor" />
-    </svg>
-  );
-}
 
 export function LakeNavigationRules() {
   const [zoomed, setZoomed] = useState<Zone | null>(null);
@@ -118,41 +96,20 @@ export function LakeNavigationRules() {
               </CardContent>
             </Card>
 
-            <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
-              <div>
-                <h3 className="mb-2 text-base font-semibold">Map key</h3>
-                <ul className="space-y-2">
-                  {legend.map((l) => (
-                    <li key={l.key} className="flex items-start gap-3 text-sm">
-                      <span className="mt-0.5 flex w-8 justify-center"><LegendSymbol kind={l.key} /></span>
-                      <span className="min-w-0"><strong>{l.label}:</strong> {l.text}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="mb-2 text-base font-semibold">Rules for this zone</h3>
-                <ul className="space-y-2">
-                  {z.rules.map((r) => (
-                    <li key={r.title} className="flex gap-2 text-sm">
-                      <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent" aria-hidden />
-                      <span className="min-w-0"><strong>{r.title}:</strong> {r.text}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div>
+              <h3 className="mb-2 text-base font-semibold">Rules for this zone</h3>
+              <ul className="space-y-2">
+                {z.rules.map((r) => (
+                  <li key={r.title} className="flex gap-2 text-sm">
+                    <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent" aria-hidden />
+                    <span className="min-w-0"><strong>{r.title}:</strong> {r.text}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </TabsContent>
         ))}
       </Tabs>
-
-      <Alert className="mt-4 border-accent bg-accent/15">
-        <AlertTriangle className="h-4 w-4" />
-        <AlertTitle>Safety Reminders</AlertTitle>
-        <AlertDescription>
-          All crews must follow traffic lanes. Coxes and single scullers must inspect navigation maps prior to launching.
-        </AlertDescription>
-      </Alert>
 
       <Dialog open={!!zoomed} onOpenChange={(o) => !o && setZoomed(null)}>
         <DialogContent className="max-h-[95vh] w-[95vw] max-w-6xl overflow-auto p-2 sm:p-4">
