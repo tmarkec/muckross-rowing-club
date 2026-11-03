@@ -25,7 +25,7 @@ const zones: Zone[] = [
       { title: "Approach to Ross Island (end / beach)", text: "Watch for shallow water at the other end. Stop at least 100 metres away from the shore." },
       { title: "No unsupervised lake crossings", text: "Do not cross the lake without a safety launch." },
       { title: "Yield to faster boats", text: "If a faster crew is catching up to you, move out of their line and give them clear water to pass." },
-      { title: "Finish your turn before resting", text: "Keep rowing until the boat is fully turned onto the new heading. Only take your rest once the boat is straight and out of the main traffic flow." },
+      { title: "Finish your turn before resting", text: "Only take your rest once the boat is fully turned, straight and out of the main traffic flow." },
     ],
   },
   {
@@ -34,11 +34,11 @@ const zones: Zone[] = [
     url: "/maps/bay-osprey-rock.png",
     file: "MRC-map-bay-osprey-rock.png",
     rules: [
-      { title: "Stay clear of rocks towards Ash Island", text: "Keep a safe distance from the rocks at the end of the bay." },
-      { title: "Stay alert for course traffic", text: "Watch for crews using the main course as well as boats entering or leaving the warm-up area." },
+      { title: "Stay clear of rocks towards Ash Island", text: "Keep a safe distance from the rocks/Naked stones at the end of the bay." },
+      { title: "Stay alert for course traffic", text: "Watch for crews using the main course as well as boats entering or leaving the warm-up area in the bay." },
       { title: "Stay close to Osprey Rock", text: "Hold your line close to Osprey Rock and pass around the safety boat." },
       { title: "Yield to faster boats", text: "If a faster crew is catching up to you, move out of their line and give them clear water to pass." },
-      { title: "Finish your turn before resting", text: "Keep rowing until the boat is fully turned onto the new heading. Only take your rest once the boat is straight and out of the main traffic flow." },
+      { title: "Finish your turn before resting", text: "Only take your rest once the boat is fully turned, straight and out of the main traffic flow" },
     ],
   },
 ];
