@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Copy, Check, ArrowRight, ExternalLink, Ticket, Users, Wrench, Megaphone, ClipboardList, Trophy, GraduationCap, HeartHandshake, Building2 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { LottoCountdown } from "@/components/LottoCountdown";
+import { GoFundMeEmbed } from "@/components/GoFundMeEmbed";
 import { LOTTO_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/support")({
@@ -143,6 +144,22 @@ function SupportPage() {
                   </Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Support Our Campaign (GoFundMe) */}
+      <section className="bg-background py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
+            Support Our Campaign
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
+            Every donation, big or small, helps keep Muckross going. Read more about the
+            campaign and donate below.
+          </p>
+          <div className="mx-auto mt-10 mb-4 max-w-[600px]">
+            <GoFundMeEmbed />
           </div>
         </div>
       </section>
