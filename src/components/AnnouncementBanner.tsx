@@ -24,7 +24,7 @@ export function AnnouncementBanner() {
 
   useEffect(() => {
     if (!visible) return;
-    const id = window.setInterval(() => setYellow((v) => !v), 1000);
+    const id = window.setInterval(() => setYellow((v) => !v), 1500);
     return () => window.clearInterval(id);
   }, [visible]);
 
