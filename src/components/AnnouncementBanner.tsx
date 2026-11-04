@@ -43,7 +43,7 @@ export function AnnouncementBanner() {
     <div
       role="region"
       aria-label="Club announcement"
-      className={`transition-colors duration-500 ${
+      className={`transition-[background-color,color] duration-[900ms] ease-in-out ${
         yellow ? "bg-secondary text-primary" : "bg-primary text-primary-foreground"
       }`}
     >
@@ -54,7 +54,7 @@ export function AnnouncementBanner() {
             href="https://gofund.me/eacdeb930"
             target="_blank"
             rel="noopener noreferrer"
-            className={`whitespace-nowrap font-semibold underline-offset-2 hover:underline ${
+            className={`whitespace-nowrap font-semibold underline-offset-2 transition-colors duration-[900ms] ease-in-out hover:underline ${
               yellow ? "text-primary" : "text-secondary"
             }`}
           >
