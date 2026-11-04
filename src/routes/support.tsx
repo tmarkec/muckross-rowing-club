@@ -147,6 +147,22 @@ function SupportPage() {
         </div>
       </section>
 
+      {/* Support Our Campaign (GoFundMe) */}
+      <section className="bg-background py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
+            Support Our Campaign
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
+            Every donation, big or small, helps keep Muckross going. Read more about the
+            campaign and donate below.
+          </p>
+          <div className="mx-auto mt-10 mb-4 max-w-[600px]">
+            <GoFundMeEmbed />
+          </div>
+        </div>
+      </section>
+
       {/* Muckross Lotto */}
       <section className="bg-background py-10 sm:py-12">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
