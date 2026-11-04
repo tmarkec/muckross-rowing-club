@@ -65,7 +65,7 @@ export function AnnouncementBanner() {
           type="button"
           aria-label="Dismiss announcement"
           onClick={dismiss}
-          className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 transition-colors sm:right-3 ${
+          className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 transition-colors duration-[900ms] ease-in-out sm:right-3 ${
             yellow
               ? "text-primary/60 hover:text-primary"
               : "text-primary-foreground/70 hover:text-primary-foreground"
