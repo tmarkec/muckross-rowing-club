@@ -43,7 +43,7 @@ export function AnnouncementBanner() {
     <div
       role="region"
       aria-label="Club announcement"
-      className={`transition-[background-color,color] duration-[900ms] ease-in-out ${
+      className={`transition-[background-color,color] duration-[1800ms] ease-in-out ${
         yellow ? "bg-secondary text-primary" : "bg-primary text-primary-foreground"
       }`}
     >
@@ -54,7 +54,7 @@ export function AnnouncementBanner() {
             href="https://gofund.me/eacdeb930"
             target="_blank"
             rel="noopener noreferrer"
-            className={`whitespace-nowrap font-semibold underline-offset-2 transition-colors duration-[900ms] ease-in-out hover:underline ${
+            className={`whitespace-nowrap font-bold underline-offset-2 transition-colors duration-[1800ms] ease-in-out hover:underline ${
               yellow ? "text-primary" : "text-secondary"
             }`}
           >
@@ -65,7 +65,7 @@ export function AnnouncementBanner() {
           type="button"
           aria-label="Dismiss announcement"
           onClick={dismiss}
-          className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 transition-colors duration-[900ms] ease-in-out sm:right-3 ${
+          className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 transition-colors duration-[1800ms] ease-in-out sm:right-3 ${
             yellow
               ? "text-primary/60 hover:text-primary"
               : "text-primary-foreground/70 hover:text-primary-foreground"
