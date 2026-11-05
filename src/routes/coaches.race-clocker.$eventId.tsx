@@ -382,7 +382,8 @@ function RunView({ event, crews, canControl, reload, setConfirm }: {
         if (error) { toast.error(error.message); return; }
       }
       const { error } = await supabase.from("race_events").update({ status: "finished", finished_at: new Date().toISOString() }).eq("id", event.id);
-      if (error) toast.error(error.message); else await reload();
+      if (error) { toast.error(error.message); return; }
+      await reload();
     },
   });
 
