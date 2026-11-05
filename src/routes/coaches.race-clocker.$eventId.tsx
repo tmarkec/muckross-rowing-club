@@ -379,7 +379,7 @@ function RunView({ event, crews, canControl, reload, setConfirm }: {
       const open = crews.filter((c) => c.status === "waiting" || c.status === "running").map((c) => c.id);
       if (open.length) {
         const { error } = await supabase.from("race_crews").update({ status: "dnf" }).in("id", open);
-        if (error) return toast.error(error.message);
+        if (error) { toast.error(error.message); return; }
       }
       const { error } = await supabase.from("race_events").update({ status: "finished", finished_at: new Date().toISOString() }).eq("id", event.id);
       if (error) toast.error(error.message); else await reload();
