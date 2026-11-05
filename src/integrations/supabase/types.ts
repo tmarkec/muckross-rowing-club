@@ -328,6 +328,124 @@ export type Database = {
         }
         Relationships: []
       }
+      race_crews: {
+        Row: {
+          boat_type: string
+          bow_number: string | null
+          category: string | null
+          created_at: string
+          crew_name: string
+          event_id: string
+          finish_time: string | null
+          id: string
+          split1_time: string | null
+          split2_time: string | null
+          start_time: string | null
+          status: string
+        }
+        Insert: {
+          boat_type: string
+          bow_number?: string | null
+          category?: string | null
+          created_at?: string
+          crew_name: string
+          event_id: string
+          finish_time?: string | null
+          id?: string
+          split1_time?: string | null
+          split2_time?: string | null
+          start_time?: string | null
+          status?: string
+        }
+        Update: {
+          boat_type?: string
+          bow_number?: string | null
+          category?: string | null
+          created_at?: string
+          crew_name?: string
+          event_id?: string
+          finish_time?: string | null
+          id?: string
+          split1_time?: string | null
+          split2_time?: string | null
+          start_time?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "race_crews_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "race_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      race_event_controllers: {
+        Row: {
+          coach_id: string
+          event_id: string
+        }
+        Insert: {
+          coach_id: string
+          event_id: string
+        }
+        Update: {
+          coach_id?: string
+          event_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "race_event_controllers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "race_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      race_events: {
+        Row: {
+          checkpoint_names: string[]
+          checkpoints_count: number
+          created_at: string
+          created_by: string
+          distance: string | null
+          end_date: string | null
+          finished_at: string | null
+          id: string
+          name: string
+          start_date: string | null
+          status: string
+        }
+        Insert: {
+          checkpoint_names?: string[]
+          checkpoints_count?: number
+          created_at?: string
+          created_by?: string
+          distance?: string | null
+          end_date?: string | null
+          finished_at?: string | null
+          id?: string
+          name: string
+          start_date?: string | null
+          status?: string
+        }
+        Update: {
+          checkpoint_names?: string[]
+          checkpoints_count?: number
+          created_at?: string
+          created_by?: string
+          distance?: string | null
+          end_date?: string | null
+          finished_at?: string | null
+          id?: string
+          name?: string
+          start_date?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       rigging_measurements: {
         Row: {
           boat: string
@@ -500,6 +618,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_control_race: {
+        Args: { _event_id: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -510,6 +632,14 @@ export type Database = {
       is_coach_of_group: {
         Args: { _group_id: string; _user_id: string }
         Returns: boolean
+      }
+      is_coach_or_admin: { Args: { _user_id: string }; Returns: boolean }
+      list_coaches: {
+        Args: never
+        Returns: {
+          full_name: string
+          id: string
+        }[]
       }
     }
     Enums: {
