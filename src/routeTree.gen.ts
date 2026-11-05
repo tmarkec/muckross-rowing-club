@@ -32,6 +32,7 @@ import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as CoachesAdminRiggingRouteImport } from './routes/coaches.admin.rigging'
 import { Route as CoachesGroupsGroupIdRouteImport } from './routes/coaches.groups.$groupId'
+import { Route as CoachesRaceClockerIndexRouteImport } from './routes/coaches.race-clocker.index'
 import { Route as CoachesGroupsGroupIdIndexRouteImport } from './routes/coaches.groups.$groupId.index'
 import { Route as CoachesGroupsGroupIdAthletesAthleteIdRouteImport } from './routes/coaches.groups.$groupId.athletes.$athleteId'
 
@@ -150,6 +151,11 @@ const CoachesGroupsGroupIdRoute = CoachesGroupsGroupIdRouteImport.update({
   path: '/coaches/groups/$groupId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoachesRaceClockerIndexRoute = CoachesRaceClockerIndexRouteImport.update({
+  id: '/coaches/race-clocker/',
+  path: '/coaches/race-clocker/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoachesGroupsGroupIdIndexRoute =
   CoachesGroupsGroupIdIndexRouteImport.update({
     id: '/',
@@ -187,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/news/': typeof NewsIndexRoute
   '/coaches/admin/rigging': typeof CoachesAdminRiggingRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRouteWithChildren
+  '/coaches/race-clocker/': typeof CoachesRaceClockerIndexRoute
   '/coaches/groups/$groupId/': typeof CoachesGroupsGroupIdIndexRoute
   '/coaches/groups/$groupId/athletes/$athleteId': typeof CoachesGroupsGroupIdAthletesAthleteIdRoute
 }
@@ -212,6 +219,7 @@ export interface FileRoutesByTo {
   '/coaches': typeof CoachesIndexRoute
   '/news': typeof NewsIndexRoute
   '/coaches/admin/rigging': typeof CoachesAdminRiggingRoute
+  '/coaches/race-clocker': typeof CoachesRaceClockerIndexRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdIndexRoute
   '/coaches/groups/$groupId/athletes/$athleteId': typeof CoachesGroupsGroupIdAthletesAthleteIdRoute
 }
@@ -240,6 +248,7 @@ export interface FileRoutesById {
   '/news/': typeof NewsIndexRoute
   '/coaches/admin/rigging': typeof CoachesAdminRiggingRoute
   '/coaches/groups/$groupId': typeof CoachesGroupsGroupIdRouteWithChildren
+  '/coaches/race-clocker/': typeof CoachesRaceClockerIndexRoute
   '/coaches/groups/$groupId/': typeof CoachesGroupsGroupIdIndexRoute
   '/coaches/groups/$groupId/athletes/$athleteId': typeof CoachesGroupsGroupIdAthletesAthleteIdRoute
 }
@@ -269,6 +278,7 @@ export interface FileRouteTypes {
     | '/news/'
     | '/coaches/admin/rigging'
     | '/coaches/groups/$groupId'
+    | '/coaches/race-clocker/'
     | '/coaches/groups/$groupId/'
     | '/coaches/groups/$groupId/athletes/$athleteId'
   fileRoutesByTo: FileRoutesByTo
@@ -294,6 +304,7 @@ export interface FileRouteTypes {
     | '/coaches'
     | '/news'
     | '/coaches/admin/rigging'
+    | '/coaches/race-clocker'
     | '/coaches/groups/$groupId'
     | '/coaches/groups/$groupId/athletes/$athleteId'
   id:
@@ -321,6 +332,7 @@ export interface FileRouteTypes {
     | '/news/'
     | '/coaches/admin/rigging'
     | '/coaches/groups/$groupId'
+    | '/coaches/race-clocker/'
     | '/coaches/groups/$groupId/'
     | '/coaches/groups/$groupId/athletes/$athleteId'
   fileRoutesById: FileRoutesById
@@ -346,6 +358,7 @@ export interface RootRouteChildren {
   CoachesTrafficRoute: typeof CoachesTrafficRoute
   CoachesIndexRoute: typeof CoachesIndexRoute
   CoachesGroupsGroupIdRoute: typeof CoachesGroupsGroupIdRouteWithChildren
+  CoachesRaceClockerIndexRoute: typeof CoachesRaceClockerIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -511,6 +524,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoachesGroupsGroupIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coaches/race-clocker/': {
+      id: '/coaches/race-clocker/'
+      path: '/coaches/race-clocker'
+      fullPath: '/coaches/race-clocker/'
+      preLoaderRoute: typeof CoachesRaceClockerIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/coaches/groups/$groupId/': {
       id: '/coaches/groups/$groupId/'
       path: '/'
@@ -587,6 +607,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachesTrafficRoute: CoachesTrafficRoute,
   CoachesIndexRoute: CoachesIndexRoute,
   CoachesGroupsGroupIdRoute: CoachesGroupsGroupIdRouteWithChildren,
+  CoachesRaceClockerIndexRoute: CoachesRaceClockerIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
