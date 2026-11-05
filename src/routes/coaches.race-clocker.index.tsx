@@ -1,12 +1,16 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/coaches/race-clocker/")({
   head: () => ({ meta: [{ title: "Race Clocker — Coaches Corner" }, { name: "robots", content: "noindex" }] }),
@@ -23,6 +27,8 @@ function RaceClockerList() {
   const navigate = useNavigate();
   const [events, setEvents] = useState<EventRow[] | null>(null);
   const [creating, setCreating] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<EventRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => { if (!loading && !session) void navigate({ to: "/coaches/login" }); }, [loading, session, navigate]);
 
@@ -47,12 +53,32 @@ function RaceClockerList() {
   if (!isCoach && !isAdmin) return <div className="min-h-screen flex items-center justify-center">Not authorised.</div>;
 
   const create = async () => {
+    if (!user) return;
     setCreating(true);
-    const { data, error } = await supabase.from("race_events").insert({ name: "New event", created_by: user!.id }).select("id").single();
+    const { data, error } = await supabase.from("race_events").insert({ name: "New event", created_by: user.id }).select("id").single();
     setCreating(false);
     if (error || !data) return toast.error(error?.message ?? "Could not create event");
-    await supabase.from("race_event_controllers").insert({ event_id: data.id, coach_id: user!.id });
+    await supabase.from("race_event_controllers").insert({ event_id: data.id, coach_id: user.id });
     void navigate({ to: "/coaches/race-clocker/$eventId", params: { eventId: data.id } });
+  };
+
+  const deleteEvent = async () => {
+    if (!isAdmin || !deleteTarget || deleting) return;
+    setDeleting(true);
+    try {
+      const { data, error } = await supabase.from("race_events").delete().eq("id", deleteTarget.id).select("id").maybeSingle();
+      if (error || !data) {
+        toast.error(error?.message ?? "Event could not be deleted. Refresh and try again.");
+        return;
+      }
+      setEvents((current) => current?.filter((event) => event.id !== data.id) ?? null);
+      setDeleteTarget(null);
+      toast.success("Event and all its crews permanently deleted.");
+    } catch {
+      toast.error("Event could not be deleted. Please try again.");
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const today = new Date().toISOString().slice(0, 10);
@@ -82,8 +108,8 @@ function RaceClockerList() {
               <TabsContent key={k} value={k} className="space-y-3 mt-4">
                 {list.length === 0 ? <div className="rounded-lg border bg-background p-6 text-sm text-muted-foreground">No events here yet.</div> :
                   list.map((e) => (
-                    <Link key={e.id} to="/coaches/race-clocker/$eventId" params={{ eventId: e.id }}
-                      className="block rounded-lg border bg-background p-4 hover:border-primary transition">
+                    <div key={e.id} className="rounded-lg border bg-background p-4 hover:border-primary transition">
+                    <Link to="/coaches/race-clocker/$eventId" params={{ eventId: e.id }} className="block">
                       <div className="flex items-start justify-between gap-2">
                         <div className="font-serif text-lg">{e.name}</div>
                         <Badge variant={e.status === "running" ? "default" : e.status === "finished" ? "secondary" : "outline"}>
@@ -95,12 +121,36 @@ function RaceClockerList() {
                         {e.status === "draft" && e.start_date && e.start_date < today ? " · date passed" : ""}
                       </div>
                     </Link>
+                    {isAdmin && (
+                      <div className="mt-3 flex justify-end">
+                        <Button variant="destructive" size="sm" onClick={() => setDeleteTarget(e)} aria-label={`Delete ${e.name} permanently`}>
+                          <Trash2 className="mr-2 h-4 w-4" />Delete event
+                        </Button>
+                      </div>
+                    )}
+                    </div>
                   ))}
               </TabsContent>
             ))}
           </Tabs>
         )}
       </div>
+      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => { if (!open && !deleting) setDeleteTarget(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Permanently delete event?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently deletes “{deleteTarget?.name}” and all its crews, split times, results and coach assignments. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction disabled={deleting} onClick={(event) => { event.preventDefault(); void deleteEvent(); }}>
+              {deleting ? "Deleting…" : "Delete permanently"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
