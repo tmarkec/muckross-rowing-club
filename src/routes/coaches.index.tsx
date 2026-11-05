@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
-import { Ruler, Gauge, CalendarRange, Anchor, Users, ShieldCheck, LogOut, Download, CalendarDays, Navigation } from "lucide-react";
+import { Ruler, Gauge, CalendarRange, Anchor, Users, ShieldCheck, LogOut, Download, CalendarDays, Navigation, Timer } from "lucide-react";
 
 type Group = { id: string; name: string; description: string | null };
 
@@ -65,6 +65,7 @@ function CoachesHome() {
               { to: "/coaches/rigging", label: "Rigging", icon: Ruler },
               { to: "/coaches/pace", label: "Pace calculator", icon: Gauge },
               { to: "/coaches/program", label: "Training program", icon: CalendarRange },
+              { to: "/coaches/race-clocker", label: "Race Clocker", icon: Timer },
               { to: "/coaches/crews", label: "Crew selection", icon: Users },
               { to: "/coaches/inventory", label: "Boats & oars", icon: Anchor },
               { to: "/coaches/schedule", label: "Group schedule", icon: CalendarDays },
