@@ -351,11 +351,12 @@ function RunView({ event, crews, canControl, reload, setConfirm }: {
     void patch(ids, { start_time: ts, status: "running" });
   };
 
-  const tap = (c: RaceCrew) => {
+  const tap = (c: RaceCrew, checkpoint: "split1_time" | "split2_time" | "finish_time") => {
+    if (c.status !== "running" || c[checkpoint]) return;
     const ts = new Date().toISOString();
-    if (event.checkpoints_count >= 1 && !c.split1_time) return void patch([c.id], { split1_time: ts });
-    if (event.checkpoints_count >= 2 && !c.split2_time) return void patch([c.id], { split2_time: ts });
-    void patch([c.id], { finish_time: ts, status: "finished" });
+    void patch([c.id], checkpoint === "finish_time"
+      ? { finish_time: ts, status: "finished" }
+      : { [checkpoint]: ts });
   };
 
   const undo = (c: RaceCrew) => {
@@ -365,12 +366,6 @@ function RunView({ event, crews, canControl, reload, setConfirm }: {
     else if (c.split1_time) { values = { split1_time: null }; what = "split 1"; }
     else { values = { start_time: null, status: "waiting" }; what = "start"; }
     setConfirm({ title: `Undo ${what}?`, body: `${c.crew_name}: the recorded ${what} will be cleared.`, action: () => patch([c.id], values) });
-  };
-
-  const actionLabel = (c: RaceCrew) => {
-    if (event.checkpoints_count >= 1 && !c.split1_time) return event.checkpoint_names[0] ? `Split 1 · ${event.checkpoint_names[0]}` : "Split 1";
-    if (event.checkpoints_count >= 2 && !c.split2_time) return event.checkpoint_names[1] ? `Split 2 · ${event.checkpoint_names[1]}` : "Split 2";
-    return "Finish";
   };
 
   const finishEvent = () => setConfirm({
@@ -437,9 +432,23 @@ function RunView({ event, crews, canControl, reload, setConfirm }: {
               </div>
             )}
             {canControl && (
-              <div className="mt-3 flex gap-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {c.status === "waiting" && <Button className="h-14 flex-1 text-lg" onClick={() => startCrews([c.id])}>Start</Button>}
-                {c.status === "running" && <Button className="h-14 flex-1 text-lg" variant="secondary" onClick={() => tap(c)}>{actionLabel(c)}</Button>}
+                {c.status === "running" && (
+                  <div className="grid min-w-0 flex-1 grid-cols-1 gap-2 sm:grid-cols-[repeat(auto-fit,minmax(120px,1fr))]">
+                    {event.checkpoints_count >= 1 && (
+                      <Button className="h-auto min-h-14 whitespace-normal break-words px-3 py-3 text-lg" variant="outline" disabled={!!c.split1_time} onClick={() => tap(c, "split1_time")}>
+                        Split 1{event.checkpoint_names[0] ? ` · ${event.checkpoint_names[0]}` : ""}
+                      </Button>
+                    )}
+                    {event.checkpoints_count >= 2 && (
+                      <Button className="h-auto min-h-14 whitespace-normal break-words px-3 py-3 text-lg" variant="outline" disabled={!!c.split2_time} onClick={() => tap(c, "split2_time")}>
+                        Split 2{event.checkpoint_names[1] ? ` · ${event.checkpoint_names[1]}` : ""}
+                      </Button>
+                    )}
+                    <Button className="h-auto min-h-14 text-lg" variant="secondary" onClick={() => tap(c, "finish_time")}>Finish</Button>
+                  </div>
+                )}
                 {c.status !== "waiting" && (
                   <Button variant="outline" className="h-14 px-4" onClick={() => undo(c)}><Undo2 className="h-5 w-5 sm:mr-2" /><span className="hidden sm:inline">Undo</span></Button>
                 )}
