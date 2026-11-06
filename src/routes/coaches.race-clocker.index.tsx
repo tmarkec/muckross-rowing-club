@@ -19,7 +19,7 @@ export const Route = createFileRoute("/coaches/race-clocker/")({
 
 type EventRow = {
   id: string; name: string; distance: string | null; start_date: string | null; end_date: string | null;
-  status: string; race_crews: { count: number }[];
+  status: string; created_by: string; race_crews: { count: number }[];
 };
 
 function RaceClockerList() {
@@ -37,7 +37,7 @@ function RaceClockerList() {
     const load = async () => {
       const { data, error } = await supabase
         .from("race_events")
-        .select("id,name,distance,start_date,end_date,status,race_crews(count)")
+        .select("id,name,distance,start_date,end_date,status,created_by,race_crews(count)")
         .order("start_date", { ascending: false, nullsFirst: false });
       if (error) toast.error(error.message);
       setEvents((data as unknown as EventRow[]) ?? []);
