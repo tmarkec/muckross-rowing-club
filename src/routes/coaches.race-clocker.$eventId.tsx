@@ -89,7 +89,7 @@ function EventPage() {
         </div>
 
         {event.status === "draft" && (canControl
-          ? <SetupView event={event} crews={crews} controllers={controllers} reload={load} setConfirm={setConfirm} />
+          ? <SetupView event={event} crews={crews} controllers={controllers} reload={load} setConfirm={setConfirm} canDelete={isAdmin || (event.status === "draft" && event.created_by === user?.id)} />
           : <div className="rounded-lg border bg-background p-6 text-sm text-muted-foreground">This event hasn't started yet. {crews.length} crews entered.</div>)}
         {event.status === "running" && <RunView event={event} crews={crews} canControl={canControl} reload={load} setConfirm={setConfirm} />}
         {event.status === "finished" && <ResultsView event={event} crews={crews} />}
@@ -113,8 +113,8 @@ function EventPage() {
 
 /* ---------------- Setup ---------------- */
 
-function SetupView({ event, crews, controllers, reload, setConfirm }: {
-  event: RaceEvent; crews: RaceCrew[]; controllers: string[]; reload: () => Promise<void>; setConfirm: (c: Confirm) => void;
+function SetupView({ event, crews, controllers, reload, setConfirm, canDelete }: {
+  event: RaceEvent; crews: RaceCrew[]; controllers: string[]; reload: () => Promise<void>; setConfirm: (c: Confirm) => void; canDelete: boolean;
 }) {
   const [form, setForm] = useState({
     name: event.name, distance: event.distance ?? "", start_date: event.start_date ?? "", end_date: event.end_date ?? "",
@@ -210,7 +210,7 @@ function SetupView({ event, crews, controllers, reload, setConfirm }: {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button className="h-12" variant="outline" onClick={() => void save()} disabled={saving}>{saving ? "Saving…" : "Save details"}</Button>
-          <Button className="h-12" variant="ghost" onClick={remove}><Trash2 className="h-4 w-4 mr-2" />Delete event</Button>
+          {canDelete && <Button className="h-12" variant="ghost" onClick={remove}><Trash2 className="h-4 w-4 mr-2" />Delete event</Button>}
         </div>
       </section>
 
@@ -383,7 +383,7 @@ function RunView({ event, crews, canControl, reload, setConfirm }: {
   });
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2 sm:space-y-3">
       <div className="sticky top-0 z-10 -mx-3 sm:mx-0 bg-muted/95 px-3 sm:px-0 py-2 backdrop-blur">
         <div className="grid grid-cols-4 gap-1 rounded-lg border bg-background p-1">
           {(["all", "waiting", "running", "finished"] as const).map((f) => (
@@ -407,50 +407,50 @@ function RunView({ event, crews, canControl, reload, setConfirm }: {
         const live = c.status === "running" && c.start_time ? now - new Date(c.start_time).getTime() : null;
         const final = elapsedMs(c.start_time, c.finish_time);
         return (
-          <div key={c.id} className={cn("rounded-xl border-2 p-3 sm:p-4", STATE_STYLE[c.status])}>
-            <div className="flex items-start gap-3">
+          <div key={c.id} className={cn("rounded-lg border-2 p-2 sm:rounded-xl sm:p-4", STATE_STYLE[c.status])}>
+            <div className="flex items-start gap-2 sm:gap-3">
               {canControl && c.status === "waiting" && (
-                <Checkbox className="mt-1 h-7 w-7" aria-label={`Select ${c.crew_name}`} checked={sel.includes(c.id)}
+                <Checkbox className="mt-1 h-6 w-6 sm:h-7 sm:w-7" aria-label={`Select ${c.crew_name}`} checked={sel.includes(c.id)}
                   onCheckedChange={(v) => setSelected(v ? [...sel, c.id] : sel.filter((x) => x !== c.id))} />
               )}
-              <div className="flex h-12 min-w-12 items-center justify-center rounded-md bg-primary px-2 font-mono text-xl font-bold text-primary-foreground">
+              <div className="flex h-9 min-w-9 sm:h-12 sm:min-w-12 items-center justify-center rounded-md bg-primary px-2 font-mono text-base sm:text-xl font-bold text-primary-foreground">
                 {c.bow_number ?? "–"}
               </div>
               <div className="min-w-0 flex-1">
-                <div className="truncate text-lg font-semibold">{c.crew_name}</div>
+                <div className="truncate text-base sm:text-lg font-semibold">{c.crew_name}</div>
                 <div className="text-sm text-muted-foreground">{c.boat_type}{c.category ? ` · ${c.category}` : ""}</div>
               </div>
               <Badge variant={c.status === "dnf" ? "destructive" : c.status === "running" ? "default" : c.status === "finished" ? "secondary" : "outline"}>{STATE_LABEL[c.status]}</Badge>
             </div>
-            <div className="mt-3 font-mono text-4xl sm:text-5xl font-bold tabular-nums tracking-tight">
+            <div className="mt-1 sm:mt-3 font-mono text-2xl sm:text-5xl font-bold tabular-nums tracking-tight">
               {c.status === "running" ? formatRaceTime(live) : c.status === "finished" ? formatRaceTime(final) : c.status === "dnf" ? "DNF" : formatRaceTime(0)}
             </div>
             {(c.split1_time || c.split2_time) && (
-              <div className="mt-1 flex flex-wrap gap-x-4 text-sm font-mono text-muted-foreground">
+              <div className="mt-1 flex flex-wrap gap-x-4 text-xs sm:text-sm font-mono text-muted-foreground">
                 {c.split1_time && <span>{event.checkpoint_names[0] || "Split 1"}: {formatRaceTime(elapsedMs(c.start_time, c.split1_time))}</span>}
                 {c.split2_time && <span>{event.checkpoint_names[1] || "Split 2"}: {formatRaceTime(elapsedMs(c.start_time, c.split2_time))}</span>}
               </div>
             )}
             {canControl && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {c.status === "waiting" && <Button className="h-14 flex-1 text-lg" onClick={() => startCrews([c.id])}>Start</Button>}
+              <div className="mt-2 sm:mt-3 flex flex-wrap gap-2">
+                {c.status === "waiting" && <Button className="h-11 sm:h-14 flex-1 text-base sm:text-lg" onClick={() => startCrews([c.id])}>Start</Button>}
                 {c.status === "running" && (
-                  <div className="grid min-w-0 flex-1 grid-cols-1 gap-2 sm:grid-cols-[repeat(auto-fit,minmax(120px,1fr))]">
+                  <div className="grid min-w-0 flex-1 grid-cols-[repeat(auto-fit,minmax(90px,1fr))] gap-2 sm:grid-cols-[repeat(auto-fit,minmax(120px,1fr))]">
                     {event.checkpoints_count >= 1 && (
-                      <Button className="h-auto min-h-14 whitespace-normal break-words px-3 py-3 text-lg" variant="outline" disabled={!!c.split1_time} onClick={() => tap(c, "split1_time")}>
+                      <Button className="h-auto min-h-11 sm:min-h-14 whitespace-normal break-words px-2 py-2 sm:px-3 sm:py-3 text-sm sm:text-lg" variant="outline" disabled={!!c.split1_time} onClick={() => tap(c, "split1_time")}>
                         Split 1{event.checkpoint_names[0] ? ` · ${event.checkpoint_names[0]}` : ""}
                       </Button>
                     )}
                     {event.checkpoints_count >= 2 && (
-                      <Button className="h-auto min-h-14 whitespace-normal break-words px-3 py-3 text-lg" variant="outline" disabled={!!c.split2_time} onClick={() => tap(c, "split2_time")}>
+                      <Button className="h-auto min-h-11 sm:min-h-14 whitespace-normal break-words px-2 py-2 sm:px-3 sm:py-3 text-sm sm:text-lg" variant="outline" disabled={!!c.split2_time} onClick={() => tap(c, "split2_time")}>
                         Split 2{event.checkpoint_names[1] ? ` · ${event.checkpoint_names[1]}` : ""}
                       </Button>
                     )}
-                    <Button className="h-auto min-h-14 text-lg" variant="secondary" onClick={() => tap(c, "finish_time")}>Finish</Button>
+                    <Button className="h-auto min-h-11 sm:min-h-14 text-base sm:text-lg" variant="secondary" onClick={() => tap(c, "finish_time")}>Finish</Button>
                   </div>
                 )}
                 {c.status !== "waiting" && (
-                  <Button variant="outline" className="h-14 px-4" onClick={() => undo(c)}><Undo2 className="h-5 w-5 sm:mr-2" /><span className="hidden sm:inline">Undo</span></Button>
+                  <Button variant="outline" className="h-11 px-3 sm:h-14 sm:px-4" onClick={() => undo(c)}><Undo2 className="h-5 w-5 sm:mr-2" /><span className="hidden sm:inline">Undo</span></Button>
                 )}
               </div>
             )}

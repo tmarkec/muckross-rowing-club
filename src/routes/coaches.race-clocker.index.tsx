@@ -19,7 +19,7 @@ export const Route = createFileRoute("/coaches/race-clocker/")({
 
 type EventRow = {
   id: string; name: string; distance: string | null; start_date: string | null; end_date: string | null;
-  status: string; race_crews: { count: number }[];
+  status: string; created_by: string; race_crews: { count: number }[];
 };
 
 function RaceClockerList() {
@@ -37,7 +37,7 @@ function RaceClockerList() {
     const load = async () => {
       const { data, error } = await supabase
         .from("race_events")
-        .select("id,name,distance,start_date,end_date,status,race_crews(count)")
+        .select("id,name,distance,start_date,end_date,status,created_by,race_crews(count)")
         .order("start_date", { ascending: false, nullsFirst: false });
       if (error) toast.error(error.message);
       setEvents((data as unknown as EventRow[]) ?? []);
@@ -63,7 +63,7 @@ function RaceClockerList() {
   };
 
   const deleteEvent = async () => {
-    if (!isAdmin || !deleteTarget || deleting) return;
+    if (!deleteTarget || !(isAdmin || (deleteTarget.status === "draft" && deleteTarget.created_by === user?.id)) || deleting) return;
     setDeleting(true);
     try {
       const { data, error } = await supabase.from("race_events").delete().eq("id", deleteTarget.id).select("id").maybeSingle();
@@ -121,7 +121,7 @@ function RaceClockerList() {
                         {e.status === "draft" && e.start_date && e.start_date < today ? " · date passed" : ""}
                       </div>
                     </Link>
-                    {isAdmin && (
+                    {(isAdmin || (e.status === "draft" && e.created_by === user?.id)) && (
                       <div className="mt-3 flex justify-end">
                         <Button variant="destructive" size="sm" onClick={() => setDeleteTarget(e)} aria-label={`Delete ${e.name} permanently`}>
                           <Trash2 className="mr-2 h-4 w-4" />Delete event
