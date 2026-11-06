@@ -210,7 +210,7 @@ function SetupView({ event, crews, controllers, reload, setConfirm }: {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button className="h-12" variant="outline" onClick={() => void save()} disabled={saving}>{saving ? "Saving…" : "Save details"}</Button>
-          {(isAdmin || (event.status === "draft" && event.created_by === user?.id)) && <Button className="h-12" variant="ghost" onClick={remove}><Trash2 className="h-4 w-4 mr-2" />Delete event</Button>}
+          {canDelete && <Button className="h-12" variant="ghost" onClick={remove}><Trash2 className="h-4 w-4 mr-2" />Delete event</Button>}
         </div>
       </section>
 
