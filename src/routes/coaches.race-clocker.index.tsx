@@ -63,7 +63,7 @@ function RaceClockerList() {
   };
 
   const deleteEvent = async () => {
-    if (!isAdmin || !deleteTarget || deleting) return;
+    if (!deleteTarget || !(isAdmin || (deleteTarget.status === "draft" && deleteTarget.created_by === user?.id)) || deleting) return;
     setDeleting(true);
     try {
       const { data, error } = await supabase.from("race_events").delete().eq("id", deleteTarget.id).select("id").maybeSingle();
@@ -121,7 +121,7 @@ function RaceClockerList() {
                         {e.status === "draft" && e.start_date && e.start_date < today ? " · date passed" : ""}
                       </div>
                     </Link>
-                    {isAdmin && (
+                    {(isAdmin || (e.status === "draft" && e.created_by === user?.id)) && (
                       <div className="mt-3 flex justify-end">
                         <Button variant="destructive" size="sm" onClick={() => setDeleteTarget(e)} aria-label={`Delete ${e.name} permanently`}>
                           <Trash2 className="mr-2 h-4 w-4" />Delete event
