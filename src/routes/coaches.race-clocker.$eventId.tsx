@@ -89,7 +89,7 @@ function EventPage() {
         </div>
 
         {event.status === "draft" && (canControl
-          ? <SetupView event={event} crews={crews} controllers={controllers} reload={load} setConfirm={setConfirm} />
+          ? <SetupView event={event} crews={crews} controllers={controllers} reload={load} setConfirm={setConfirm} canDelete={isAdmin || (event.status === "draft" && event.created_by === user?.id)} />
           : <div className="rounded-lg border bg-background p-6 text-sm text-muted-foreground">This event hasn't started yet. {crews.length} crews entered.</div>)}
         {event.status === "running" && <RunView event={event} crews={crews} canControl={canControl} reload={load} setConfirm={setConfirm} />}
         {event.status === "finished" && <ResultsView event={event} crews={crews} />}
@@ -113,8 +113,8 @@ function EventPage() {
 
 /* ---------------- Setup ---------------- */
 
-function SetupView({ event, crews, controllers, reload, setConfirm }: {
-  event: RaceEvent; crews: RaceCrew[]; controllers: string[]; reload: () => Promise<void>; setConfirm: (c: Confirm) => void;
+function SetupView({ event, crews, controllers, reload, setConfirm, canDelete }: {
+  event: RaceEvent; crews: RaceCrew[]; controllers: string[]; reload: () => Promise<void>; setConfirm: (c: Confirm) => void; canDelete: boolean;
 }) {
   const [form, setForm] = useState({
     name: event.name, distance: event.distance ?? "", start_date: event.start_date ?? "", end_date: event.end_date ?? "",
