@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS "controllers delete events" ON public.race_events;
+CREATE POLICY "admins or draft creator delete events" ON public.race_events FOR DELETE TO authenticated USING (public.has_role(auth.uid(), 'admin') OR (created_by = auth.uid() AND status = 'draft'));

@@ -29,6 +29,13 @@
       "when": 1793904331520,
       "tag": "0003_race_clocker",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793952847787,
+      "tag": "0004_race_event_delete_rules",
+      "breakpoints": true
     }
   ]
 }
