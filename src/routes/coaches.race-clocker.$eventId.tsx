@@ -383,7 +383,7 @@ function RunView({ event, crews, canControl, reload, setConfirm }: {
   });
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2 sm:space-y-3">
       <div className="sticky top-0 z-10 -mx-3 sm:mx-0 bg-muted/95 px-3 sm:px-0 py-2 backdrop-blur">
         <div className="grid grid-cols-4 gap-1 rounded-lg border bg-background p-1">
           {(["all", "waiting", "running", "finished"] as const).map((f) => (
