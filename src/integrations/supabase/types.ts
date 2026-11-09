@@ -102,6 +102,42 @@ export type Database = {
           },
         ]
       }
+      calendar_events: {
+        Row: {
+          created_at: string
+          end_date: string | null
+          id: string
+          location: string
+          name: string
+          start_date: string
+          tag: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          location?: string
+          name: string
+          start_date: string
+          tag?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          location?: string
+          name?: string
+          start_date?: string
+          tag?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
       club_boats: {
         Row: {
           assigned_group: string | null
