@@ -3,13 +3,13 @@ import { ArrowRight, MapPin } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { getUpcomingFixtures } from "@/lib/fixtures";
+import { getUpcomingFixtures, rowToFixture, type CalendarEventRow } from "@/lib/fixtures";
 import type { getHomeNews } from "@/lib/home-news.functions";
 
 type NewsData = Awaited<ReturnType<typeof getHomeNews>>;
 
-export function HomeNewsAndDates({ news, today }: { news: NewsData; today: string }) {
-  const events = getUpcomingFixtures(new Date(today), 4);
+export function HomeNewsAndDates({ news, events: rows, today }: { news: NewsData; events: CalendarEventRow[]; today: string }) {
+  const events = getUpcomingFixtures(rows.map(rowToFixture), new Date(today), 4);
   return (
     <section aria-labelledby="home-news-heading" className="bg-card py-10 sm:py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -42,7 +42,7 @@ export function HomeNewsAndDates({ news, today }: { news: NewsData; today: strin
             <h3 className="mb-5 border-b-2 border-secondary pb-3 font-serif text-2xl font-bold text-primary">Upcoming Key Dates</h3>
             <ul className="divide-y divide-border">
               {events.map((event) => (
-                <li key={event.name} className="grid grid-cols-[64px_minmax(0,1fr)] items-center gap-4 py-5 first:pt-0">
+                <li key={event.id} className="grid grid-cols-[64px_minmax(0,1fr)] items-center gap-4 py-5 first:pt-0">
                   <time dateTime={`${event.date.getFullYear()}-${String(event.date.getMonth() + 1).padStart(2, "0")}-${String(event.date.getDate()).padStart(2, "0")}`} className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-md bg-primary text-primary-foreground">
                     <span className="text-xs font-semibold uppercase text-secondary">{event.date.toLocaleDateString("en-IE", { month: "short" })}</span>
                     <span className="text-2xl font-bold">{String(event.date.getDate()).padStart(2, "0")}</span>

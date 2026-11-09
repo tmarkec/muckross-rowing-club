@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { HomeNewsAndDates } from "@/components/HomeNewsAndDates";
 import { getHomeNews } from "@/lib/home-news.functions";
+import { getCalendarEvents } from "@/lib/calendar-events.functions";
 import { CLUB_EMAIL, CLUBFORCE_URL, SITE_URL, SOCIAL } from "@/lib/site";
 const pullingTogether = "/club-community.jpg";
 const boathouse = "/old-boathouse.jpg";
@@ -53,7 +54,7 @@ const homeJsonLd = {
 };
 
 export const Route = createFileRoute("/")({
-  loader: async () => ({ news: await getHomeNews(), today: new Date().toISOString() }),
+  loader: async () => { const [news, events] = await Promise.all([getHomeNews(), getCalendarEvents()]); return { news, events, today: new Date().toISOString() }; },
   errorComponent: () => <SiteLayout><p role="alert" className="mx-auto max-w-7xl px-4 py-16">The homepage is temporarily unavailable. Please refresh to try again.</p></SiteLayout>,
   notFoundComponent: () => <SiteLayout><p className="px-4 py-16">Page not found.</p></SiteLayout>,
   head: () => ({
@@ -93,7 +94,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const { news, today } = Route.useLoaderData();
+  const { news, events, today } = Route.useLoaderData();
   const [activeSlide, setActiveSlide] = useState(0);
   useEffect(() => {
     const id = setInterval(() => {
@@ -145,7 +146,7 @@ function HomePage() {
         </div>
       </section>
 
-      <HomeNewsAndDates news={news} today={today} />
+      <HomeNewsAndDates news={news} events={events} today={today} />
 
       {/* Highlights */}
       <section className="bg-background py-20 sm:py-28">
