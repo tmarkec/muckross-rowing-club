@@ -94,7 +94,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const { news, today } = Route.useLoaderData();
+  const { news, events, today } = Route.useLoaderData();
   const [activeSlide, setActiveSlide] = useState(0);
   useEffect(() => {
     const id = setInterval(() => {
