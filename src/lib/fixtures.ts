@@ -1,6 +1,7 @@
 export const ROWING_IRELAND_EVENTS_URL = "https://www.rowingireland.ie/regatta-hors/events/";
 
 export type Fixture = {
+  id: string;
   date: Date;
   endDate: Date;
   dateLabel: string;
@@ -10,67 +11,38 @@ export type Fixture = {
   url?: string;
 };
 
-export const fixtures: Fixture[] = [
-  {
-    date: new Date(2026, 11, 5),
-    endDate: new Date(2026, 11, 5),
-    dateLabel: "Sat 5 Dec 2026",
-    name: "Muckross Head",
-    location: "NRC, Farran Wood, Cork",
-    tag: "Head race",
-    url: ROWING_IRELAND_EVENTS_URL,
-  },
-  {
-    date: new Date(2026, 8, 5),
-    endDate: new Date(2026, 8, 5),
-    dateLabel: "Sat 5 Sep 2026",
-    name: "Kenmare Endurance Regatta (Coastal)",
-    location: "Kenmare, Co. Kerry",
-    tag: "Coastal",
-    url: ROWING_IRELAND_EVENTS_URL,
-  },
-  {
-    date: new Date(2026, 8, 12),
-    endDate: new Date(2026, 8, 12),
-    dateLabel: "Sat 12 Sep 2026",
-    name: "Swift Racing Coastal Junior Championships",
-    location: "Bantry, Co. Cork",
-    tag: "Championships",
-    url: ROWING_IRELAND_EVENTS_URL,
-  },
-  {
-    date: new Date(2026, 9, 10),
-    endDate: new Date(2026, 9, 10),
-    dateLabel: "Sat 10 Oct 2026",
-    name: "St Michael's Masters & Juniors HOR",
-    location: "O'Briensbridge, Co. Clare",
-    tag: "Head race",
-    url: ROWING_IRELAND_EVENTS_URL,
-  },
-  {
-    date: new Date(2026, 9, 24),
-    endDate: new Date(2026, 9, 24),
-    dateLabel: "Sat 24 Oct 2026",
-    name: "Castleconnell Head",
-    location: "Castleconnell, Co. Limerick",
-    tag: "Head race",
-    url: ROWING_IRELAND_EVENTS_URL,
-  },
-  {
-    date: new Date(2026, 10, 14),
-    endDate: new Date(2026, 10, 14),
-    dateLabel: "Sat 14 Nov 2026",
-    name: "Skibbereen HOR",
-    location: "Marina, Cork",
-    tag: "Head race",
-    url: ROWING_IRELAND_EVENTS_URL,
-  },
-];
+/** Raw calendar row as stored in the database (dates as YYYY-MM-DD). */
+export type CalendarEventRow = {
+  id: string;
+  name: string;
+  location: string;
+  tag: string;
+  start_date: string;
+  end_date: string | null;
+  url: string | null;
+};
 
+function parseLocalDate(value: string) {
+  const [y, m, d] = value.slice(0, 10).split("-").map(Number);
+  return new Date(y, (m ?? 1) - 1, d ?? 1);
+}
 
-export function getUpcomingFixtures(today = new Date(), limit = fixtures.length) {
+function label(date: Date) {
+  return date.toLocaleDateString("en-IE", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+}
+
+export function rowToFixture(row: CalendarEventRow): Fixture {
+  const date = parseLocalDate(row.start_date);
+  const endRaw = row.end_date ? parseLocalDate(row.end_date) : date;
+  const endDate = endRaw < date ? date : endRaw;
+  const dateLabel = endDate.getTime() === date.getTime() ? label(date) : `${label(date)} – ${label(endDate)}`;
+  return { id: row.id, date, endDate, dateLabel, name: row.name, location: row.location, tag: row.tag, url: row.url || undefined };
+}
+
+/** Events that have not finished yet, soonest first. */
+export function getUpcomingFixtures(list: Fixture[], today = new Date(), limit = list.length) {
   const startOfToday = new Date(today);
   startOfToday.setHours(0, 0, 0, 0);
-  return fixtures.filter((fixture) => fixture.date >= startOfToday)
+  return list.filter((fixture) => fixture.endDate >= startOfToday)
     .sort((a, b) => a.date.getTime() - b.date.getTime()).slice(0, limit);
 }

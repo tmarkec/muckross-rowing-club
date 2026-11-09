@@ -5,7 +5,7 @@ import { Calendar as CalendarIcon, MapPin, ExternalLink } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { fixtures, ROWING_IRELAND_EVENTS_URL } from "@/lib/fixtures";
+import { getUpcomingFixtures, rowToFixture, ROWING_IRELAND_EVENTS_URL, type Fixture } from "@/lib/fixtures";
 import { WeatherWidget } from "@/components/WeatherWidget";
 import { supabase } from "@/lib/supabase";
 import { fetchPublishedNews } from "@/lib/published-news";
@@ -84,13 +84,15 @@ function NewsPage() {
       });
   }, []);
 
-  const upcomingFixtures = useMemo(() => {
-    const startOfToday = new Date();
-    startOfToday.setHours(0, 0, 0, 0);
-    return fixtures
-      .filter((f) => f.date.getTime() >= startOfToday.getTime())
-      .sort((a, b) => a.date.getTime() - b.date.getTime());
+  const [allFixtures, setAllFixtures] = useState<Fixture[]>([]);
+  useEffect(() => {
+    void supabase.from("calendar_events").select("id, name, location, tag, start_date, end_date, url").order("start_date")
+      .then(({ data, error }) => {
+        if (error) console.error("[Calendar] read failed:", error.message);
+        setAllFixtures((data ?? []).map(rowToFixture));
+      });
   }, []);
+  const upcomingFixtures = useMemo(() => getUpcomingFixtures(allFixtures), [allFixtures]);
   const eventDays = useMemo(() => {
     const days: Date[] = [];
     for (const f of upcomingFixtures) {
@@ -160,7 +162,7 @@ function NewsPage() {
                     <ul className="mt-4 divide-y divide-border/60 overflow-hidden rounded-xl border border-border/60">
                       {upcomingFixtures.map((f) => (
                         <li
-                          key={f.name}
+                          key={f.id}
                           className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-5"
                         >
                           <div className="flex shrink-0 flex-col items-center justify-center rounded-lg bg-gradient-navy px-3 py-2 text-center text-primary-foreground sm:w-32">
