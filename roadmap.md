@@ -10,3 +10,5 @@
 - [x] Drop the map key and safety reminders from Traffic rules.
 - [x] Reword Traffic rules subtitle to "on the lake" and move Back to Coaches Corner to a top-right button.
 - [x] Race Clocker (events, per-crew timers, results PDF/CSV).
+- [x] Show overall Race Clocker results with optional category filtering and time-sorted live finishes; ordering tests pass.
+- [ ] Verify results with a real saved event; blocked because the signed-in event list has no events.

@@ -37,24 +37,18 @@ export function formatRaceTime(ms: number | null): string {
 
 export type ResultRow = { position: number | null; crew: RaceCrew; finalMs: number | null };
 
-/** Groups crews by category, finished crews sorted by elapsed time, DNF/unfinished last. */
-export function buildResults(crews: RaceCrew[]): { category: string; rows: ResultRow[] }[] {
-  const groups = new Map<string, RaceCrew[]>();
-  for (const c of crews) {
-    const key = c.category?.trim() || "Uncategorised";
-    groups.set(key, [...(groups.get(key) ?? []), c]);
-  }
-  return [...groups.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([category, list]) => {
-      const done = list
-        .filter((c) => c.status === "finished" && elapsedMs(c.start_time, c.finish_time) !== null)
-        .map((c) => ({ crew: c, finalMs: elapsedMs(c.start_time, c.finish_time) }))
-        .sort((a, b) => (a.finalMs ?? 0) - (b.finalMs ?? 0))
-        .map((r, i) => ({ ...r, position: i + 1 }));
-      const rest = list
-        .filter((c) => !done.some((d) => d.crew.id === c.id))
-        .map((c) => ({ crew: c, finalMs: null, position: null }));
-      return { category, rows: [...done, ...rest] };
-    });
+/** Overall elapsed-time ranking, optionally narrowed to one category. Untimed crews stay last. */
+export function buildResults(crews: RaceCrew[], category: string | null = null): ResultRow[] {
+  const list = category === null ? crews : crews.filter((c) => (c.category?.trim() || "Uncategorised") === category);
+  const rows = list.map((crew) => {
+    const time = crew.status === "finished" ? elapsedMs(crew.start_time, crew.finish_time) : null;
+    const finalMs = time !== null && Number.isFinite(time) && time >= 0 ? time : null;
+    return { crew, finalMs, position: null } as ResultRow;
+  });
+  rows.sort((a, b) => {
+    if (a.finalMs === null) return b.finalMs === null ? 0 : 1;
+    if (b.finalMs === null) return -1;
+    return a.finalMs - b.finalMs;
+  });
+  return rows.map((row, i) => ({ ...row, position: row.finalMs === null ? null : i + 1 }));
 }

@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -19,7 +20,14 @@ import {
 } from "@/lib/race-clocker";
 
 export const Route = createFileRoute("/coaches/race-clocker/$eventId")({
-  head: () => ({ meta: [{ title: "Race event — Race Clocker" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [
+    { title: "Race Results | Muckross Rowing Club Race Clocker" },
+    { name: "description", content: "Record crew times and view overall race results at Muckross Rowing Club." },
+    { property: "og:title", content: "Race Results | Muckross Rowing Club Race Clocker" },
+    { property: "og:description", content: "Record crew times and view overall race results at Muckross Rowing Club." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
+    { name: "robots", content: "noindex" },
+  ] }),
   component: EventPage,
 });
 
@@ -336,7 +344,8 @@ function RunView({ event, crews, canControl, reload, setConfirm }: {
   const now = useNow(anyRunning);
   useWakeLock(canControl);
 
-  const shown = crews.filter((c) => filter === "all" || (filter === "finished" ? c.status === "finished" || c.status === "dnf" : c.status === filter));
+  const filtered = crews.filter((c) => filter === "all" || (filter === "finished" ? c.status === "finished" || c.status === "dnf" : c.status === filter));
+  const shown = filter === "finished" ? buildResults(filtered).map((r) => r.crew) : filtered;
   const waitingIds = crews.filter((c) => c.status === "waiting").map((c) => c.id);
   const sel = selected.filter((id) => waitingIds.includes(id));
 
@@ -476,11 +485,13 @@ function RunView({ event, crews, canControl, reload, setConfirm }: {
 /* ---------------- Results ---------------- */
 
 function ResultsView({ event, crews }: { event: RaceEvent; crews: RaceCrew[] }) {
-  const results = useMemo(() => buildResults(crews), [crews]);
+  const [category, setCategory] = useState<string | null>(null);
+  const categories = useMemo(() => [...new Set(crews.map((c) => c.category?.trim() || "Uncategorised"))].sort(), [crews]);
+  const results = useMemo(() => buildResults(crews, category), [crews, category]);
   const cps = event.checkpoints_count;
   const splitLabel = (i: number) => event.checkpoint_names[i] || `Split ${i + 1}`;
   const dateText = event.start_date ? (event.end_date && event.end_date !== event.start_date ? `${event.start_date} – ${event.end_date}` : event.start_date) : "";
-  const rowCells = (r: ReturnType<typeof buildResults>[number]["rows"][number]) => [
+  const rowCells = (r: ReturnType<typeof buildResults>[number]) => [
     r.position ? String(r.position) : "–", r.crew.bow_number ?? "", r.crew.crew_name, r.crew.boat_type, r.crew.category ?? "",
     ...(cps >= 1 ? [r.crew.split1_time ? formatRaceTime(elapsedMs(r.crew.start_time, r.crew.split1_time)) : ""] : []),
     ...(cps >= 2 ? [r.crew.split2_time ? formatRaceTime(elapsedMs(r.crew.start_time, r.crew.split2_time)) : ""] : []),
@@ -492,7 +503,7 @@ function ResultsView({ event, crews }: { event: RaceEvent; crews: RaceCrew[] }) 
   const downloadCsv = () => {
     const esc = (s: string) => `"${s.replace(/"/g, '""')}"`;
     const lines = [head.map(esc).join(",")];
-    for (const g of results) for (const r of g.rows) lines.push(rowCells(r).map(esc).join(","));
+    for (const r of results) lines.push(rowCells(r).map(esc).join(","));
     const blob = new Blob([lines.join("\n")], { type: "text/csv" });
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `${fileBase}_results.csv`; a.click();
   };
@@ -505,12 +516,8 @@ function ResultsView({ event, crews }: { event: RaceEvent; crews: RaceCrew[] }) 
       doc.setFontSize(16); doc.text("Muckross Rowing Club", 14, 16);
       doc.setFontSize(13); doc.text(event.name, 14, 24);
       doc.setFontSize(10); doc.text([dateText, event.distance].filter(Boolean).join(" · "), 14, 30);
-      let y = 38;
-      for (const g of results) {
-        doc.setFontSize(12); doc.text(g.category, 14, y);
-        autoTable(doc, { startY: y + 2, head: [head], body: g.rows.map(rowCells), styles: { fontSize: 9 }, headStyles: { fillColor: [10, 37, 64] } });
-        y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
-      }
+      doc.setFontSize(12); doc.text(category ?? "Overall results", 14, 38);
+      autoTable(doc, { startY: 40, head: [head], body: results.map(rowCells), styles: { fontSize: 9 }, headStyles: { fillColor: [10, 37, 64] } });
       doc.save(`${fileBase}_results.pdf`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not create PDF");
@@ -521,22 +528,32 @@ function ResultsView({ event, crews }: { event: RaceEvent; crews: RaceCrew[] }) 
     <div className="space-y-4">
       <div className="rounded-lg border bg-background p-4">
         <div className="text-sm text-muted-foreground">{[dateText, event.distance, `${crews.length} crews`].filter(Boolean).join(" · ")}</div>
+        <div className="mt-3 max-w-xs space-y-1">
+          <Label htmlFor="results-category">Category</Label>
+          <Select value={category === null ? "all" : `category:${category}`} onValueChange={(value) => setCategory(value === "all" ? null : value.slice(9))}>
+            <SelectTrigger id="results-category"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All categories</SelectItem>
+              {categories.map((name) => <SelectItem key={name} value={`category:${name}`}>{name}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
         <div className="mt-3 flex flex-wrap gap-2">
           <Button className="h-12" onClick={() => void downloadPdf()}><Download className="h-4 w-4 mr-2" />Download PDF</Button>
           <Button className="h-12" variant="outline" onClick={downloadCsv}><Download className="h-4 w-4 mr-2" />Download CSV</Button>
         </div>
       </div>
-      {results.length === 0 && <div className="rounded-lg border bg-background p-6 text-sm text-muted-foreground">No crews were entered.</div>}
-      {results.map((g) => (
-        <section key={g.category} className="rounded-lg border bg-background">
-          <h2 className="border-b px-4 py-3 font-serif text-lg">{g.category}</h2>
+      {results.length === 0 && <div className="rounded-lg border bg-background p-6 text-sm text-muted-foreground">No crews in this view.</div>}
+      {results.length > 0 && (
+        <section className="rounded-lg border bg-background">
+          <h2 className="border-b px-4 py-3 font-serif text-lg">{category ?? "Overall results"}</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-muted/50 text-left">
                 <tr>{head.map((h) => <th key={h} className="px-3 py-2 font-medium whitespace-nowrap">{h}</th>)}</tr>
               </thead>
               <tbody>
-                {g.rows.map((r) => (
+                {results.map((r) => (
                   <tr key={r.crew.id} className="border-t">
                     {rowCells(r).map((cell, i) => (
                       <td key={i} className={cn("px-3 py-2 whitespace-nowrap", i >= 5 && "font-mono tabular-nums", i === head.length - 1 && "font-semibold")}>{cell}</td>
@@ -547,7 +564,7 @@ function ResultsView({ event, crews }: { event: RaceEvent; crews: RaceCrew[] }) 
             </table>
           </div>
         </section>
-      ))}
+      )}
     </div>
   );
 }
